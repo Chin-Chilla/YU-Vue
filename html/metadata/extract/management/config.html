@@ -1,0 +1,472 @@
+<section class="content" xmlns="http://www.w3.org/1999/html" id="vue">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="box box-primary" style="height: 1020px;overflow-x: auto">
+                <div class="box-header with-border">
+                    <h3 class="box-title" id="title">{{title}}</h3>
+                </div>
+                <div class="ztree">
+                    <ul id="tree" style="width:230px; overflow:auto;"></ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">属性管理</h3>
+                </div>
+                <div class="overlay" id="attributeLoading" style="display: none">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+                <form role="form">
+                    <div class="box">
+                        <div class="box-header col-md-12">
+                            <div class="col-md-2">
+                                <input type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal1" style="width: 80px; height: 35px;margin-right:10px" @click="getProperty" id="addProperty" value="增加属性">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn btn-primary" style="width: 80px; height: 35px;" id="deleteProperty" @click="deleteProperty()" value="删除属性">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn  btn-warning" style="width: 80px; height: 35px;" id="OrderInAttributesB" data-toggle="modal" data-target="#OrderInAttributes" @click="showAttorder" value="属性顺序">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn  btn-warning" style="width: 80px; height: 35px;" id="abstractConfig" @click="goAbstractConfig" value="摘要配置">
+                            </div>
+                            <div class="col-md-2">
+                                <input type="button" class="btn  btn-warning" style="width: 80px; height: 35px;" data-toggle="modal" data-target="#contactConfigModal" id="contactsConfig" @click="showContact" value="联系人">
+                            </div>
+                        </div>
+                        <hr style="padding-bottom:0px;margin:0px" />
+                        <div class="box-body" style="padding-top:0px;margin:0px">
+                            <div class="col-md-12">
+                                <div class=" col-md-12" style="margin-bottom: 1px">
+                                    <div class="col-md-6">
+                                        <label for="attributeName">属性名称:</label>
+                                        <input v-model="attenchname" id="attributeName" value="" style="width:140px; height:24px;margin:1px 0px 1px 1px" disabled="true">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label>属性类型:</label>
+                                        描述属性 <input type="radio" name="radio6" checked="checked" value="描述属性" />
+                                        测验属性 <input type="radio" name="radio6" value="测验属性" />
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="border-style: solid;border-color: #CCCCCC;border-width:1px;">
+                                    <div class="row">
+                                        <div class="col-md-11">
+                                            <div style="overflow:auto;height:200px;margin-left: 10px">
+                                                <table class="table table-striped" border="1" id="attributeTable" style="min-width:50px; white-space: nowrap;">
+                                                    <tr>
+                                                        <th Bgcolor=#b0c4de></th>
+                                                        <th Bgcolor=#b0c4de>主表</th>
+                                                        <th Bgcolor=#b0c4de>关联字段1</th>
+                                                        <th Bgcolor=#b0c4de>子表</th>
+                                                        <th Bgcolor=#b0c4de>关联字段2</th>
+                                                    </tr>
+                                                    <tbody id="attributeTableBody">
+                                                        <tr v-for="(item,index) in relationList">
+                                                            <td>{{index+1}}</td>
+                                                            <td>{{item.ptabId}}</td>
+                                                            <td>{{item.pfdId}}</td>
+                                                            <td>{{item.ftabId}}</td>
+                                                            <td>{{item.ffdId}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <br>
+                                            <input type="button" data-toggle="modal" data-target="#exampleModal" class="btn btn-default" id="modal" @click="showRelationTable" value="+">
+                                            <br>
+                                            <br>
+                                            <input type="button" class="btn btn-default" @click="deleteRelation" value="-">
+                                        </div>
+                                    </div>
+                                    <div style="margin:10px 10px">
+                                        <label for="attributeDataTable">关联数据表</label>
+                                        <input class="form-control" v-model="relationTableName" id="attributeDataTable" disabled="disabled">
+                                    </div>
+                                    <div style="margin: 10px 10px;">
+                                        <label for="attributeField">关联字段</label>
+                                        <select class="form-control" id="attributeField" @change="selectRelationField">
+                                            <option v-for="item in relationFieldList" :selected='item.fdName==attnameSelect'>{{item.fdName}}({{item.fdCName}})</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="box-body" id="enumerationCover">
+                            <div>
+                                <label for="">描述属性枚举项配置:</label>
+                                <div>
+                                    <input id="enumerationInput" v-model="enumeration" value="" disabled="disabled" style="width:500px; margin:20px;">
+                                    <input type="button" id="enumerationModal" data-toggle="modal" class="btn btn-primary" value="选择" @click="showEnumModal">
+                                    <input type="button" id="cleanenumeration" data-toggle="modal" data-target="" class="btn " value="清空" @click="cleanEnumeration">
+                                </div>
+                            </div>
+                            <div class="overlay" id="enumerationOverlay">
+                                <i class="fa fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="box">
+                            <div id="attriubteCountConfigure" class="box-body">
+                                <div class="col-md-12">
+                                    <label style="margin-bottom: 10px">属性统计配置（仅针对测验属性）</label>
+                                    <div id="cover" style="border-style: solid;border-color: #CCCCCC;border-width:1px;">
+                                        <div class="row">
+                                            <div class="col-md-10">
+                                                <div style="overflow:auto;height:200px;margin-left: 10px;margin-top:10px;">
+                                                    <table class="table table-striped" border="1" id="attributeCount">
+                                                        <tr>
+                                                            <th Bgcolor=#b0c4de style="width:100px;">次序</th>
+                                                            <th Bgcolor=#b0c4de style="width:100px;">统计项</th>
+                                                            <th Bgcolor=#b0c4de>统计字段</th>
+                                                        </tr>
+                                                        <tbody id="attributeCountBody">
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <br>
+                                                <input type="button" data-toggle="modal" data-target="" class="btn btn-default" id="" onclick="AttributeManager.attributeCount()" value="+">
+                                                <br>
+                                                <br>
+                                                <input type="button" class="btn btn-default" onclick="AttributeManager.deleteCount()" value="-">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="overlay" id="attriubteCountConfigureOverlay">
+                                <i class="fa fa-spin"></i>
+                            </div>
+                        </div>
+                        <div class="box-footer">
+                            <div style="float:right">
+                                <input type="button" class="btn btn-primary" style="width: 85px; height: 35px;" id="confirm" @click="save" value="保存">
+                                <input type="button" class="btn btn-primary" style="width: 85px; height: 35px;" id="cancel" @click="reset" value="取消">
+                            </div>
+                            <br>
+                            <br>
+                        </div>
+                        <div class="modal fade" id="exampleModal" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="exampleModalLabel">设置属性表关联关系</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3 class="box-title">主表</h3>
+                                                <div class="box-tools" style="width: 250px; height: 200px;margin-right:250px">
+                                                    <select class="form-control select2" id="selectserach" style="width: 250px;height: 200px;margin-left:30px;" placehold="请搜索">
+                                                        <option value="">请搜索</option>
+                                                        <option v-for="(item,index) in mainTableList" :value="item.tabId" :selected="item.tabId==mainTableIdSelect">{{item.tabCName}}({{item.tabEName}})</option>
+                                                    </select>
+                                                </div>
+                                                <div class="box-tools">
+                                                    <div class="input-group input-group-sm" style="width: 150px;margin-left:30px">
+                                                        <h3 class="box-title" style="margin-left:-70px">关联字段</h3>
+                                                        <input name="table_search" v-model="mainTableKeyword" class="form-control pull-right" id="field1" type="text">
+                                                        <div class="input-group-btn">
+                                                            <input type="button" class="btn btn-primary" @click="searchField1" value="筛选">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="height:1px;background-color:grey"></div>
+                                            <div class="box-primary " style="height: 35px;width: 953px;">
+                                                <div class="box-primary" style="height: 35px;width: 80px;float:left;">选择</div>
+                                                <div class="box-primary" style="height: 35px;width: 273px;float:left;">字段名称</div>
+                                                <div class="box-primary" style="height: 35px;width: 297px;float:left;margin-right: 0px;">字段标识</div>
+                                                <div class="box-primary" style="height: 35px;width: 303px;float:left;margin-left: 0px;">字段类型</div>
+                                            </div>
+                                            <div class="box-body table-responsive no-padding" style="overflow:auto;height:200px;">
+                                                <table class="table" id="modaltable1">
+                                                    <tbody id="modaltbody1">
+                                                        <tr v-for="item in mainTableFieldList" @click="selectMainTableField(item.fdName)">
+                                                            <td><input type='radio' name='optionsRadios1' value='option1' :checked="mainFieldSelect == item.fdName"></td>
+                                                            <td>{{item.fdCName}}</td>
+                                                            <td>{{item.fdName}}</td>
+                                                            <td>{{item.fdType}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3 class="box-title">子表</h3>
+                                                <div class="box-tools" style="width: 250px; height: 200px; margin-right:250px;">
+                                                    <select class="form-control select2" id="selectserach1" style="width: 250px;height: 200px;margin-left:30px;" placehold="请搜索">
+                                                        <option value="">请搜索</option>
+                                                        <option v-for="(item,index) in subTableList" :value="item.tabId" :selected="item.tabId==subTableIdSelect">{{item.tabCName}}({{item.tabEName}})</option>
+                                                    </select>
+                                                </div>
+                                                <!-- <h3 >关联字段</h3>-->
+                                                <div class="box-tools">
+                                                    <div class="input-group input-group-sm" style="width: 150px;margin-left:30px">
+                                                        <h3 class="box-title" style="margin-left:-70px">关联字段</h3>
+                                                        <input name="table_search" v-model="subTableKeyword" class="form-control pull-right" id="field2" type="text">
+                                                        <div class="input-group-btn">
+                                                            <input type="button" class="btn btn-primary" @click="searchField2" value="筛选">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div style="height:1px;background-color:grey"></div>
+                                            <div class="box-primary " style="height: 35px;width: 953px;">
+                                                <div class="box-primary" style="height: 35px;width: 80px;float:left;">选择</div>
+                                                <div class="box-primary" style="height: 35px;width: 273px;float:left;">字段名称</div>
+                                                <div class="box-primary" style="height: 35px;width: 297px;float:left;margin-right: 0px;">字段标识</div>
+                                                <div class="box-primary" style="height: 35px;width: 303px;float:left;margin-left: 0px;">字段类型</div>
+                                            </div>
+                                            <div class="box-body table-responsive no-padding" style="overflow:auto;height:200px;">
+                                                <table class="table" id="modaltable2">
+                                                    <tbody id="modaltbody2">
+                                                        <tr v-for="item in subTableFieldList" @click="selectSubTableField(item.fdName)">
+                                                            <td><input type='radio' name='optionsRadios2' value='option2' :checked="subFieldSelect == item.fdName"></td>
+                                                            <td>{{item.fdCName}}</td>
+                                                            <td>{{item.fdName}}</td>
+                                                            <td>{{item.fdType}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="关闭">
+                                        <input type="button" class="btn btn-primary" @click="addRelation" value="提交">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="OrderInAttributes" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" @click="cancelOrder" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title">设置属性顺序</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div>
+                                            <select id="saved_attributes" multiple="multiple" size="14" style="width:100%; overflow:scroll">
+                                                <option v-for="item in attInfoList" :key="item.attId" :value='item.attId'>{{item.attCName}}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="text" style="width:30px;height:30px;text-align: center" value="up" readonly="readonly" @click="moveUp" />
+                                        <input type="text" style="width:50px;height:30px;text-align: center" value="down" readonly="readonly" @click="moveDown" />
+                                        <button type="button" class="btn btn-default" data-dismiss="modal" @click="cancelOrder">取消</button>
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal" @click="saveAttributeSequence">确认</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="exampleModal1" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content" style="height: 600px;width:500px;position: relative">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="exampleModalLabel">添加配置</h4>
+                                    </div>
+                                    <div class="modal-body" id="modal-body1" style="height:450px;width:500px;overflow: auto">
+                                        <table>
+                                            <tr v-for="item in newAttList">
+                                                <td>
+                                                    <input type='checkbox' name='optionsRadios3'>
+                                                </td>
+                                                <td>{{item}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="取消">
+                                        <input type="button" class="btn btn-primary" @click="addPropertyTo" value="添加">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="exampleModal2" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="exampleModalLabe2">添加描述属性字段对象关系</h4>
+                                    </div>
+                                    <div class="modal-body" id="modal-body2">
+                                        <div style="margin-bottom:10px">
+                                            <label for="contrastTable" style="margin-right:15px">对照表</label>
+                                            <select class="form-control select2" id="contrastTable" value="" style="width:300px">
+                                               
+                                            </select>
+                                        </div>
+                                        <div style="margin-top:30px">
+                                            <label>对照编码</label>
+                                            <select class="form-control select2" id="codeselect" style="width:300px">
+                                                <option v-for="item in enumFieldList" :value='item.code'>{{item.name}}({{item.code}})</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" value="取消">
+                                        <input type="button" class="btn btn-primary" @click="confirmEnumeration" value="确定">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="contactConfigModal" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">联系人配置</h4>
+                                    </div>
+                                    <div class="modal-body" id="modal-body2">
+                                        <ul id="contactConfigTab" class="nav nav-tabs">
+                                            <li class="active">
+                                                <a href="#metadataContact" data-toggle="tab">元数据联系人</a>
+                                            </li>
+                                        </ul>
+                                        <div id="contactConfigTabContent" class="tab-content">
+                                            <div class="box-header">
+                                                <h3></h3>
+                                                <div class="box-tools">
+                                                    <div class="input-group input-group-sm" style="width: 150px;">
+                                                        <input v-model="searchContact" name="table_search" class="form-control" id="searchContact" type="text">
+                                                        <div class="input-group-btn">
+                                                            <input type="button" class="btn btn-primary" @click="contactSearch()" value="筛选">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="tab-pane fade in active" id="metadataContact">
+                                                <table class="table table-striped" border="1" id="dataContactTable">
+                                                    <thead id="metaCall">
+                                                        <tr>
+                                                            <th Bgcolor=#b0c4de></th>
+                                                            <th Bgcolor=#b0c4de>联系人姓名</th>
+                                                            <th Bgcolor=#b0c4de>联系人ID</th>
+                                                            <th Bgcolor=#b0c4de>性别</th>
+                                                            <th Bgcolor=#b0c4de>单位名称</th>
+                                                            <th Bgcolor=#b0c4de>电话</th>
+                                                            <th Bgcolor=#b0c4de>传真</th>
+                                                            <th Bgcolor=#b0c4de>邮箱</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="dataContactTableBody">
+                                                        <tr v-for="item in contactList" :id="item.objId" @click="selectContact(item.objId)">
+                                                            <td style='width: 50px'>
+                                                                <input type='radio' name='contactcheckbox' :checked="contactSelect==item.objId" :value="item.objId">
+                                                            </td>
+                                                            <td>{{item.objName}}</td>
+                                                            <td>{{item.objId}}</td>
+                                                            <td>{{item.sex}}</td>
+                                                            <td>{{item.orgName}}</td>
+                                                            <td>{{item.telnumber}}</td>
+                                                            <td>{{item.faxnumb}}</td>
+                                                            <td>{{item.email}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div v-if="contactList.length==0" class="align-middle text-center">
+                                                    暂无搜索结果~
+                                                </div>
+                                                <div class="text-center" style="width:600px">
+                                                    <ul id="dataContactPage" class="pagination-sm pagination">
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <input type="button" class="btn  btn-default" style="width: 80px; height: 35px;" data-toggle="modal" data-target="#contactModal" value="新增">
+                                        <input type="button" class="btn btn-default" data-dismiss="modal" @click="bindContact" value="确认">
+                                        <input type="button" class="btn btn-primary" data-dismiss="modal" onclick="" value="取消">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="supplementContactModal" role="dialog" aria-labelledby="exampleModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title">补充联系人</h4>
+                                    </div>
+                                    <div class="modal-body" id="modal-body2">
+                                        <label for="supplementWorkUnit">单位</label>
+                                        <input id="supplementWorkUnit">
+                                        <label for="supplementCandidate">候选人员</label>
+                                        <input id="supplementCandidate">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form class="form-horizontal">
+                    <div class="modal modal-default" id="contactModal">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title">新增联系人</h4>
+                                </div>
+                                <div class="form-group" style="margin-top:20px;">
+                                    <label for="contactName" class="col-sm-3 control-label">用户名称:</label>
+                                    <div class="col-sm-4">
+                                        <input v-model="contactName" style="width:300px;" type="text" class="form-control" id="contactName" placeholder="用户名称(*必填)" />
+                                    </div>
+                                    <label id="labelContentName" style="margin:0px 0px 0px 15px" class="col-sm-3 control-label">*(必填)</label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactOrg" class="col-sm-3 control-label">单位名称:</label>
+                                    <div class="col-sm-4">
+                                        <input maxlength="18" v-model="contactOrg" onblur="" style="width:300px;" type="text" class="form-control" id="contactOrg" placeholder="单位名称" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactTel" class="col-sm-3 control-label">办公室电话:</label>
+                                    <div class="col-sm-3">
+                                        <input v-model="contactTel" style="width:300px;" type="text" class="form-control" id="contactTel" placeholder="办公室电话" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactFaxnumb" class="col-sm-3 control-label">传真:</label>
+                                    <div class="col-sm-3">
+                                        <input v-model="contactFaxnumb" style="width:300px;" type="text" class="form-control" id="contactFaxnumb" placeholder="传真" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="contactMail" class="col-sm-3 control-label">邮箱:</label>
+                                    <div class="col-sm-3">
+                                        <input v-model="contactMail" style="width:300px;" type="text" class="form-control" id="contactMail" placeholder="邮箱" />
+                                    </div>
+                                    <label id="labelContactMail" style="margin:0px 0px 0px 15px" class="col-sm-4 control-label"></label>
+                                </div>
+                                <div class="modal-footer">
+                                    <button id="contactNew" type="button" style="margin:0px 0px 0px 0px;" class="btn btn-default" @click="addContact">添加</button>
+                                    <button type="button" style="margin-right:50px;" class="btn btn-default" data-dismiss="modal" >取消</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- 遮盖层的div-->
+<div class="mask" id=""></div>
+<div class="mask" id=""></div>
+<script src="/YU/javascript/metadata/extract/management/config.js"></script>

@@ -1,0 +1,30 @@
+
+
+#########################################################################################
+###
+#########################################################################################
+目录结构(按系统逻辑排序)如下：
+    adminLTE                      → APE 添加模板JS存放路径
+     └ * commons                 → 必要的公用js
+        └ app.min.js
+        └ bootstrap.min.js
+        └ dashboard.js
+        └ demo.js
+        └ jquery-2.2.3.min.js
+        └ jquery-ui.min.js
+     └ * plugins                                →  模板的插件js用的自己引用
+        └ bootstrap3-wysihtml5.all.min.js       →  bootstrap文本输入框组件
+        └ bootstrap-datepicker.js               →  日期选择器组件
+        └ daterangepicker.js                    →  日期选择器组件
+        └ jquery.knob.js                        →  旋钮插件
+        └ jquery.slimscroll.min.js              →  滚动条插件
+        └ jquery.sparkline.min.js               →  线状图插件
+        └ moment.min.js                         →  日期处理插件
+        └ morris.min.js                         →  时序图插件
+        └ raphael-min.js                        →  矢量图形库插件
+
+
+
+
+
+

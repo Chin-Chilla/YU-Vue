@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>关系抽取 </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+</head>
+<body>
+<br><br>
+<div class="ui container">
+   <div  class="ui attached  segment">
+
+       <div  class="ui middle  moblie reversed stackable grid " >
+           <div class="five wide column">
+               <div style="border-right: solid 2px darkgray;!important;" id="ajax">
+               </div>
+           </div>
+       <div  class=" eleven wide column  ">
+        <br>
+           <form action="#" method="post"  th:action=" @{/objectImport/addObjRelConfig} "  class="ui form">
+               <div>
+                   <table  class="ui compact teal table table-bordered table-striped dataTable">
+                       <thead>
+                       <tr>
+                           <th></th>
+                           <th>关系</th>
+                           <th></th>
+                           <th>记录数</th>
+                           <th>操作</th>
+                       </tr>
+                       </thead>
+                       <tbody>
+                       <tr th:each="record:${listRelExtract}">
+
+                           <td th:text="${record.obj1}"></td>
+                           <td th:text="${record.rel}"></td>
+                           <td th:text="${record.obj2}"></td>
+                           <td th:text="${record.num}"></td>
+                           <td>
+                               <a href="#" class="button" th:text="${record.extract}==false?'未构建':'已构建'"></a>
+                           </td>
+                       </tr>
+                       </tbody>
+                       <tfoot>
+                       <tr>
+                       </tr>
+                       </tfoot>
+                   </table>
+               </div>
+           </form>
+           <br>
+      </div>
+ </div>
+</div>
+</div>
+
+<script th:inline="javascript">
+
+    $(function () {
+
+        $('#ajax').jstree({
+            'core' : {
+                'data' : {
+                    "url" : "/config/resource/root.json",
+                    "dataType" : "json" // needed only if you do not supply JSON headers
+                }
+            }
+        });
+
+        $('#ajax').on("changed.jstree", function (e, data) {
+
+            let entCode = data.selected.toLocaleString();
+            let _csrf = $("[name='_csrf']").val();
+            let data_1={"entCode":entCode};
+            let url="/objectImport/objRelExtract";
+            getStringData_1(url, data_1, function(msg){
+                $(".content-wrapper").html(msg);
+                Permission.ShieldButton();
+            });
+
+        });
+
+
+    });
+
+</script>
+</body>
+</html>

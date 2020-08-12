@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title>关系配置 </title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+</head>
+<body>
+<br><br>
+<div class="ui container">
+   <div  class="ui attached  segment">
+       <div  class="ui middle  moblie reversed stackable grid " >
+           <div class="five wide column">
+               <div style="border-right: solid 2px darkgray;!important;" id="ajax">
+                   <!--<ul>
+                       <li>请选择对象
+                           <ul>
+                               <li id="RES">水库</li>
+                               <li id="LK">湖泊</li>
+                               <li id="RV">河流</li>
+                               <li id="BAS">流域</li>
+                               <li id="DAM">大坝</li>
+                               <li id="IRR">灌区</li>
+                               <li id="HYST">水电站</li>
+                               <li id="CHAN">渠（沟）道</li>
+                               <li id="WELL">取水井</li>
+                               <li id="WAGA">水闸</li>
+                               <li id="FLUM">渡槽</li>
+                               <li id="INSI">倒虹吸</li>
+                               <li id="PUST">泵站</li>
+                               <li id="CULV">涵洞</li>
+                               <li id="WADI">引调水工程</li>
+                               <li id="CWS">农村供水工程</li>
+                               <li id="PIT">窖池</li>
+                               <li id="POND">塘坝</li>
+                               <li id="FSDA">蓄滞洪区</li>
+                               <li id="DIKE">堤防</li>
+                               <li id="POLD">圩垸</li>
+                               <li id="GRPJ">治河工程</li>
+                               <li id="SD">淤地坝</li>
+                               <li id="RUDA">橡胶坝</li>
+                               <li id="ST">水文监测站</li>
+                               <li id="WSST">水土保持监测站</li>
+                               <li id="WVST">供（取）水量监测点</li>
+                               <li id="WMST">水事影像监视点</li>
+                               <li id="WRZ">水资源分区</li>
+                               <li id="WFZ">水功能区</li>
+                               <li id="WSCZ">水土保持区划</li>
+                               <li id="RLMD">河湖管理范围</li>
+                               <li id="SLFZ">岸线功能分区</li>
+                               <li id="SEP">采砂分区</li>
+                               <li id="REA">河段</li>
+                               <li id="DISC">堤段</li>
+                               <li id="DPDS">险工险段</li>
+                               <li id="SWHS">水源地</li>
+                               <li id="WAIN">取水口</li>
+                               <li id="PDO">退排水口</li>
+                               <li id="WIU">取用水户</li>
+                               <li id="DRHO">退排水户</li>
+                           </ul>
+
+                       </li>
+                   </ul>-->
+               </div>
+           </div>
+       <div  class=" eleven wide column  ">
+        <br>
+           <form action="#" method="post"  th:action=" @{/objectImport/addObjRelConfig} "  class="ui form">
+               <div>
+                   <table  class="ui compact teal table">
+                       <thead>
+                       <tr>
+                           <th>关系表</th>
+                           <th>备注</th>
+                           <th></th>
+                           <th>关系</th>
+                           <th></th>
+                       </tr>
+                       </thead>
+                       <tbody id="content">
+                       <tr>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td></td>
+                           <td > </td>
+                       </tr>
+                       </tbody>
+                       <tfoot>
+                       <tr>
+                       </tr>
+                       </tfoot>
+                   </table>
+               </div>
+           </form>
+           <br>
+           <button id="submitRelConfig" class="ui fluid button">提交</button>
+      </div>
+ </div>
+</div>
+</div>
+
+<script th:inline="javascript">
+
+    $(function () {
+
+         // $('#ajax').jstree();
+
+        $('#ajax').jstree({
+            'core' : {
+                'data' : {
+                    "url" : "/config/resource/root.json",
+                    "dataType" : "json" // needed only if you do not supply JSON headers
+                }
+            }
+        });
+
+        $('#ajax').on("changed.jstree", function (e, data) {
+
+            let entCode = data.selected.toLocaleString();
+            let _csrf = $("[name='_csrf']").val();
+            let data_1={"entCode":entCode};
+            getDataByPostWithToken("/objectImport/queryTableNames",data_1,_csrf,function(msg){
+                $("#content").empty();
+                for(let index=0;index<msg.length;index++){
+                    let obj = msg[index];
+                    let tr = $("<tr></tr>");
+                    let td1 = $("<td></td>").html(obj["name"]);
+                    let td2 = $("<td></td>").html(obj["note"]);
+                    let td3 = $("<td></td>").html(obj["obj1"]);
+                    let td4 = $("<td></td>").html(obj["obj2"]);
+                    let td5 = $("<td><select  name=\"rel\" style=\"width: 150px\" class=\"ui search dropdown relSelector\" >\n" +
+                        "                               <option value=\"NONE\">选择关系</option>\n" +
+                        "                               <option value=\"位于\">位于</option>\n" +
+                        "                               <option value=\"属于\">属于</option>\n" +
+                        "                               <option value=\"包含\">包含</option>\n" +
+                        "                               <option value=\"拥有\">拥有</option>\n" +
+                        "                           </select></td>")
+                    tr.append(td1);
+                    tr.append(td2);
+                    tr.append(td3);
+                    tr.append(td5);
+                    tr.append(td4);
+
+                    $("#content").append(tr);
+                }
+                $(".relSelector").on("change",function(tar){
+                    let tr = $($($(tar.target).parent()).parent()[0])
+                    let tds = tr.children("td");
+                    let row = [$(tds[0]).html(),$(tar.target).val()]
+                    _KgRelConfigCollection.push(row);
+                })
+            })
+        });
+
+      /*  $("#entSelector").on("change",function(){
+            let entCode = $("#entSelector option:selected").val();
+            let _csrf = $("[name='_csrf']").val();
+            console.log("-"+_csrf)
+            let data={"entCode":entCode}
+            getDataByPostWithToken("/objectImport/queryTableNames",data,_csrf,function(msg){
+                $("#content").empty();
+                for(let index=0;index<msg.length;index++){
+                    let obj = msg[index];
+                    let tr = $("<tr></tr>");
+                    let td1 = $("<td></td>").html(obj["name"]);
+                    let td2 = $("<td></td>").html(obj["note"]);
+                    let td3 = $("<td></td>").html(obj["obj1"]);
+                    let td4 = $("<td></td>").html(obj["obj2"]);
+                    let td5 = $("<td><select  name=\"rel\" style=\"width: 150px\" class=\"ui search dropdown relSelector\" >\n" +
+                        "                               <option value=\"NONE\">选择关系</option>\n" +
+                        "                               <option value=\"位于\">位于</option>\n" +
+                        "                               <option value=\"属于\">属于</option>\n" +
+                        "                               <option value=\"包含\">包含</option>\n" +
+                        "                               <option value=\"拥有\">拥有</option>\n" +
+                        "                           </select></td>")
+                    tr.append(td1);
+                    tr.append(td2);
+                    tr.append(td3);
+                    tr.append(td5);
+                    tr.append(td4);
+
+                    $("#content").append(tr);
+                }
+                $(".relSelector").on("change",function(tar){
+                    let tr = $($($(tar.target).parent()).parent()[0])
+                    let tds = tr.children("td");
+                    let row = [$(tds[0]).html(),$(tar.target).val()]
+                    _KgRelConfigCollection.push(row);
+                })
+            })
+        })*/
+
+        $("#submitRelConfig").on("click",function(){
+
+            let _csrf = $("[name='_csrf']").val();
+            let data = {"configs":JSON.stringify(_KgRelConfigCollection)}
+            getDataByPostWithToken("/objectImport/addRelConfig",data,_csrf,function(msg){
+                alert(msg)
+            })
+            _KgRelConfigCollection = []
+        })
+
+    });
+
+</script>
+</body>
+</html>
