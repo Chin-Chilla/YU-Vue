@@ -466,7 +466,14 @@ var app = new Vue({
 			var selected = e.target.value
 			that.attnameSelect = selected.substr(0,selected.indexOf("("))
 		},
-		//增加属性
+		//增加测验
+		//增加属性统计
+		addCount(){
+
+		},
+		deleteCount(){
+
+		},
 		addProperty(){
 			if (that.relationList.length==0) {
 	            toastr.warning("请添加关联");// todo 同时获取属性英文名称和量纲

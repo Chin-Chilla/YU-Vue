@@ -127,7 +127,7 @@ var app = new Vue({
 			that.keyword =''
 			that.pageNum=1
 		},
-		//翻页
+		//更改页面大小
 		changePageSize(e){
 			that.pageNum=1
 			that.pageSize = e.target.value
