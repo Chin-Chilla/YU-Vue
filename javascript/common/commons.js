@@ -53,10 +53,10 @@ function getDataByGet(aURl,aJson,aCallback,errorCallback){
 }
 //同步get
 function getDataByGet1(aURl,aJson,aCallback){
-    var data = { "dataJson":aJson, };
       $.ajax({
-			url:aURl,           //该路径在route中定义
-			data:data,
+			url:BASE_URL+aURl,           //该路径在route中定义
+			contentType: "application/json",
+			data:aJson,
 			dataType:"JSON",
             async : false,
 			type:"GET",                     //必须是get类型，POST类型不行
@@ -64,14 +64,13 @@ function getDataByGet1(aURl,aJson,aCallback){
 				aCallback(res)
 			},
 			error:function(res){
-			    errorCallback(res);
+			    toastr.error(res.msg)
 			}
 	  })
 }
 
 //post方式
 function getDataByPost(aURl,aJson,aCallback,errorCallback){
-	// var data = { "dataJson":aJson, };
 	$.ajax({
 		url:BASE_URL+aURl,           //该路径在route中定义
 		contentType: "application/json",
@@ -89,7 +88,6 @@ function getDataByPost(aURl,aJson,aCallback,errorCallback){
 }
 
 function getDataByPost(aURl,aJson,aCallback){
-	// var data = { "dataJson":aJson, };
 	$.ajax({
 		url:BASE_URL+aURl,           //该路径在route中定义
 		contentType: "application/json",
