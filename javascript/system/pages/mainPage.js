@@ -10,13 +10,17 @@ MainPage={
         })
     },
     setContent:function(href,classname){
-        if(classname!='none'){
+       if(classname!='none'){
             $(".sidebar-menu li li").removeClass("active");
             $(".sidebar-menu").find("."+classname).addClass("active");
+            $("#pagination").empty();
+            $("#text1").empty();
+            $('.content-wrapper').load(href, function() {}); 
+        }else{
+            //如果是主页
+            window.location.assign(href);
         }
-        $("#pagination").empty();
-        $("#text1").empty();
-        $('.content-wrapper').load(href, function() {});
+        
     }
 
     //生成菜单栏
