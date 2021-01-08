@@ -277,8 +277,8 @@ ObjectMetadataPage = {
         var classId = $("input[name='optionsRadios']:checked").val();
         console.log(classId);
         var nodes = ObjectMetadataPage.zTreeObj.getCheckedNodes(true);
-        if (nodes.length == 0) {
-            alert("您没有选择节点！");
+        if (nodes.length !=2) {
+            alert("二级结点只能选择一个！");
         } else {
             var nodeIdList = [];
             // alert("新编目的节点位置是:");

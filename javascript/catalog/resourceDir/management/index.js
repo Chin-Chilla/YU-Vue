@@ -89,6 +89,7 @@ var app = new Vue({
 	        var nodes = treeObj.getCheckedNodes(true);
 	        that.className = nodes[nodes.length-1].className
             that.classId =  nodes[nodes.length-1].classId
+            that.search();
         },
         //选择状态
         selectState(e) {
@@ -328,6 +329,10 @@ var app = new Vue({
         //审核通过
         passReview() {
             var icheck1 = document.getElementById("all"); //全选所有内容框
+            if(app.className==""){
+                toastr.warning("请选择对象分类!")
+                return;
+            }
             if (icheck1.checked != true) { //如果没有全选所有内容
                 var table = document.getElementById("sample_1");
                 var ischeck = document.getElementsByName("choose");
@@ -393,7 +398,11 @@ var app = new Vue({
                             },1000)
                         }else{
                         	$("#progressModal").modal('hide')
-	                        toastr.error("审核通过失败!");
+                            if(res.msg==""){
+                                toastr.error("已经审核通过的元数据不能再审核！");
+                            }else{
+                                toastr.error(res.msg);
+                            }
                         }
                     })
                 } else { //一行都没被选中
@@ -456,7 +465,12 @@ var app = new Vue({
                             },1000)
                         }else{
                         	$("#progressModal").modal('hide')
-	                        toastr.error("审核通过失败！");
+                            if(res.msg==""){
+                                toastr.error("已经审核通过的元数据不能再审核！");
+                            }else{
+                                toastr.error(res.msg);
+                            }
+
                         }
                 	})
                 // }
