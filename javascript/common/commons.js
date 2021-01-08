@@ -4,7 +4,7 @@
  *主要用编写前台通用的js方法
  */
 
-const BASE_URL = "http://localhost:8080"
+const BASE_URL = "http://localhost:8080",LOCATION = "hohai";
 //根据名称获取url中的参数值
 function getUrlParam(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象

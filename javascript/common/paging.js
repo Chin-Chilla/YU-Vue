@@ -136,14 +136,14 @@
 						html += '<li data-page="' + i + '" class="ui-pager">' + i + '</li>'
 					}
 				}
-				html += '<li data-page="' + this.pagecount + '" class="ui-pager">' + this.pagecount + '</li>';
+				// html += '<li data-page="' + this.pagecount + '" class="ui-pager">' + this.pagecount + '</li>';
 			} else {
 				for (var i = 1; i <= this.pagecount; i++) {
 					html += '<li data-page="' + i + '" class="ui-pager">' + i + '</li>'
 				}
 			}
 			html += '<li class="js-page-next js-page-action ui-pager">' + this.settings.nextTpl + '</li>';
-			html += '<li class="js-page-last js-page-action ui-pager">' + this.settings.lastTpl + '</li>';
+			// html += '<li class="js-page-last js-page-action ui-pager">' + this.settings.lastTpl + '</li>';
 			html += '</ul>';
 			this.container.html(html);
 			if (this.current == 1) {

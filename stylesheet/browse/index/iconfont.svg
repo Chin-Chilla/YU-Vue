@@ -1,0 +1,29 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd" >
+<!--
+2013-9-30: Created.
+-->
+<svg>
+<metadata>
+Created by iconfont
+</metadata>
+<defs>
+
+<font id="iconfont" horiz-adv-x="1024" >
+  <font-face
+    font-family="iconfont"
+    font-weight="500"
+    font-stretch="normal"
+    units-per-em="1024"
+    ascent="896"
+    descent="-128"
+  />
+    <missing-glyph />
+    
+    <glyph glyph-name="zanwushuju" unicode="&#58882;" d="M958.66 607.357h0.025L511.996 830.696 66.12 607.764h-0.83V160.65l446.707-223.345L958.711 160.65V607.357h-0.05z m-446.664 169.23l335.907-168.38-127.914-64.487-337.52 167.877 129.527 64.99z m-188.06-96.672l341.852-164.713L511.972 440.7 176.095 607.357l147.84 72.558zM121.125 550.86h17.754l-17.754 0.653V579.43l362.96-181.485v-390.872l-362.96 181.482V550.86z m781.74-27.275v-335.031L539.906 7.072V397.944l362.962 181.485v-55.844z"  horiz-adv-x="1024" />
+
+    
+
+
+  </font>
+</defs></svg>

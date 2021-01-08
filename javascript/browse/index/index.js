@@ -1,78 +1,11 @@
 var that;
-var app = new Vue({
+var index = new Vue({
     el: "#vue", //绑定之前html写的ID
     data: { //相当于成员变量
-        update_rank_config: {
-            header: ['单位', '最近更新时间'],
-            // headerBGC:'#00BAFF',
-            //oddRowBGC:'',
-            //evenRowBGC:'',
-            data: [],
-            indexHeader: '序号',
-            index: true,
-            columnWidth: [100],
-            align: ['center', 'center', 'center']
-        },
-        total_rank_config: {
-            header: ['单位', '总更新数'],
-            data: [],
-            indexHeader: '序号',
-            index: true,
-            columnWidth: [100],
-            align: ['center', 'center', 'center']
-        },
+        updateData:[],
+        totalData:[],
         resZtree: '',
         objZtree: '',
-        setting:{
-            async:  {
-                enable: true,
-                type: "GET",
-                dataType: 'json',
-                url: BASE_URL+"/index_manager/getResById",
-                autoParam: ["nodeId"]
-            },
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "nodeId",
-                    pIdKey: "pnodeId",
-                    rootPId: "0"
-                },
-                key: {
-                    name: "nodeName"
-                }
-            },
-            callback: {
-                onClick: this.zTreeOnClickSearch,
-                onAsyncSuccess: this.zTreeOnAsyncSuccess
-            }
-        },
-        settingObject: {
-            async: {
-                enable: true,
-                type: "GET",
-                dataType: 'json',
-                url: BASE_URL+"/index_manager/getObjById",
-                autoParam: ["nodeId"]
-            },
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "nodeId",
-                    pIdKey: "pnodeId",
-                    rootPId: "0",
-                    isHidden: "isHidden",
-                    isBlack: "isBlack"
-                },
-                key: {
-                    name: "nodeName"
-                }
-            },
-            callback: {
-                onClick: this.objectTreeClickSearch,
-                onAsyncSuccess: this.objectTreeOnAsyncSuccess
-            }
-        },
         leftoption: {
             title: {
                 text: '水利信息目录资源分布图',
@@ -741,52 +674,12 @@ var app = new Vue({
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-        var updateData = []
+        //更新榜
         getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
         	var msg= res.data;
-            for (var i = 0; i < (msg.length > 10 ? 10 : msg.length); i++) {
-                var tmp = [];
-                tmp[0] = msg[i].name;
-                tmp[1] = msg[i].uptime;
-                updateData.push(tmp)
-            }
-            that.update_rank_config = {
-                header: ['单位', '最近更新时间'],
-                data: updateData,
-                indexHeader: '序号',
-                index: true,
-                columnWidth: [100],
-                align: ['center', 'center', 'center']
-            }
+            index.updateData = msg.slice(0,10);
         })
-        var nameArr = ['水利部业务网', '长江水利委员会', '黄河水利委员会', '淮河水利委员会', '海河水利委员会', '珠江水利委员会', '松辽水利委员会', '太湖流域管理局', '北京市水务局', '天津市水务局', '河北省水利厅局', '山西省水利厅', '内蒙古自治区水利厅', '辽宁省水利厅', '吉林省水利厅', '黑龙江省水利厅', '上海市水务局', '江苏省水利厅', '浙江省水利厅', '安徽省水利厅', '福建省水利厅', '江西省水利厅', '山东省水利厅', '河南省水利厅', '湖北省水利厅', '湖南省水利厅', '广东省水利厅', '广西壮族自治区水利厅', '海南省水利厅', '重庆市水务局', '四川省水利厅', '贵州省水利厅', '云南省水利厅', '西藏自治区水利厅', '陕西省水利厅', '甘肃省水利厅', '青海省水利厅', '宁夏回族自治区水利厅', '新疆维吾尔族自治区水利厅', '新疆生产建设兵团水利局', '大连', '青岛', '宁波', '厦门', '深圳']
-        setTimeout(function() {
-            var totalArr = [];
-            for (var i = 0; i < that.arrayAllData.length; i++) {
-                var tmp = { 'name': '', value: '' }
-                tmp.name = nameArr[i];
-                tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
-                totalArr.push(tmp)
-            }
-            totalArr.sort(function(a, b) {
-                return b.value - a.value
-            })
-            var data = [];
-            for (var i = 0; i < totalArr.length; i++) {
-                var tmp = [];
-                tmp[0] = totalArr[i].name;
-                tmp[1] = totalArr[i].value + '';
-                data.push(tmp)
-            }
-            that.total_rank_config = {
-                header: ['单位', '总更新数'],
-                data: data.slice(0, 10),
-                indexHeader: '序号',
-                index: true,
-                columnWidth: [100],
-                align: ['center', 'center', 'center']
-            };
-        }, 4000)
+        
 
         window.onresize = function loadChart() {
             that.pictureShow();
@@ -833,11 +726,56 @@ var app = new Vue({
             // that.findusermessage();
 
             var aJson = {};
-
+            var setting={
+                async:  {
+                    enable: true,
+                    type: "GET",
+                    dataType: 'json',
+                    url: BASE_URL+"/index_manager/getResById",
+                    autoParam: ["nodeId"]
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "nodeId",
+                        pIdKey: "pnodeId",
+                        rootPId: "0"
+                    },
+                    key: {
+                        name: "nodeName"
+                    }
+                },
+                callback: {
+                    onClick: function zTreeOnClickSearch(event, treeId, treeNode) {
+                        var nodeId = treeNode.nodeId;
+                        keySearch.loadFromTree(nodeId,"ReSourceTree");
+                    },
+                    onAsyncSuccess:function zTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
+                        var cur = that.arrayNodeId.indexOf(treeNode.nodeId);
+                        for (var i = 0; i < dataStr.length; i++) {
+                            if (dataStr[i].pnodeId == treeNode.nodeId) {
+                                var str = dataStr[i].nodeName + "";
+                                var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                                var name = str.substr(0, str.indexOf("("));
+                                if (num != 0) {
+                                    var data = {
+                                        value: num,
+                                        name: name,
+                                        nodeid: dataStr[i].nodeId,
+                                    }
+                                    that.arrayData[cur].push(data);
+                                    that.arrayLegend[cur].push(name);
+                                }
+                            }
+                        }
+                        that.catalogTreeData = that.catalogTreeData.concat(dataStr)
+                    }
+                }
+            }
             //资源目录树的懒加载  加载所有一级节点和水利部子节点
             getDataByGet('/index_manager/getResById?nodeId=1000',aJson, dataStr =>{
             	that.catalogTreeData = dataStr
-                    that.resZtree = $.fn.zTree.init($("#tree"), that.setting, dataStr);
+                    that.resZtree = $.fn.zTree.init($("#tree"), setting, dataStr);
                     for (var i = 0; i < dataStr.length; i++) {
                         //父节点为水利信息资源目录结点
                         if (dataStr[i].pnodeId == 1001) {
@@ -888,9 +826,41 @@ var app = new Vue({
                             }
                         }
                     }
+
                     that.getChartNum();
             })
 
+            var settingObject = {
+                async: {
+                    enable: true,
+                    type: "GET",
+                    dataType: 'json',
+                    url: BASE_URL+"/index_manager/getObjById",
+                    autoParam: ["nodeId"]
+                },
+                data: {
+                    simpleData: {
+                        enable: true,
+                        idKey: "nodeId",
+                        pIdKey: "pnodeId",
+                        rootPId: "0",
+                        isHidden: "isHidden",
+                        isBlack: "isBlack"
+                    },
+                    key: {
+                        name: "nodeName"
+                    }
+                },
+                callback: {
+                    onClick:function objectTreeClickSearch(event, treeId, treeNode) {
+                        var nodeId = treeNode.nodeId;
+                        keySearch.loadFromTree(nodeId,"ObjectTree");
+                    },
+                    onAsyncSuccess: function objectTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
+
+                    }
+                }
+            }
          
             //对象树的懒加载
             getDataByGet('/index_manager/getObjById?nodeId=1000',aJson, dataStr=>{
@@ -902,7 +872,7 @@ var app = new Vue({
                             that.arrayRightBarObj.push(num);
                         }
                     }
-                    that.objZtree = $.fn.zTree.init($("#objectTree"), that.settingObject, dataStr);
+                    that.objZtree = $.fn.zTree.init($("#objectTree"), settingObject, dataStr);
             })
             
 
@@ -948,12 +918,18 @@ var app = new Vue({
             } catch (cer) {
                 console.log(cer);
             }
+
+
+        },
+        search(flag){
+            alert("hhh")
         },
         getChartNum(){
 	        new Promise(function(resolve){
 	            that.getReSourceNum(resolve);
 	        }).then(function(){
 	            that.getObjTreeNum();
+
 	        })
     	},
 	    getReSourceNum(resolve){
@@ -1283,13 +1259,27 @@ var app = new Vue({
 		            that.getObjNum();
 		            that.midPictureShow();
 		            that.showLevel2();
-
+                    that.setRankData();
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
 	        	
 	        })
 	    },
+        setRankData(){
+            var nameArr = ['水利部业务网', '长江水利委员会', '黄河水利委员会', '淮河水利委员会', '海河水利委员会', '珠江水利委员会', '松辽水利委员会', '太湖流域管理局', '北京市水务局', '天津市水务局', '河北省水利厅局', '山西省水利厅', '内蒙古自治区水利厅', '辽宁省水利厅', '吉林省水利厅', '黑龙江省水利厅', '上海市水务局', '江苏省水利厅', '浙江省水利厅', '安徽省水利厅', '福建省水利厅', '江西省水利厅', '山东省水利厅', '河南省水利厅', '湖北省水利厅', '湖南省水利厅', '广东省水利厅', '广西壮族自治区水利厅', '海南省水利厅', '重庆市水务局', '四川省水利厅', '贵州省水利厅', '云南省水利厅', '西藏自治区水利厅', '陕西省水利厅', '甘肃省水利厅', '青海省水利厅', '宁夏回族自治区水利厅', '新疆维吾尔族自治区水利厅', '新疆生产建设兵团水利局', '大连', '青岛', '宁波', '厦门', '深圳']
+            var totalArr = [];
+            for (var i = 0; i < that.arrayAllData.length; i++) {
+                var tmp = { 'name': '', value: '' }
+                tmp.name = nameArr[i];
+                tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
+                totalArr.push(tmp)
+            }
+            totalArr.sort(function(a, b) {
+                return b.value - a.value
+            })
+            index.totalData = totalArr.slice(0,10);
+        },
 	    getObjTree(objdep_id){
 	        // var data = {
 	        //     dep: objdep_id,
@@ -1776,53 +1766,20 @@ var app = new Vue({
 	        })
 	    },
 	    reSet(){
+            console.log("hhh")
 	        that.myChartAllData.showLoading();
 	        that.myChartRightData.showLoading();
 	        that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40);
 	        that.AllDataoption.series[1].data = that.allDataObj;
 	        that.rightBaroption.series[0].data = that.arrayRightBar;
 	        that.rightBaroption.series[1].data = that.rightBarObj;
+            that.myChartAllData.clear();
+            that.myChartRightData.clear();
 	        that.myChartAllData.setOption(that.AllDataoption);
 	        that.myChartRightData.setOption(that.rightBaroption);
 	        that.myChartAllData.hideLoading();
 	        that.myChartRightData.hideLoading();
-	    },
-	    zTreeOnClickSearch(event, treeId, treeNode) {
-		    var nodeId = treeNode.nodeId;
-		    keySearch.nodeId = nodeId;
-		    keySearch.treeType = "ReSourceTree";
-		    keySearch.loadFromTree();
-		},
-		zTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
-		    var cur = that.arrayNodeId.indexOf(treeNode.nodeId);
-		    for (var i = 0; i < dataStr.length; i++) {
-		        if (dataStr[i].pnodeId == treeNode.nodeId) {
-		            var str = dataStr[i].nodeName + "";
-		            var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-		            var name = str.substr(0, str.indexOf("("));
-		            if (num != 0) {
-		                var data = {
-		                    value: num,
-		                    name: name,
-		                    nodeid: dataStr[i].nodeId,
-		                }
-		                that.arrayData[cur].push(data);
-		                that.arrayLegend[cur].push(name);
-		            }
-		        }
-		    }
-
-		    that.catalogTreeData = that.catalogTreeData.concat(dataStr)
-		},
-		objectTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
-
-		},
-		objectTreeClickSearch(event, treeId, treeNode) {
-		    var nodeId = treeNode.nodeId;
-		    keySearch.nodeId = nodeId;
-		    keySearch.treeType = "ObjectTree";
-		    keySearch.loadFromTree();
-		}
+	    }
 
     },
 
