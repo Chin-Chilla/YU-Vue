@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>YU后台管理系统</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <!--引入公用css-->
     <link rel="stylesheet" type="text/css" href="/YU/stylesheet/adminLTE/commons/bootstrap.min.css" />
@@ -27,163 +28,171 @@
     <link rel="stylesheet" type="text/css" href="/YU/stylesheet/adminLTE/plugins/select2.min.css" />
     <link rel="stylesheet" type="text/css" href="/YU/javascript/adminLTE/plugins/datepicker/datepicker3.css" />
     <!--   关系配置-->
-    <link rel="stylesheet" type="text/css"  href="/YU/stylesheet/kgms/objectImport/style.min.css" />
+    <link rel="stylesheet" type="text/css" href="/YU/stylesheet/kgms/objectImport/style.min.css" />
 
     <!-- toastr -->
-    <link rel="stylesheet" type="text/css"  href="/YU/stylesheet/plugins/toastr/toastr.min.css" />
+    <link rel="stylesheet" type="text/css" href="/YU/stylesheet/plugins/toastr/toastr.min.css" />
 
     <!-- sweetalert -->
-    <link rel="stylesheet" type="text/css"  href="/YU/stylesheet/plugins/sweetalert/sweetalert.css" />
+    <link rel="stylesheet" type="text/css" href="/YU/stylesheet/plugins/sweetalert/sweetalert.css" />
 
 
 </head>
+
 <body class="skin-blue-light sidebar-mini" style="font-size: 16px">
-<div class="wrapper">
-    <!--    @*网页标题*@-->
-    <!--修改工作统一做-->
-    <header class="main-header">
-        <a href="#" class="logo">
-            <span class="logo-lg" style="font-size: 13px;font-weight: bold;font-family: Helvetica,Arial,Verdana,sans-serif;"><b></b>目录服务</span>
-            <span class="logo-mini"><b></b></span>
+    <div class="wrapper">
+        <!--    @*网页标题*@-->
+        <!--修改工作统一做-->
+        <header class="main-header">
+            <a href="#" class="logo">
+                <span class="logo-lg"
+                    style="font-size: 13px;font-weight: bold;font-family: Helvetica,Arial,Verdana,sans-serif;"><b></b>目录服务</span>
+                <span class="logo-mini"><b></b></span>
 
-        </a>
+            </a>
 
-    </header>
-    <!--    @*菜单栏*@-->
-    <!--修改工作统一做-->
-    <aside class="main-sidebar" style="font-size: 13px !important;">
-        <section class="sidebar">
-            <ul class="sidebar-menu">
-            </ul>
-        </section>
-    </aside>
-    <!--    @*内容部分*@-->
-    <!--所有的html放到这里来-->
-    <div>
-        <div class="content-wrapper">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="box box-solid">
-                        <div class="box-body" style="text-align: center;min-height: 800px;;padding-top: 200px">
-                            <div>
-                                <h1>YU后台管理系统</h1>
+        </header>
+        <!--    @*菜单栏*@-->
+        <!--修改工作统一做-->
+        <aside class="main-sidebar" style="font-size: 13px !important;">
+            <section class="sidebar">
+                <ul class="sidebar-menu">
+                </ul>
+            </section>
+        </aside>
+        <!--    @*内容部分*@-->
+        <!--所有的html放到这里来-->
+        <div>
+            <div class="content-wrapper">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-solid">
+                            <div class="box-body" style="text-align: center;min-height: 800px;;padding-top: 200px">
+                                <div>
+                                    <h1>YU后台管理系统</h1>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--        底栏-->
+            <footer class="main-footer" style="width:60%; height:40px;margin:0 auto">
+                <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-2" style="margin-left: 50px ;height:30px">
+                        <lable id="text1">结果数量：</lable>
+                    </div>
+                    <div class="col-md-4">
+                        <ul id="pagination" class="pagination-sm pagination"></ul>
+                    </div>
+                    <div class="col-md-3"></div>
+                </div>
+            </footer>
+
         </div>
-<!--        底栏-->
-        <footer class="main-footer" style="width:60%; height:40px;margin:0 auto">
-            <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-2" style="margin-left: 50px ;height:30px">
-                    <lable id="text1">结果数量：</lable>
-                </div>
-                <div class="col-md-4">
-                    <ul id="pagination" class="pagination-sm pagination"></ul>
-                </div>
-                <div class="col-md-3"></div>
-            </div>
-        </footer>
-
     </div>
-</div>
-<!--引入js-->
-<!--公用js-->
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/bootstrap.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/app.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/demo.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.core.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.excheck.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exedit.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exhide.js"></script>
+    <!--引入js-->
+    <!--公用js-->
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/app.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/demo.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exedit.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exhide.js"></script>
 
-<script type="text/javascript" src="/YU/javascript/system/schemas/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/schemas/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/dataTables.bootstrap.min.js"></script>
 
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/jquery.slimscroll.min.js"></script>
-<!--引入插件的js-->
-<!--日期选择器-->
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/select2.full.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/jquery.slimscroll.min.js"></script>
+    <!--引入插件的js-->
+    <!--日期选择器-->
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/select2.full.min.js"></script>
+    <script type="text/javascript"
+        src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript"
+        src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script type="text/javascript"
+        src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
 
-<!--公共js类-->
-<script type="text/javascript" src="/YU/javascript/common/commons.js"></script>
-
-
-<!--你自己的js使用注释分开!-->
-<script type="text/javascript" src="/YU/javascript/system/pages/mainPage.js"></script>
-<!--kgms/objectImport-->
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfig.lazy.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfigOperate.lazy.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/jstree.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/ObjRelExtract.js"></script>
-<!--事件抽取-->
-<script type="text/javascript" src="/YU/javascript/system/demo/dataProcess.js"></script>
-
-<!--目录管理-->
-<script type="text/javascript" src="/YU/javascript/catalog/departmentDir/management/catalogPage.js"></script>
-<script type="text/javascript" src="/YU/javascript/metadata/release/menuReviewPage.js"></script>
-<script type="text/javascript" src="/YU/javascript/metadata/sync/indexSync.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/schemas/jquery.form.js"></script>
-
-<!--菜单树管理-->
-<!--<script type="text/javascript" src="/YU/javascripts/sysMenu/sysMenu.js"></script>-->
-<!--系统管理-->
-<!--数据连接管理-->
-<script src="/YU/javascript/system/rdbms/DataManage.js"  type="text/javascript"></script>
-
-<!--demo-->
-<script type="text/javascript" src="/YU/javascript/system/demo/demoPage.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/demo/demoPage.lazy.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/demo/demoPage.crud.js"></script>
-
-<!--元数据手动填报-->
-<script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/manualImport.js"></script>
-<script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/objectMetadata.js"></script>
-
-<!--分页-->
-<script type="text/javascript" src="/YU/javascript/common/query.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/paging.js"></script>
-
-<!-- vue -->
-<script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
-
-<!-- toastr提示框 -->
-<script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
-
-<!-- sweetalert -->
-<script type="text/javascript" src="/YU/javascript/plugins/sweetalert/sweetalert.min.js"></script>
+    <!--公共js类-->
+    <script type="text/javascript" src="/YU/javascript/common/commons.js"></script>
 
 
+    <!--你自己的js使用注释分开!-->
+    <script type="text/javascript" src="/YU/javascript/system/pages/mainPage.js"></script>
+    <!--kgms/objectImport-->
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfig.lazy.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfigOperate.lazy.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/jstree.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/ObjRelExtract.js"></script>
+    <!--事件抽取-->
+    <script type="text/javascript" src="/YU/javascript/system/demo/dataProcess.js"></script>
 
-<script>
-    $(document).ready(function () {
-        MainPage.getMenu();
+    <!--目录管理-->
+    <script type="text/javascript" src="/YU/javascript/catalog/departmentDir/management/catalogPage.js"></script>
+    <script type="text/javascript" src="/YU/javascript/metadata/release/menuReviewPage.js"></script>
+    <script type="text/javascript" src="/YU/javascript/metadata/sync/indexSync.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/jquery.form.js"></script>
 
-        // toastr 配置
-        toastr.options = {
-            "closeButton": false,
-            "debug": false,
-            "progressBar": false,
-            "positionClass": "toast-top-center",
-            "onclick": null,
-            "showDuration": "200",
-            "hideDuration": "200",
-            "timeOut": "3000",
-            "extendedTimeOut": "1000",
-            "showEasing": "swing",
-            "hideEasing": "linear",
-            "showMethod": "fadeIn",
-            "hideMethod": "fadeOut"
-        }
-    });
-</script>
+    <!--菜单树管理-->
+    <!--<script type="text/javascript" src="/YU/javascripts/sysMenu/sysMenu.js"></script>-->
+    <!--系统管理-->
+    <!--数据连接管理-->
+    <script src="/YU/javascript/system/rdbms/index.js" type="text/javascript"></script>
+
+    <!--demo-->
+    <script type="text/javascript" src="/YU/javascript/system/demo/demoPage.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/demo/demoPage.lazy.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/demo/demoPage.crud.js"></script>
+
+    <!--元数据手动填报-->
+    <script type="text/javascript"
+        src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/manualImport.js"></script>
+    <script type="text/javascript"
+        src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/objectMetadata.js"></script>
+
+    <!--分页-->
+    <script type="text/javascript" src="/YU/javascript/common/query.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/paging.js"></script>
+
+    <!-- vue -->
+    <script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
+
+    <!-- toastr提示框 -->
+    <script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
+
+    <!-- sweetalert -->
+    <script type="text/javascript" src="/YU/javascript/plugins/sweetalert/sweetalert.min.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            MainPage.getMenu();
+
+            // toastr 配置
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "progressBar": false,
+                "positionClass": "toast-top-center",
+                "onclick": null,
+                "showDuration": "200",
+                "hideDuration": "200",
+                "timeOut": "3000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+        });
+    </script>
 </body>
+
 </html>
