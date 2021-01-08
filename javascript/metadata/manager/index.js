@@ -56,7 +56,7 @@ var app = new Vue({
 		    }
 		};
 
-		getDataByGet('/resource_dir/initial_resource_dirtree','',res=>{
+		getDataByGet('/resource_dir/initial_objdept_dirtree','',res=>{
 			that.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data);
 		})
 	},
@@ -247,9 +247,11 @@ var app = new Vue({
 		},
 		catalogue(){
 			var classId = $("input[name='optionsRadios']:checked").val();
-		    var nodes = that.zTreeObj.getCheckedNodes(true);
-		    if (nodes.length == 0) {
-		        toastr.warning("您没有选择节点！");
+			var classCode = $("input[name='optionsRadios']:checked").parent().parent().find("td")[2].innerHTML;
+			var nodes = that.zTreeObj.getCheckedNodes(true);
+			var nodeCode = nodes[1].nodeCode+"_"+classCode;
+		    if (nodes.length !=2) {
+		        toastr.warning("二级结点必须选择一个！");
 		    } else {
 		        var nodeIdList = [];
 		        // alert("新编目的节点位置是:");
@@ -259,6 +261,7 @@ var app = new Vue({
 		        }
 		        var data = {
 		            classId: classId,
+					nodeCode:nodeCode,
 		            nodeId: JSON.stringify(nodeIdList),
 		            state: 100,
 		            flag:0
@@ -328,8 +331,10 @@ var app = new Vue({
 		seeClass(){
 			var classId = $("input[name='optionsRadios']:checked").val();
 			var className = $("input[name='optionsRadios']:checked").attr("data-name");
+			var classCode = $("input[name='optionsRadios']:checked").parent().parent().find("td")[2].innerHTML;
 			sessionStorage.setItem("objClassName",className);
 			sessionStorage.setItem("objClassId",classId);
+			sessionStorage.setItem("objClassCode",classCode);
 		    if (typeof(classId) != "undefined") {
 		        $('.content-wrapper').load('metadata/manager/detail.html', function() {});
 		    }

@@ -82,7 +82,7 @@ var app = new Vue({
 		    }
 		};
 
-		getDataByGet('/resource_dir/initial_resource_dirtree','',res=>{
+		getDataByGet('/resource_dir/initial_objdept_dirtree','',res=>{
 			that.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data);
 		})
 	},
@@ -329,8 +329,8 @@ var app = new Vue({
             var nodeList = []
             if(flag==0||flag==2){
             	var nodes = that.zTreeObj.getCheckedNodes(true);
-            	if (nodes.length == 0) {
-			        toastr.warning("您没有选择节点！");
+            	if (nodes.length !=2) {
+			        toastr.warning("二级结点必须选择一个！");
 			        return;
 			    }else{
 			    	for (var i = 0; i < nodes.length; i++) {
@@ -353,7 +353,10 @@ var app = new Vue({
 				endTime:$("#endTime").val(),
 				hasCataLog:'0'
         	}
+			var nodes = that.zTreeObj.getCheckedNodes(true);
+			var nodeCode = nodes[1].nodeCode+"_"+sessionStorage.getItem("objClassCode");
 	        var data = {
+            	nodeCode:nodeCode,
 	            classId: that.classId,
 	            nodeId: JSON.stringify(nodeList),
 	            entityArray:JSON.stringify(entityArray),
