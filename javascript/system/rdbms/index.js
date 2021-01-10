@@ -524,26 +524,84 @@ var app = new Vue({
 
         //查看表信息按钮事件
         seeDataTable: function () {
-            var id1 = null;
+            var id = null;
             var ID = [];
             var ischeck = document.getElementsByName("isChecked2");
             for (i = 0; i < ischeck.length; i++) {
                 if (ischeck[i].checked == true) {
                     var node = ischeck[i].parentNode.parentNode.parentNode.nextSibling;
-                    id1 = node.innerHTML.replace(/\s+/g, "");
-                    ID.push(id1);
+                    id = node.innerHTML.replace(/\s+/g, "");
+                    ID.push(id);
                 }
             }
             if (ID.length <= 0) { toastr.warning("您还没有选择要查看的数据库！"); }
             else if (ID.length > 1) { toastr.warning("一次只能选择一个数据库！"); }
             else {
-                var data = {};
-                getStringData('/DataSourceManager/seeDataTable', data, function (msg) {
-                    $(".content-wrapper").html(msg);
-                    DataManage.getDataTable(id1);
-                })
+                $('.content-wrapper').load('system/rdbms/table_detail.html', function () { });
+                that.getDataTable(id);
             }
+        },
+
+        //获得指定数据库的所有表信息并展示
+        getDataTable: function (id) {
+            var data = { databaseId: id };
+            getDataByPost(
+                '/system_rdbms/loadDataTable',
+                data,
+                res => {
+                    tempDBId = id;
+                    $("#pagination").empty();
+                    $("#pagination").Paging({
+                        pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                            that.changeTablePage(page, size);
+                        }
+                    });
+                    that.changeTablePage(1, 10);
+                },
+                err => {
+                    toastr.error("查看数据库失败！");
+                }
+            )
+        },
+
+        //表信息分页
+        changeTablePage: function (nowPage, size) {
+            var data = {
+                page: nowPage,
+                size: size
+            };
+            getDataByPost(
+                '/system_rdbms/showDataTable',
+                data,
+                res => {
+                    var num = 0;
+                    $("#property_body").empty();
+                    console.log(res.data);
+                    for (var o in res.data) {
+                        num++;
+                        if (res.data[o].updatestamp == null) {
+                            var updatetime = "";
+                        } else {
+                            var date = new Date(res.data[o].updatestamp.time);
+                            var updatetime = date.Format("yyyy-MM-dd HH:mm:ss");
+                        }
+                        if (res.data[o].tabCName == null) res.data[o].tabCName = "";
+                        if (res.data[o].keyword == null) res.data[o].keyword = "";
+                        if (res.data[o].note == null) res.data[o].note = "";
+                        $("#property_body").append("<tr><td><div class='checker'><span><input type='checkbox' class='checkboxes' value='1' name='isChecked'/></span></div></td><td>" + res.data[o].tabId + "</td><td>" + res.data[o].dbId + "</td><td> " + res.data[o].tabEName + "</td><td>" + res.data[o].tabCName + "</td><td>" + res.data[o].keyword + "</td><td>" + res.data[o].note + "</td><td>" + res.data[o].recNum + "</td><td>" + res.data[o].tabSize + "</td><td>" + updatetime + "</td></tr>");
+                    }
+                },
+                err => {
+                    toastr.error("查看数据库失败！");
+                }
+            )
         }
+
+
+
+
+
+
     }
 })
 
