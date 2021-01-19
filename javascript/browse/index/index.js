@@ -1295,11 +1295,12 @@ var index = new Vue({
 	                var tmp = arr[i].trim();
 	                arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
 	            }
-	            var HP_DATA = that.arrayDepObj.slice(33,37);
-	            var sum = 0;
-	            HP_DATA.forEach(item =>{
-	                sum = sum + item
-	            });
+                //EX_DATA存放其他管理对象的数据
+                var EX_DATA = arr1.slice(33,37);
+                var sum = 0;
+                for(var i=0;i<EX_DATA.length;i++){
+                    sum+=Number(EX_DATA[i]);
+                }
 	            that.arrayDepObj = [];
 	            for (i = 0; i < 33; i++){
 	                that.arrayDepObj.push(Number(arr1[i]));
@@ -1486,12 +1487,6 @@ var index = new Vue({
 	        var depobjId = $("#level2").find("option:selected").attr("objdep_id");
 	        //请求数据
 	        that.getObjTree(depobjId);
-	        // // jq模拟点击事件
-	        // $('#'+node.tId+"_switch").click()
-	        // setTimeout(function () {
-	        //     that.leftDownPictureShow();
-	        //     that.rightDownPictureShow();
-	        // },1500)
 	    },
 	    rightDownBtnClick(flag){
 	        if(flag){
