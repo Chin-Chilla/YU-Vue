@@ -65,11 +65,11 @@
                         </div>-->
                 <div class="btn-group">
                     <input type="button" value="查看表" permission="ss" class="PER_BTN btn btn-block btn-primary"
-                        id="view_table" onclick="DataManage.getColumn()">
+                        id="view_table" @click="getColumn">
                 </div>
                 <div class="btn-group">
                     <input type="button" value="编辑表" permission="ss" class="PER_BTN btn btn-block btn-primary"
-                        id="edit_table" onclick="DataManage.editTable()">
+                        id="edit_table" @click="editTable">
                 </div>
                 <!-- <div class="btn-group">
                     <input type="button" value="编目表" permission="ss" class="PER_BTN btn btn-block btn-primary"
@@ -202,7 +202,7 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                         <button type="button" class="btn btn-primary" data-dismiss="modal"
-                            onclick="DataManage.saveTableChanges()">保存编辑</button>
+                            @click="saveEditTable">保存编辑</button>
                     </div>
                 </div>
             </div>
