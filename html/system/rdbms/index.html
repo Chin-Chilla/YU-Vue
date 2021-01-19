@@ -60,10 +60,9 @@
 
                             <div class="pull-right" style="margin-right:130px">
                                 <nobr><input type="button" value="提交" permission="ss" class="PER_BTN btn btn-info "
-                                        onClick="DataManage.loadSpecificTable()">
+                                        @click="loadSpecificTable">
                                     <input type="button" value="重置" permission="ss" class="PER_BTN btn btn-default "
-                                        onClick="DataManage.reset()">
-
+                                        @click="reset">
                                 </nobr>
                             </div>
 
@@ -111,10 +110,10 @@
                     <input type="button" value="查看" permission="ss" class="PER_BTN btn btn-block btn-primary"
                         @click="seeDataTable">
                 </div>
-                <div class="btn-group">
+                <!-- <div class="btn-group">
                     <button type="button" class="btn btn-block btn-primary" disabled="disabled"
                         onclick="DataManage.showCatalogModal('isChecked2')">编目元数据</button>
-                </div>
+                </div> -->
 
             </div>
         </div>
@@ -160,10 +159,10 @@
             </div>
 
         </div>
-        <div>
+        <!-- <div>
             <input type="button" value="字典维护" id="dictionary" class="btn btn-warning pull-right"
                 style="margin-right:20px" onclick="DataManage.dictionary()">
-        </div>
+        </div> -->
         <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog" role="document" style="height:400px">
                 <div class="modal-content">

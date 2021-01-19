@@ -28,10 +28,10 @@ var app = new Vue({
     },
     mounted() {
         that = this;
-        $('.objDatepicker').datepicker({
+        $('.datepicker').datepicker({
             autoclose: true,
-            language: "zh-CN",
-            todayHighlight: true
+            todayHighlight: true,
+            language: "zh-CN"
         });
 
         //初始化资源目录树
@@ -39,7 +39,6 @@ var app = new Vue({
             that.zTreeObj = $.fn.zTree.init($("#addTree3"), setting, res.data);
         })
 
-        //
         that.loadTable();
     },
     methods: {
@@ -69,6 +68,7 @@ var app = new Vue({
                 data,
                 res => {
                     dataSourceList = res.data;
+                    console.log(dataSourceList);
                     $("#property_body").empty();
                     for (var o in dataSourceList) {
                         if (dataSourceList[o].realname == '"null"') dataSourceList[o].realname = "";
@@ -553,10 +553,11 @@ var app = new Vue({
                     $("#pagination").empty();
                     $("#pagination").Paging({
                         pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
-                            that.changeTablePage(page, size);
+                            that.changeTablePage(page, size, id);
                         }
                     });
-                    that.changeTablePage(1, 10);
+                    //将改js的dataBaseId通过参数方式传递到tabDetail.js中，那边要用到
+                    that.changeTablePage(1, 10, id);
                 },
                 err => {
                     toastr.error("查看数据库失败！");
@@ -564,31 +565,75 @@ var app = new Vue({
             )
         },
 
-        //表信息分页
-        changeTablePage: function (nowPage, size) {
+        //清空搜索条件
+        reset: function () {
+            $("#dbname").val("");
+            $("#dbcnname").val("");
+            $("#contacts").val("");
+            $("#company").val("");
+            $("#startTime").val("");
+            $("#endTime").val("");
+        },
+
+        //载入检索后符合条件的数据库数量
+        loadSpecificTable: function () {
+            var dbname = $("#dbname").val();
+            var dbcnname = $("#dbcnname").val();
+            var contacts = $("#contacts").val();
+            var company = $("#company").val();
+            var startTime = $("#startTime").val();
+            var endTime = $("#endTime").val();
+            var time_1 = new Date(startTime).getTime();//1的时间戳
+            var time_2 = new Date(endTime).getTime();//2的时间戳
+            if (time_1 != NaN && time_2 != NaN && time_1 > time_2) {
+                toastr.warning("您选择的起始时间晚于截止时间，请重新选择！");
+            } else {
+                var data = {
+                    dbname: dbname,
+                    dbcnname: dbcnname,
+                    contacts: contacts,
+                    company: company,
+                    startTime: startTime,
+                    endTime: endTime
+                };
+            }
+            getDataByPost(
+                '/system_rdbms/loadSpecificTable',
+                data,
+                res => {
+                    $("#pagination").empty();
+                    $("#pagination").Paging({
+                        pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                            that.showSpecificTable(page, size);
+                        }
+                    });
+                    that.showSpecificTable(1, 10);
+                },
+                err => {
+                    toastr.error("查看数据库失败！");
+                }
+            )
+        },
+
+        //载入检索后符合条件的数据库具体信息
+        showSpecificTable: function (nowPage, size) {
             var data = {
                 page: nowPage,
                 size: size
             };
             getDataByPost(
-                '/system_rdbms/showDataTable',
+                '/system_rdbms/showSpecificTable',
                 data,
                 res => {
-                    var num = 0;
                     $("#property_body").empty();
-                    console.log(res.data);
                     for (var o in res.data) {
-                        num++;
-                        if (res.data[o].updatestamp == null) {
-                            var updatetime = "";
-                        } else {
-                            var date = new Date(res.data[o].updatestamp.time);
-                            var updatetime = date.Format("yyyy-MM-dd HH:mm:ss");
-                        }
-                        if (res.data[o].tabCName == null) res.data[o].tabCName = "";
-                        if (res.data[o].keyword == null) res.data[o].keyword = "";
-                        if (res.data[o].note == null) res.data[o].note = "";
-                        $("#property_body").append("<tr><td><div class='checker'><span><input type='checkbox' class='checkboxes' value='1' name='isChecked'/></span></div></td><td>" + res.data[o].tabId + "</td><td>" + res.data[o].dbId + "</td><td> " + res.data[o].tabEName + "</td><td>" + res.data[o].tabCName + "</td><td>" + res.data[o].keyword + "</td><td>" + res.data[o].note + "</td><td>" + res.data[o].recNum + "</td><td>" + res.data[o].tabSize + "</td><td>" + updatetime + "</td></tr>");
+                        var date = new Date(res.data[o].updatestamp);
+                        var updatetime = date.Format("yyyy-MM-dd HH:mm:ss");
+                        if (res.data[o].realname == "null") res.data[o].realname = "";
+                        if (res.data[o].dbdesc == "null") res.data[o].dbdesc = "";
+                        if (res.data[o].recordnum == "null") res.data[o].recordnum = "0";
+                        if (res.data[o].dbdesc == '"null"') res.data[o].dbdesc = "";
+                        $("#property_body").append("<tr><td><div class='checker'><span><input type='checkbox' class='checkboxes' value='1' name='isChecked2'/></span></div></td><td>" + res.data[o].id + "</td><td> " + res.data[o].dbcnname + "</td><td>" + res.data[o].sid + "</td><td>" + "" + "</td><td>" + res.data[o].dbdesc + "</td><td>" + res.data[o].tablenum + "</td><td>" + res.data[o].recordnum + "</td><td>" + updatetime + "</td><td></td></tr>");
                     }
                 },
                 err => {
@@ -596,7 +641,6 @@ var app = new Vue({
                 }
             )
         }
-
 
 
 
