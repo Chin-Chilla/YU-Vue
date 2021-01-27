@@ -5,6 +5,11 @@
  */
 
 const BASE_URL = "http://localhost:8080",LOCATION = "hohai";
+const RES_CODE = {
+"UNAUTHENTICATED": 4002,//未登录
+
+"UNAUTHORIZED": 4003//没有权限
+};
 //根据名称获取url中的参数值
 function getUrlParam(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
@@ -13,30 +18,12 @@ function getUrlParam(name) {
 		return decodeURI(r[2]);
 	return null; //返回参数值
 };
-//ajax使用get方式请求
-//调用demo:getDataByGet(url,data,function(msgObj){
-//你需要在ajax结束后执行的函数体
 
-//});
-//get方法的参数名统一使用dataJson
-function getDataByGet(aURl,aJson,aCallback){
-      $.ajax({
-			url:BASE_URL+aURl,           //该路径在route中定义
-			contentType: "application/json",
-			data:aJson,
-			dataType:"JSON",
-            async : true,
-			type:"GET",                     //必须是get类型，POST类型不行
-			success:function(res){
-				aCallback(res)
-			},
-			error:function(res){
-			    toastr.error(res.msg)
-			}
-	  })
-}
 function getDataByGet(aURl,aJson,aCallback,errorCallback){
       $.ajax({
+      		xhrFields: {
+                withCredentials: true
+            },
 			url:BASE_URL+aURl,           //该路径在route中定义
 			contentType: "application/json",
 			data:aJson,
@@ -44,16 +31,58 @@ function getDataByGet(aURl,aJson,aCallback,errorCallback){
             async : true,
 			type:"GET",                     //必须是get类型，POST类型不行
 			success:function(res){
-				aCallback(res)
+				if(res.code ==RES_CODE.UNAUTHENTICATED){
+					toastr.error(res.msg);
+					setTimeout(function(){
+						window.location.href="/"
+					},1500)
+				}else if(res.code ==RES_CODE.UNAUTHORIZED){
+					toastr.error(res.msg);
+				}else{
+					aCallback(res)
+				}
 			},
 			error:function(res){
 			    errorCallback(res);
 			}
 	  })
 }
-//同步get
-function getDataByGet1(aURl,aJson,aCallback){
+
+function getDataByGet(aURl,aJson,aCallback){
       $.ajax({
+      		xhrFields: {
+                withCredentials: true
+            },
+			url:BASE_URL+aURl,           //该路径在route中定义
+			contentType: "application/json",
+			data:aJson,
+			dataType:"JSON",
+            async : true,
+			type:"GET",                     //必须是get类型，POST类型不行
+			success:function(res){
+				if(res.code ==RES_CODE.UNAUTHENTICATED){
+					toastr.error(res.msg);
+					setTimeout(function(){
+						window.location.href="/"
+					},1500)
+				}else if(res.code ==RES_CODE.UNAUTHORIZED){
+					toastr.error(res.msg);
+				}else{
+					aCallback(res)
+				}
+			},
+			error:function(res){
+			    toastr.error(res.msg)
+			}
+	  })
+}
+
+
+function getDataByGet1(aURl,aJson,aCallback,errorCallback){
+      $.ajax({
+      		xhrFields: {
+                withCredentials: true
+            },
 			url:BASE_URL+aURl,           //该路径在route中定义
 			contentType: "application/json",
 			data:aJson,
@@ -61,7 +90,46 @@ function getDataByGet1(aURl,aJson,aCallback){
             async : false,
 			type:"GET",                     //必须是get类型，POST类型不行
 			success:function(res){
-				aCallback(res)
+				if(res.code ==RES_CODE.UNAUTHENTICATED){
+					toastr.error(res.msg);
+					setTimeout(function(){
+						window.location.href="/"
+					},1500)
+				}else if(res.code ==RES_CODE.UNAUTHORIZED){
+					toastr.error(res.msg);
+				}else{
+					aCallback(res)
+				}
+			},
+			error:function(res){
+			    errorCallback(res);
+			}
+	  })
+}
+
+//同步get
+function getDataByGet1(aURl,aJson,aCallback){
+      $.ajax({
+      		xhrFields: {
+                withCredentials: true
+            },
+			url:BASE_URL+aURl,           //该路径在route中定义
+			contentType: "application/json",
+			data:aJson,
+			dataType:"JSON",
+            async : false,
+			type:"GET",                     //必须是get类型，POST类型不行
+			success:function(res){
+				if(res.code ==RES_CODE.UNAUTHENTICATED){
+					toastr.error(res.msg);
+					setTimeout(function(){
+						window.location.href="/"
+					},1500)
+				}else if(res.code ==RES_CODE.UNAUTHORIZED){
+					toastr.error(res.msg);
+				}else{
+					aCallback(res)
+				}
 			},
 			error:function(res){
 			    toastr.error(res.msg)
@@ -69,9 +137,14 @@ function getDataByGet1(aURl,aJson,aCallback){
 	  })
 }
 
+
+
 //post方式
 function getDataByPost(aURl,aJson,aCallback,errorCallback){
 	$.ajax({
+		xhrFields: {
+            withCredentials: true
+        },
 		url:BASE_URL+aURl,           //该路径在route中定义
 		contentType: "application/json",
 		data:JSON.stringify(aJson),
@@ -79,7 +152,16 @@ function getDataByPost(aURl,aJson,aCallback,errorCallback){
         async : true,
 		type:"POST",                     //必须是get类型，POST类型不行
 		success:function(res){
-			aCallback(res)
+			if(res.code ==RES_CODE.UNAUTHENTICATED){
+				toastr.error(res.msg);
+				setTimeout(function(){
+					window.location.href="/"
+				},1500)
+			}else if(res.code ==RES_CODE.UNAUTHORIZED){
+				toastr.error(res.msg);
+			}else{
+				aCallback(res)
+			}
 		},
 		error:function(res){
 		    errorCallback(res);
@@ -89,6 +171,9 @@ function getDataByPost(aURl,aJson,aCallback,errorCallback){
 
 function getDataByPost(aURl,aJson,aCallback){
 	$.ajax({
+		xhrFields: {
+            withCredentials: true
+        },
 		url:BASE_URL+aURl,           //该路径在route中定义
 		contentType: "application/json",
 		data:JSON.stringify(aJson),
@@ -96,13 +181,84 @@ function getDataByPost(aURl,aJson,aCallback){
         async : true,
 		type:"POST",                     //必须是get类型，POST类型不行
 		success:function(res){
-			aCallback(res)
+			if(res.code ==RES_CODE.UNAUTHENTICATED){
+				toastr.error(res.msg);
+				setTimeout(function(){
+					window.location.href="/"
+				},1500)
+			}else if(res.code ==RES_CODE.UNAUTHORIZED){
+				toastr.error(res.msg);
+			}else{
+				aCallback(res)
+			}
 		},
 		error:function(res){
 		    toastr.error(res.msg)
 		}
   })
 }
+
+//post方式
+function getDataByPost1(aURl,aJson,aCallback,errorCallback){
+	$.ajax({
+		xhrFields: {
+            withCredentials: true
+        },
+		url:BASE_URL+aURl,           //该路径在route中定义
+		contentType: "application/json",
+		data:JSON.stringify(aJson),
+		dataType:"JSON",
+        async : false,
+		type:"POST",                     //必须是get类型，POST类型不行
+		success:function(res){
+			if(res.code ==RES_CODE.UNAUTHENTICATED){
+				toastr.error(res.msg);
+				setTimeout(function(){
+					window.location.href="/"
+				},1500)
+			}else if(res.code ==RES_CODE.UNAUTHORIZED){
+				toastr.error(res.msg);
+			}else{
+				aCallback(res)
+			}
+		},
+		error:function(res){
+		    errorCallback(res);
+		}
+  })
+}
+
+function getDataByPost1(aURl,aJson,aCallback){
+	$.ajax({
+		xhrFields: {
+            withCredentials: true
+        },
+		url:BASE_URL+aURl,           //该路径在route中定义
+		contentType: "application/json",
+		data:JSON.stringify(aJson),
+		dataType:"JSON",
+        async : false,
+		type:"POST",                     //必须是get类型，POST类型不行
+		success:function(res){
+			if(res.code ==RES_CODE.UNAUTHENTICATED){
+				toastr.error(res.msg);
+				setTimeout(function(){
+					window.location.href="/"
+				},1500)
+			}else if(res.code ==RES_CODE.UNAUTHORIZED){
+				toastr.error(res.msg);
+			}else{
+				aCallback(res)
+			}
+		},
+		error:function(res){
+		    toastr.error(res.msg)
+		}
+  })
+}
+
+
+
 
 //post方式
 function getDataByPostWithToken(aURl,aJson,csrf,aCallback){
@@ -130,49 +286,7 @@ function getDataByPostWithToken(aURl,aJson,csrf,aCallback){
 		}
 	});
 }
-//返回非json
-function getStringData(aURI,aJson,aCallback){
-	var data = { "dataJson":aJson, };
-	$.ajax({
-		url:aURI,           //该路径在route中定义
-		data:data,
-		async : true,
-		type:"GET",
-		success:function(msg){
-			aCallback(msg);
-		},
-		error:function(msg){
-			aCallback(msg);
-		}
-	});
-}
-function getStringData_1(aURI,aJson,aCallback){
 
-	$.ajax({
-		url:aURI,           //该路径在route中定义
-		data:aJson,
-		async : true,
-		type:"GET",
-		success:function(msg){
-			aCallback(msg);
-		},
-		error:function(msg){
-			aCallback(msg);
-		}
-	});
-}
-
-//数据库分页方法
-//前端html写法如下:依赖于bootstrap.min.css
-//id和class都不要改,可以加
-//<div class="text-center">
-//<ul id="pagination" class="pagination-sm pagination">
-//<li class="prev"><a onclick=dataPagination.changePage(-1)>上一页</a></li>
-//<li class="page"><a onclick=dataPagination.changePage(1)>1</a></li>
-//<li class="page"><a onclick=dataPagination.changePage(2)>2</a></li>
-//<li class="next"><a onclick=dataPagination.changePage(-999)>下一页</a></li>
-// </ul>
-// </div>
 dataPagination={
 	pageNo:1,//页号由参数指定
 	pageSize:5,//每页的大小由各自指定 dataPagination.pageSize=?
