@@ -147,6 +147,124 @@ var app = new Vue({
                     toastr.error("查看表失败！");
                 }
             )
+        },
+
+        //查看表详情
+        getColumn: function () {
+            var ischeck = document.getElementsByName("isChecked2");
+            var ID = [];
+            for (i = 0; i < ischeck.length; i++) {
+                if (ischeck[i].checked == true) {
+                    var node = ischeck[i].parentNode.parentNode.parentNode.nextSibling;
+                    var id = node.innerHTML.replace(/\s+/g, "");
+                    ID.push(id);
+                }
+            }
+            if (ID.length > 1) {
+                toastr.warning("一次只能选择一个要查看的表");
+            } else if (ID.length <= 0) {
+                toastr.warning("您还没有选择要查看的表");
+            } else {
+                $('#exampleModal').modal('show');
+                that.getColumnDetail(id);
+            }
+
+        },
+        getColumnDetail: function (id) {
+            $("#column_body").empty();
+            var data = {
+                ID: id
+            };
+            getDataByPost(
+                '/system_rdbms/getColumn',
+                data,
+                res => {
+                    console.log(res, data);
+                    for (var o in res.data) {
+                        $("#column_body").append("<tr><td><div class='checker'><span><input type='checkbox' class='checkboxes' value='1' name='isChecked1'/></span></div></td><td>" + res.data[o].fdId + "</td><td>" + res.data[o].fdName + "</td><td>" + res.data[o].fdCName + "</td><td> " + res.data[o].fdType + "</td><td>" + res.data[o].isFk + "</td></tr>");
+                    }
+                },
+                err => {
+                    toastr.error("查看表失败！");
+                }
+            )
+        },
+
+        //编辑表
+        editTable: function () {
+            $("#table_name").val();
+            $("#table_cnname").val();
+            $("#keyword").val();
+            $("#table_desc").val();
+            var ischeck = document.getElementsByName("isChecked2");
+            var ID = [];
+            for (i = 0; i < ischeck.length; i++) {
+                if (ischeck[i].checked == true) {
+                    var node = ischeck[i].parentNode.parentNode.parentNode.nextSibling;
+                    var id = node.innerHTML.replace(/\s+/g, "");
+                    ID.push(id);
+                }
+            }
+            if (ID.length > 1) {
+                toastr.warning("一次只能选择一个需要编辑的表");
+            } else if (ID.length <= 0) {
+                toastr.warning("您还没有选择要编辑的表");
+            } else {
+                $('#tableModal').modal('show');
+                tempEditId = id;
+                that.editTableDetail(id);
+            }
+        },
+        editTableDetail: function (id) {
+            var data = { ID: id };
+            getDataByPost(
+                '/system_rdbms/editTable',
+                data,
+                res => {
+                    console.log(res.data);
+                    if (res.data.tabEName == null) res.data.tabEName = '';
+                    if (res.data.tabCName == null) res.data.tabCName = '';
+                    if (res.data.keyword == null) res.data.keyword = '';
+                    if (res.data.note == null) res.data.note = '';
+                    $("#table_name").val(res.data.tabEName);
+                    $("#table_cnname").val(res.data.tabCName);
+                    $("#keyword").val(res.data.keyword);
+                    $("#table_desc").val(res.data.note);
+                },
+                err => {
+                    tempEditId = null;
+                    toastr.warning("error");
+                }
+            )
+        },
+
+        //保存编辑
+        saveEditTable: function () {
+            var tabEName = $("#table_name").val();
+            var tabCName = $("#table_cnname").val();
+            var keyword = $("#keyword").val();
+            var tabDesc = $("#table_desc").val();
+            var data = {
+                tabEName: tabEName,
+                tabCName: tabCName,
+                keyword: keyword,
+                tabDesc: tabDesc,
+                tabId: tempEditId
+            };
+            getDataByPost(
+                '/system_rdbms/saveEditTable',
+                data,
+                res => {
+                    $('#tableModal').modal('hide');
+                    toastr.success("保存编辑成功!");
+                    that.changeTablePage(1, 10, dataBaseId);
+                    tempEditId = null;
+                },
+                err => {
+                    toastr.error("保存编辑失败！");
+                    tempEditId = null;
+                }
+            )
         }
 
 
