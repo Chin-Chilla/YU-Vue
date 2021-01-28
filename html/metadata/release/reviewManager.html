@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">条件查询</h3>
+            </div>
+            <form role="form-horizontal" style="overflow: auto">
+                <div class="box-body">
+                    <div style="width: 970px">
+                        <div style="width: 320px;float: left;">
+                            <label style="float: left;text-align:right;padding-top: 5px;padding-right: 3px;width:120px" class="control-label" >对象分类:&nbsp;</label>
+                            <input type="text" id="objectType" style="float: left;padding-top: 3px;height:35px;width:130px" class="form-control input-sm" placeholder="" readonly="readonly">
+                            <input type="button" class="PER_BTN btn btn-info " value="选择" data-toggle="modal" data-target="#myModal1" style="float: left;width:65px;height: 35px;margin-left: 5px" onclick="MenuReviewPage.zTreeOnClickObjectModel()">
+                        </div>
+
+                        <div style="width: 320px;float: left;">
+                            <label style="float: left;text-align:right;padding-top: 5px;padding-right: 3px;width:120px" class="col-xs-2 control-label">元数据id:&nbsp;</label>
+                            <input type="text" id="filename" style="float: left;padding-top: 3px;width:200px" class="form-control input-sm" placeholder="">
+                        </div>
+                        <div style="width: 320px;float: left;">
+                            <label style="float: left;text-align:right;padding-top: 5px;padding-right: 3px;width:120px" class="col-xs-2 control-label">编目时间:&nbsp;</label>
+                            <input  type="text" id="regtime" style="float: left;padding-top: 3px;width:80px" readonly class="form-control objDatepicker input-sm">
+                            <label style="float: left;text-align:center;padding-top: 5px;width:30px;" class="col-xs-1 control-label">至</label>
+                            <input  type="text" style="float: left;padding-top: 3px;width:80px" id="to" readonly class="form-control objDatepicker input-sm">
+                        </div><br><br>
+                        <div style="width: 320px;float: left;">
+                            <label style="float: left;text-align:right;padding-top: 6px;padding-right: 3px;width:120px" class="col-xs-1 control-label">审核状态:&nbsp;</label>
+                            <select  class="form-control" id="state" style="float: left;padding-top: 3px;width:200px">
+                                <option value ="">所有状态</option>
+                                <option value ="0">未审核</option>
+                                <option value ="1">审核通过</option>
+                                <option value="2">审核未通过</option>
+                            </select>
+                        </div>
+                        <div style="width: 320px;float: left;">
+                            <label style="float: left;text-align:right;padding-top: 6px;padding-right: 3px;width:120px" class="col-xs-2 control-label">对象名称:&nbsp;</label>
+                            <input type="text" style="float: left;padding-top: 3px;width:200px" id="objectName" class="form-control input-sm" placeholder="">
+                        </div>
+                        <div style="width:320px;float: left;text-align: right;padding-right: 20px">
+                            <input type="button" value="提交" class="btn btn-primary" style="width:80px;height: 35px;" onclick="MenuReviewPage.search()">
+                            <input type="button" value="重置" class="btn btn-primary" style="width:80px;height: 35px;" onclick="MenuReviewPage.clean()">&nbsp
+                        </div>
+                        <div class="col-xs-1">
+                            <input type="text" value="" style="visibility:hidden" id="hideText"/>
+                        </div>
+                        <br>
+                    </div></div></form>
+        </div>
+    </div>
+</div>
+
+<div class="box box-primary">
+    <div style="padding-top:5px;" class="pull-left">
+        &nbsp;&nbsp;&nbsp;<input name="optionsChoose"  value="thisPage"  type="radio" id="thispage" onclick="MenuReviewPage.selectThisPage()">全选当前页&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <input name="optionsChoose"  value="clear"  type="radio" id="clearPage" onclick="MenuReviewPage.clear()">清空所选内容&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <input name="optionsChoose"  value="all" type="radio" id="allpage" onclick="MenuReviewPage.selectAllPage()">全选所有内容
+    </div>
+    <label style="padding-top:10px;margin-left:40px">展示：</label>
+    <select id="pagesize" style="width:50px" onchange="MenuReviewPage.search();">
+        <option>10</option>
+        <option selected="selected">20</option>
+        <option>50</option>
+        <option>100</option>
+    </select>
+
+    <label style="padding-top:10px;margin-left:5px">条数据</label>
+    <div class="pull-right">
+        <input type="button" value="数据更新" class="btn btn-primary" style="width:80px;height: 35px;" onclick="MenuReviewPage.updateReview()">
+        <input type="button" value="审核通过" class="btn btn-primary" style="width:80px;height: 35px;" onclick="MenuReviewPage.passReview()">
+        <input type="button" value="审核拒绝" class="btn btn-primary" style="width:80px;height: 35px;" onclick="MenuReviewPage.showModal()">
+    </div>
+
+
+    <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+        <div class="row">
+            <div class="col-sm-12" style="overflow:auto;height:900px;">
+                <table class="table table-striped table-bordered table-hover" id="sample_1">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th style="min-width: 150px">
+                            元数据id
+                        </th>
+                        <th style="min-width: 150px">
+                            名称
+                        </th>
+                        <th style="min-width: 200px">
+                            时间
+                        </th>
+                        <th style="min-width: 200px">
+                            状态
+                        </th>
+                        <th style="min-width: 150px">
+                            树节点
+                        </th>
+                        <th style="min-width: 200px">
+                            操作
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody id="modaltbody1"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="box-footer">
+        </div>
+    </div>
+    <div id="loading" class="overlay" style="display:none;">
+        <i class="fa fa-refresh fa-spin"></i>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal modal-default" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">审核拒绝</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-sm-4 control-label">审核拒绝理由:</label>
+                    <div class="col-sm-8">
+                        <textarea class="form-control autosizeme" id="note" rows="4" name="textarea" placeholder="注释"></textarea>
+                    </div>
+                </div>
+            </div>
+            <br><br><br><br><br>
+            <div class="modal-footer">
+                <input type="button" value="确认" class="btn btn-primary" data-dismiss="modal" onclick="MenuReviewPage.reviewRefuse()">
+                <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal -->
+<div class="modal modal-default" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document" style="width: 450px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">对象分类树</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="box box-primary" style="height:550px;overflow:auto;margin:10px;">
+                            <div>
+                                <ul id="objectTree"  class="ztree" style="width:300px;"  ></ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <input type="button" value="确认" class="btn btn-primary" data-dismiss="modal" onclick="MenuReviewPage.showText()">
+                <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function() {
+        $('.objDatepicker').datepicker({
+            autoclose: true,
+            language:"zh-CN",
+            todayHighlight: true
+        });
+    })
+</script>
+<script type="text/javascript">
+
+    var setting = {
+        data: {
+            simpleData:{
+                enable:true,
+                idKey:"class_id",
+                pIdKey:"p_class_id",
+                rootPId:"0"
+            },
+            key: {
+                name: "class_name"
+            }
+        },
+        check:{
+            enable:true,
+            chkStyle: "checkbox",
+            chkboxType: { "Y": "", "N": "" }
+        }
+    };
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<section class="content" id="vue">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-footer table-hover" style="border-bottom: 1px solid #ececec">
+                    <div class="pull-left">
+                        <h4 class="box-title" style="margin-top: 10px">对象元数据状态</h4>
+                    </div>
+                    <div style="padding: 5px 5px 5px 5px;" class="pull-right">
+                        <input type="button" value="抽取对象" permission="ss,mdm" class="PER_BTN btn btn-primary col-lg-2" data-toggle="modal" id="" style="width:80px;height: 35px;margin: 0px 5px 0px 5px" @click="showDataSourceModal">
+                        <input type="button" value="编目对象" permission="ss,mdm" class="PER_BTN btn btn-primary col-lg-2" data-toggle="modal" id="" style="width:80px; height: 35px;margin: 0px 5px 0px 5px" @click="catalogClass">
+                        <input type="button" value="查看对象" permission="ss,mdm,mdv" class="PER_BTN btn btn-primary col-lg-2" id="" style="width:80px;height: 35px;margin: 0px 5px 0px 5px" @click="seeClass">
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-header">
+                    <h3></h3>
+                    <div class="box-tools">
+                        <div class="input-group input-group-sm" style="width: 150px;">
+                            <input name="table_search" class="form-control pull-right" id="filter" type="text">
+                            <div class="input-group-btn">
+                                <input type="button" class="btn btn-primary" @click="filterKey" value="筛选">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-body table-responsive no-padding">
+                    <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th style="min-width: 150px">名称</th>
+                                <th style="min-width: 150px">标识</th>
+                                <th style="min-width: 100px">模型建立</th>
+                                <th style="min-width: 150px">抽取人员</th>
+                                <th style="min-width: 150px">对象数量</th>
+                                <th style="min-width: 150px">编目数量</th>
+                                <th style="min-width: 150px">抽取时间</th>
+                                <th style="min-width: 150px">编目时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="overlay" id="loading" style="display: none">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+            </div>
+            <!-- /.box -->
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="progressModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width: 450px;margin-top: 400px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">编目进度（{{progress}}%）</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box box-solid">
+                        <!-- /.box-header -->
+                        <div class="box-body text-center">
+                            <div class="progress progress-striped active" style="width: 100%">
+                                <div class="progress-bar progress-bar-primary" role="progressbar" :style="{width:progress+'%'}">{{progress}}%</div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 450px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">编目节点选择</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="ztree">
+                        <ul id="tree" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="更换联系人信息" class="btn btn-primary pull-left" @click="showContactModal">
+                    <input type="button" value="确认" class="btn btn-primary" @click="catalogue">
+                    <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="dataSoureModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document" style="width: 450px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">选择数据源</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="inputEmail3" class="col-sm-4 control-label">关联数据源</label>
+                        <div class="col-sm-8">
+                            <select id="attributeSource" placeholder="请搜索" style="width:200px">
+                                <option v-for="item in dataList" :value="item.dbId">{{item.dbCName}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" value="抽取" class="btn btn-primary" @click="confirmExtractClass">
+                    <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="contactConfigModal" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">联系人配置</h4>
+                </div>
+                <div class="modal-body" id="modal-body2">
+                    <ul id="contactConfigTab" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#metadataContact" data-toggle="tab">元数据联系人</a>
+                        </li>
+                    </ul>
+                    <div id="contactConfigTabContent" class="tab-content">
+                        <div class="box-header">
+                            <h3></h3>
+                            <div class="box-tools">
+                                <div class="input-group input-group-sm" style="width: 150px;">
+                                    <input name="table_search" v-model="searchContact" class="form-control" id="searchContact" type="text">
+                                    <div class="input-group-btn">
+                                        <input type="button" class="btn btn-primary" @click="contactSearch" value="筛选">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="tab-pane fade in active" id="metadataContact">
+                            <table class="table table-striped" border="1" id="dataContactTable">
+                                <tr>
+                                    <th Bgcolor=#b0c4de></th>
+                                    <th Bgcolor=#b0c4de>联系人姓名</th>
+                                    <th Bgcolor=#b0c4de>联系人ID</th>
+                                    <th Bgcolor=#b0c4de>性别</th>
+                                    <th Bgcolor=#b0c4de>单位名称</th>
+                                    <th Bgcolor=#b0c4de>电话</th>
+                                    <th Bgcolor=#b0c4de>传真</th>
+                                    <th Bgcolor=#b0c4de>邮箱</th>
+                                </tr>
+                                <tbody id="dataContactTableBody">
+                                    <tr v-for="item in contactList" :id="item.objId" @click="selectContact(item.objId)">
+                                        <td style='width: 50px'>
+                                            <input type='radio' name='contactcheckbox' :checked="contactSelect==item.objId" :value="item.objId">
+                                        </td>
+                                        <td>{{item.objName}}</td>
+                                        <td>{{item.objId}}</td>
+                                        <td>{{item.sex}}</td>
+                                        <td>{{item.orgName}}</td>
+                                        <td>{{item.telnumber}}</td>
+                                        <td>{{item.faxnumb}}</td>
+                                        <td>{{item.email}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center" style="width:600px">
+                                <ul id="dataContactPage" class="pagination-sm pagination">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!--  <input type="button" class="btn btn-default" data-toggle="modal" data-target="#supplementContactModal" id="supplementContact" value="补充">  !-->
+                    <input type="button" class="btn  btn-default" style="width: 80px; height: 35px;" data-toggle="modal" data-target="#contactModal" value="新增">
+                    <input type="button" class="btn btn-default" @click="bindContact" value="确认">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" onclick="" value="取消">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="supplementContactModal" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">补充联系人</h4>
+                </div>
+                <div class="modal-body" id="modal-body2">
+                    <label for="supplementWorkUnit">单位</label>
+                    <input id="supplementWorkUnit">
+                    <label for="supplementCandidate">候选人员</label>
+                    <input id="supplementCandidate">
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="form-horizontal">
+        <div class="modal modal-default" id="contactModal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">新增联系人</h4>
+                    </div>
+                    <div class="form-group" style="margin-top:20px;">
+                        <label for="contactName" class="col-sm-3 control-label">用户名称:</label>
+                        <div class="col-sm-4">
+                            <input v-model="contactName" style="width:300px;" type="text" class="form-control" id="contactName" placeholder="用户名称(*必填)" />
+                        </div>
+                        <label id="labelContentName" style="margin:0px 0px 0px 15px" class="col-sm-3 control-label">*(必填)</label>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactOrg" class="col-sm-3 control-label">单位名称:</label>
+                        <div class="col-sm-4">
+                            <input maxlength="18" v-model="contactOrg" onblur="" style="width:300px;" type="text" class="form-control" id="contactOrg" placeholder="单位名称" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactTel" class="col-sm-3 control-label">办公室电话:</label>
+                        <div class="col-sm-3">
+                            <input v-model="contactTel" style="width:300px;" type="text" class="form-control" id="contactTel" placeholder="办公室电话" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactFaxnumb" class="col-sm-3 control-label">传真:</label>
+                        <div class="col-sm-3">
+                            <input v-model="contactFaxnumb" style="width:300px;" type="text" class="form-control" id="contactFaxnumb" placeholder="传真" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="contactMail" class="col-sm-3 control-label">邮箱:</label>
+                        <div class="col-sm-3">
+                            <input v-model="contactMail" style="width:300px;" type="text" class="form-control" id="contactMail" placeholder="邮箱" />
+                        </div>
+                        <label id="labelContactMail" style="margin:0px 0px 0px 15px" class="col-sm-4 control-label"></label>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="contactNew" type="button" style="margin:0px 0px 0px 0px;" class="btn btn-default" @click="addContact">添加</button>
+                        <button type="button" style="margin-right:50px;" class="btn btn-default" data-dismiss="modal">取消</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</section>
+<script src="/YU/javascript/metadata/manager/index.js"></script>

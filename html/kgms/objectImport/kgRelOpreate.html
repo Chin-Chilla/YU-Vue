@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css" >
+</head>
+<body>
+<br><br><br><br>
+<div class="ui container">
+   <div class="ui attached  segment">
+       <div class="ui middle aligned mobile reversed stackable grid" >
+        <div class=" wide column ">
+            <div class="box-body">
+                <div id="catalogNodeList_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="dataTables_length" id="example1_length" onchange="KGConfigPageOperate.showPage()">
+                                <label> 展示
+                                    <select id="length_selector" aria-controls="example1" class="ui search dropdown form-control input-sm">
+                                        <option>5</option>
+                                        <option>10</option>
+                                        <option>20</option>
+                                    </select> 项结果
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+<br>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table id="catalogNodeList" class="ui compact teal table table-bordered table-striped dataTable" role="grid" aria-describedby="catalogNodeList_info">
+
+                                <thead>
+                                <tr role="row">
+
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1"></th>
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1">Subject</th>
+                                    <th class="sorting_desc" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1">Pre</th>
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1">Object</th>
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1">Time</th>
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1">Operate</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr th:each="rel,iterStat:${listRel}"  role="row" class="odd">
+                                    <td  th:text="${iterStat.count}" class="sorting_1 num">编号</td>
+                                    <td th:text="${rel['obj1']}">湖泊</td>
+                                    <td th:text="${rel['rel']}">属于</td>
+                                    <td  th:text="${rel['obj2']}">流域</td>
+                                    <td th:text="${rel['configTime']}"}>2020/5/27</td>
+                                    <td>
+                                        <a href="#"  class="ui mini teal basic button">编辑</a>
+<!--                                        <a  th:href="@{/objectImport/{obj}/deleteRel(obj=${rel['obj1']}+'_'+${rel['obj2']})}" class="ui mini red basic button">删除</a>-->
+                                        <button th:onclick="KGConfigPageOperate.deleteRel([[${rel['obj1']}]],[[${rel['obj2']}]])"  class="ui mini red basic button">删除</button>
+
+                                    </td>
+
+                                </tr>
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 表格分页器由 adminLTE 加载 -->
+                </div>
+            </div>
+        </div>
+ </div>
+</div>
+</div>
+<script th:inline="javascript">
+    $(function () {
+
+
+        //$("#catalogNodeList").DataTable();  // 动态加载
+        $('#catalogNodeList').DataTable({
+            "paging": false,                 // 分页器
+            "lengthChange": false,           // 列表显示长度
+            "searching": false,              // 搜索框
+            "ordering": true,                // 对已加载的数据按列排序
+            "info": false,                   // 当前显示记录的位置（左下角）
+            "autoWidth": false               // 自动调整列宽
+        });
+
+        var currentPage = [[${currentPage}]];
+        var pageSize = [[${pageSize}]];
+        var resultNum = [[${resultNum}]];
+
+        // // 对结果计数器进行初始化
+        KGConfigPageOperate.initializeResultNum(resultNum);
+        // 将分页器设置为当前的页粒度和当前页号值
+        KGConfigPageOperate.setPagination(pageSize,currentPage,resultNum);
+        KGConfigPageOperate.setPageSize(pageSize);
+
+
+
+    });
+</script>
+</body>
+</html>

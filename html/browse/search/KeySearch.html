@@ -1,0 +1,57 @@
+<section class="content" id="keySearch">
+    <div id="downLinePage" class="row">
+        <div class="col-md-4" style="margin-top: 10px">
+
+            <div class="row" style="padding: 5px 0px 5px 0px">
+                <div class="col-xs-6" style="padding: 8px 20px 8px 20px">
+                    <input v-model="keyWord2" class="form-control" type="输入要搜索的关键词" style="border-radius: 3px" id="keyWord2">
+                </div>
+                <div class="col-xs-3" style="padding: 8px 0px 8px 0px">
+                    <div style="float: left;
+                    margin-left: 10px">
+                        <a class="btn btn-primary" style="width: 150px;
+                        border-radius: 3px" onclick="keySearch.load(4)">
+                            <i class="fa fa-search"></i> 在结果中检索
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="nav-tabs-custom" >
+                <ul class="nav nav-tabs " style="font-size: 16px">
+                    <li style="width:50%"class="active "><a href="#facet" data-toggle="tab" aria-expanded="true">精炼检索结果</a></li>
+                    <li style="width:50%"class=""><a href="#treeDemo" data-toggle="tab" aria-expanded="false">检索结果分布树</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="facet">
+                        <div  style="margin-top: 5px">
+                            <ul class="facet" style="height: 100%; min-height: 900px;overflow: auto; -moz-user-select: none;padding-left: 0px;"></ul>
+                        </div>
+                    </div>
+                    <!-- /.tab-pane 动态树-->
+                    <div class="tab-pane" id="treeDemo">
+                        <div style="margin-top: 5px" class="zTreeDemoBackground right">
+                            <ul id="treeDemos" class="ztree" style="height: 100%; min-height: 900px;overflow: auto; -moz-user-select: none;padding-left: 0px;"></ul>
+                        </div>
+                        <!-- /.tab-pane 动态树-->
+                    </div>
+                    <!-- /.tab-pane -->
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-8" style="margin-top: 10px">
+            <div class="col-md-12" style="padding-right: 10px ">
+                <div class="box-group">
+                    <div class="box-primary">
+                        <div class="row" style="margin: 0px 0px 0px 10px;font-size:16px" id="cardPage">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

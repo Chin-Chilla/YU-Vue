@@ -1,0 +1,256 @@
+<section class="content" id="vue">
+    <div class="row">
+        <div class="col-md-12">
+            <!-- Horizontal Form -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">添加搜索条件</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form class="form-horizontal">
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label" style="min-width: 100px">表英文名&nbsp;</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="tableName">
+                            </div>
+                            <label class="col-sm-1 control-label" style="min-width: 100px">表中文名&nbsp;</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="tablecnName">
+                            </div>
+                        </div>
+                        <!-- Date and time range -->
+                        <!-- Date and time range -->
+                        <div class="form-group">
+                            <label class="col-sm-1 control-label" style="min-width: 100px">起始时间&nbsp;</label>
+                            <div class="col-sm-4">
+                                <input id="startTime" type="text" readonly class="form-control datepicker">
+                            </div>
+
+                            <label class="col-sm-1 control-label" style="min-width: 100px">截止时间&nbsp;</label>
+                            <div class="col-sm-4">
+                                <input id="endTime" type="text" readonly class="form-control datepicker">
+                            </div>
+                        </div>
+                        <!-- <div class="form-group">
+                            <label class="col-sm-1 control-label" style="min-width: 100px">字典&nbsp;</label>
+
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control" id="diction">
+                            </div>
+                        </div> -->
+                        <!-- /.form group -->
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer">
+                        <div style="margin-right:220px">
+                            <input type="button" value="重置" permission="ss" class="PER_BTN btn btn-default pull-right"
+                                style="margin-left:10px" @click="resetForm">
+                            <input type="button" value="提交" permission="ss" class="PER_BTN btn btn-info pull-right"
+                                @click="submitForm">
+                        </div>
+                    </div>
+                    <!-- /.box-footer -->
+                </form>
+            </div>
+
+        </div>
+        <div>
+            <div class="pull-right" style="margin-right:15px">
+                <!--<div class="btn-group">
+                            <button type="button" class="btn btn-block btn-primary"onclick="DataManage.extractTableColumn()">抽取表结构</button>
+                        </div>-->
+                <div class="btn-group">
+                    <input type="button" value="查看表" permission="ss" class="PER_BTN btn btn-block btn-primary"
+                        id="view_table" @click="getColumn">
+                </div>
+                <div class="btn-group">
+                    <input type="button" value="编辑表" permission="ss" class="PER_BTN btn btn-block btn-primary"
+                        id="edit_table" @click="editTable">
+                </div>
+                <!-- <div class="btn-group">
+                    <input type="button" value="编目表" permission="ss" class="PER_BTN btn btn-block btn-primary"
+                        id="catalog_table" onclick="DataManage.showCatalogModal('isChecked')">
+                </div> -->
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="box box-primary">
+
+                <!-- /.box-header -->
+                <div class="box-body" style="overflow-x:scroll;">
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="checkboxes"
+                                        onchange="DataManage.selectall('checkboxes','isChecked')" /></th>
+                                <th style="min-width: 50px">ID</th>
+                                <th style="min-width: 80px">所属数据源ID</th>
+                                <th style="min-width: 100px">表名</th>
+                                <th style="min-width: 100px">表中文名</th>
+                                <th style="min-width: 100px">关键字</th>
+                                <th style="min-width: 100px">表描述</th>
+                                <th style="min-width: 100px">记录数</th>
+                                <th style="min-width: 100px">表大小</th>
+                                <th style="min-width: 60px">最后更新时间</th>
+                            </tr>
+                        </thead>
+                        <tbody id="property_body">
+                        </tbody>
+                    </table>
+                    <div class="text-center">
+                    </div>
+
+                </div>
+                <!-- /.box-body -->
+            </div>
+        </div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog" role="document" style="height:400px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="exampleModalLabel1">查看表</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box box-primary" style="height:400px;overflow-x:hidden;margin:10px;0px;0px;0px"
+                            id="viewTable1">
+                            <div class="row" id="viewTable">
+                                <div class="col-md-12">
+                                    <table id="example2" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="checkboxes1"
+                                                        onchange="DataManage.selectall('checkboxes1','isChecked1')" />
+                                                </th>
+                                                <th>字段ID</th>
+                                                <th>字段名</th>
+                                                <th>字段中文名</th>
+                                                <th>字段类型</th>
+                                                <th>是否外键</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="column_body">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!--<button type="button" class="btn btn-primary" id="">通用信息</button>
+                        <button type="button" class="btn btn-primary" id="getColumn">字段信息</button>-->
+                        <!--<button type="button" class="btn btn-default" onclick="DataManage.showCatalogModal('isChecked1')">编目字段</button>-->
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal fade" id="tableModal" tabindex="-1" role="dialog" aria-labelledby="tableModalLabel">
+            <div class="modal-dialog" role="document" style="height:400px">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="tableModalLabel">编辑表</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="box box-primary" style="height:400px;overflow-x:hidden;margin:10px;0px;0px;0px">
+                            <form>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-7">
+                                            <label for="table_name" class="control-label">表名</label>
+                                            <input type="text" class="form-control" id="table_name" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-7">
+                                            <label for="tablecnname" class="control-label">表中文名</label>
+                                            <input type="text" class="form-control" id="table_cnname">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-7">
+                                            <label for="keyword" class="control-label">关键字</label>
+                                            <input type="text" class="form-control" id="keyword" disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <div class="col-xs-7">
+                                            <label for="table_desc" class="control-label">表描述</label>
+                                            <input type="text" class="form-control" id="table_desc">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal"
+                            @click="saveEditTable">保存编辑</button>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.modal -->
+
+        <!--编目表模态框-->
+        <div class="modal fade" id="modelTree" tabindex="-1" role="dialog" aria-labelledby="">
+            <div class="modal-dialog" role="document" style="width: 450px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">编目节点选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="ztree">
+                            <ul id="addTree" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" value="确认" class="btn btn-primary" onclick="DataManage.catalogTable()">
+                        <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--编目字段模态框-->
+        <div class="modal fade" id="modelTree1" tabindex="-1" role="dialog" aria-labelledby="">
+            <div class="modal-dialog" role="document" style="width: 450px;">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">编目节点选择</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="ztree">
+                            <ul id="addTree1" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" value="确认" class="btn btn-primary" onclick="DataManage.catalogColumn()">
+                        <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/YU/javascript/system/rdbms/tabDetail.js"></script>
