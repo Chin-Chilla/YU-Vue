@@ -1,0 +1,521 @@
+<section class="content" id="vue">
+    <div class="row">
+        <!-- 用户信息显示表 -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">用户管理</h3>
+                </div>
+                <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="sample_1" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="table-checkbox sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 24px;">
+                                        <div class="checker"><span></span></div>
+                                    </th>
+                                    <th>用户名</th>
+                                    <th>姓名</th>
+                                    <th>所在机构名称</th>
+                                    <th>所在部门名称</th>
+                                    <th>联系方式</th>
+                                    <th>角色权限代码</th>
+                                </tr>
+                            </thead>
+                            <tbody id="modaltbody1">
+                                <tr v-for="item in userList">
+                                    <td><input type="radio" class="checkboxes" value="1" name="isChecked"></td>
+                                    <td style="display: none">{{item.id}}</td>
+                                    <td>{{item.loginName}}</td>
+                                    <td>{{item.username}}</td>
+                                    <td>{{item.orgname}}</td>
+                                    <td>{{item.depname}}</td>
+                                    <td>{{item.mobileNumber}}</td>
+                                    <td>{{item.roleCode}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-left:755px">
+                            <ul id="pagination" class="pagination-sm pagination">
+                            </ul>
+                        </div>
+                        <div class="margin" style="margin-left:0px">
+                            <div class="btn-group">
+                                <input type="button" value="新增用户" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-block btn-primary" data-toggle="modal" onclick="UserPage.alertCheckbox()">编辑用户</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-block btn-primary" onclick="UserPage.deleteUser()">删除用户</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-block btn-primary" data-toggle="modal" onclick="UserPage.setRoleCheckbox()">设置权限</button>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-block btn-primary" data-toggle="modal" onclick="UserPage.manageRole()">权限维护</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 新增用户模态框 -->
+        <div class="col-md-12">
+            <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">新增用户</h4>
+                        </div>
+                        <div class="box box-primary" style="height:600px;overflow:auto;">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_1" class="control-label">用户名</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_1" placeholder=" 用户名由字母、数字、下划线组成。" onblur="UserPage.checkname('typeahead_example_modal_1','mydivlogin_name')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivlogin_name"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_2" class="control-label">真实姓名</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_2" placeholder=" 请填写您的真实中文名！" onblur="UserPage.checkrealname('typeahead_example_modal_2','mydivusername')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivusername"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_3" class="control-label">身份编码</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_3" placeholder=" 请填写您的身份编码！" onblur="UserPage.checkpersCode('typeahead_example_modal_3','mydivpersCode')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivpersCode"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_4" class="control-label">机构名称</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_4" placeholder="请填写您所在的机构名称！" onblur="UserPage.checkorgName('typeahead_example_modal_4','mydivorgName')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivorgName"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_5" class="control-label">机构编码</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_5" placeholder=" 请填写您所在的机构编码！" onblur="UserPage.checkorgCode('typeahead_example_modal_5','mydivorgCode')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivorgCode"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_6" class="control-label">部门名称</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_6" placeholder="请填写您所在的部门名称！" onblur="UserPage.checkdepName('typeahead_example_modal_6','mydivdepName')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivdepName"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_7" class="control-label">部门编码</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_7" placeholder=" 请填写您的所在部门编码！" onblur="UserPage.checkdepCode('typeahead_example_modal_7','mydivdepCode')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivdepCode"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_8" class="control-label">联系方式</label><br>
+                                                <input type="text" class="form-control" id="typeahead_example_modal_8" placeholder="请填写您的电话号码！" onblur="UserPage.checktelephone('typeahead_example_modal_8','mydivtelephone')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivtelephone"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_8" class="control-label">登陆密码</label><br>
+                                                <input type="password" class="form-control" id="typeahead_example_modal_9" onblur="UserPage.checkuserpassword('typeahead_example_modal_9','mydivuserpassword')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivuserpassword"><br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-8">
+                                                <label for="typeahead_example_modal_9" class="control-label">确认密码</label>
+                                                <input type="password" class="form-control" id="typeahead_example_modal_10" placeholder="请再填写一次密码！" onblur="UserPage.checkpwdagin('typeahead_example_modal_10','mydivpwdagin','typeahead_example_modal_9')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="mydivpwdagin"><br>
+                                        </p>
+                                    </div><br>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" onclick="UserPage.addUser()" class="btn btn-primary">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal -->
+        </div>
+        <!-- 编辑用户模态框 -->
+        <div class="col-md-12">
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel1">编辑用户</h4>
+                        </div>
+                        <div class="box box-primary" style="height:600px;overflow:auto;">
+                            <div class="modal-body">
+                                <form>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_1" class="control-label">用户名</label>
+                                                <input type="text" class="form-control" id="example_modal_1" readonly=ture>
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editusername">用户名不可编辑！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_2" class="control-label">真实姓名</label>
+                                                <input type="text" class="form-control" id="example_modal_2" onblur="UserPage.checkrealname('example_modal_2','editrealname')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editrealname">请填写您的真实中文名！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_3" class="control-label">身份编码</label>
+                                                <input type="text" class="form-control" id="example_modal_3" onblur="UserPage.checkpersCode('example_modal_3','editpersCode')">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editpersCode">您填写您的身份编码！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_4" class="control-label">机构名称</label>
+                                                <input type="text" class="form-control" onblur="UserPage.checkorgName('example_modal_4','editorgName')" id="example_modal_4">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editorgName">请填写您的机构名称！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_5" class="control-label">机构编码</label>
+                                                <input type="text" class="form-control" onblur="UserPage.checkorgCode('example_modal_5','editorgCode')" id="example_modal_5">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editorgCode">请填写您的机构编码！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_6" class="control-label">部门名称</label>
+                                                <input type="text" class="form-control" onblur="UserPage.checkdepName('example_modal_6','editdepName')" id="example_modal_6">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editdepName">请填写您的部门名称！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_7" class="control-label">部门编码</label>
+                                                <input type="text" class="form-control" onblur="UserPage.checkdepCode('example_modal_7','editdepCode')" id="example_modal_7">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editdepCode">请填写您的部门编码！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_8" class="control-label">电话号码</label>
+                                                <input type="text" class="form-control" onblur="UserPage.checktelephone('example_modal_8','edittelephone')" id="example_modal_8">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="edittelephone">请填写您的电话号码！<br>
+                                        </p>
+                                    </div><br>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_9" class="control-label">登陆密码</label>
+                                                <input type="password" class="form-control" id="example_modal_9">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="eidtpassword">修改密码填写，长度至少为6位！<br>
+                                        </p>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="example_modal_10" class="control-label">确认密码</label>
+                                                <input type="password" class="form-control" id="example_modal_10">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="editpwdagin">请再填写一次密码！<br>
+                                        </p>
+                                    </div><br>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="UserPage.editUser()">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal -->
+        </div>
+        <!-- 设置权限 -->
+        <div class="col-md-12">
+            <div class="modal fade" id="exampleModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" style="width:400px;" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel2">用户权限设置</h4>
+                        </div>
+                        <div class="modal-body">
+                            <!-- /.box-header -->
+                            <div class="box">
+                                <div class="box-header">
+                                    <h3 class="box-title">当前用户：</h3>
+                                    <span id="uname-rname">
+                                        {{checkedLoginname}}({{checkedUsername}})-----[{{checkedRole}}]
+                                    </span>
+                                </div>
+                                <div class="box-body">
+                                    <table id="sample_3" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-checkbox sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 24px;">
+                                                    <div class="checker"><span></span></div>
+                                                </th>
+                                                <th>角色代码</th>
+                                                <th>角色名称</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="modaltbody3">
+                                            <tr v-for="item in roleList">
+                                                <td>
+                                                    <input :checked="checkedRole.indexOf(item.roleCode)!=-1" type="checkbox" class="checkboxes" :value="item.roleCode" name="isChecked3">
+                                                </td>
+                                                <td>{{item.roleName}}</td>
+                                                <td>{{item.roleDesc}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="margin-left:755px">
+                                        <ul id="pagination" class="pagination-sm pagination">
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="UserPage.saveUserRole()">提交</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal -->
+        </div>
+        <!-- 权限维护 -->
+        <div class="col-md-12">
+            <div class="modal fade" id="exampleModal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="width:950px;">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel3">用户权限维护</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="box">
+                                <div class="box-body">
+                                    <table id="sample_2" class="table table-bordered table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th class="table-checkbox sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 24px;">
+                                                    <div class="checker"><span></span></div>
+                                                </th>
+                                                <th>角色代码</th>
+                                                <th>角色名称</th>
+                                                <th>角色中文名称</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="modaltbody2">
+                                            <tr v-for="item in roleList">
+                                                <td><input type="radio" class="checkboxes" value="1" name="isChecked2"></td>
+                                                <td class="hidden">{{item.roleGuid}}</td>
+                                                <td>{{item.roleCode}}</td>
+                                                <td>{{item.roleName}}</td>
+                                                <td>{{item.roleDesc}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div style="margin-left:755px">
+                                        <ul id="pagination" class="pagination-sm pagination">
+                                        </ul>
+                                    </div>
+                                    <div class="margin" style="margin-left:0px">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" data-target="#myModal">新增角色</button>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-primary" data-toggle="modal" onclick="UserPage.showEditRole()">编辑角色</button>
+                                        </div>
+                                        <div class="btn-group">
+                                            <button type="button" class="btn btn-block btn-primary" onclick="UserPage.delateRole()">删除角色</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- /.modal -->
+        </div>
+        <!-- 新增角色模态框 -->
+        <div class="modal fade" id="myModal" role="dialog" aria-hidden="true" aria-labelledby="treeModalLabel">
+            <div class="modal-dialog" role="document" style="height:400px">
+                <div class="modal-content" style="margin:0 auto;width:750px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">新增角色</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <label for="typeahead_example_modal_1" class="control-label">角色代码</label><br>
+                                    <input type="text" class="form-control" id="role_id_modal_1" placeholder=" ">
+                                </div>
+                            </div>
+                            <p class="help-block" style="line-height:50px" id="myDivuRoleName"><br>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <label for="typeahead_example_modal_2" class="control-label">角色英文名称</label><br>
+                                    <input type="text" class="form-control" id="role_name_modal_1" placeholder=" ">
+                                </div>
+                            </div>
+                            <p class="help-block" style="line-height:50px"><br>
+                            </p>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                    <label for="typeahead_example_modal_3" class="control-label">角色中文名称</label><br>
+                                    <input type="text" class="form-control" id="role_chinesename_modal_1" placeholder=" ">
+                                </div>
+                            </div>
+                            <p class="help-block" style="line-height:50px" id="mydivrealname"><br>
+                            </p>
+                        </div><br>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" onclick="UserPage.addRole()" class="btn btn-primary">提交</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 编辑角色模态框 -->
+        <div class="col-md-12">
+            <div class="modal fade" id="exampleModal7" z-index="9999" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="margin-top:200px;margin-left:200px;width:750px;">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title" id="exampleModalLabel">编辑角色</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-8">
+                                        <label for="typeahead_example_modal_1" class="control-label">角色代码</label><br>
+                                        <input v-model="editRoleCode" type="text" class="form-control" id="role_id_modal_2" placeholder="" readonly=true>
+                                    </div>
+                                </div>
+                                <p class="help-block" style="line-height:50px" id="myDivuRoleName"><br>
+                                </p>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-8">
+                                        <label for="typeahead_example_modal_2" class="control-label">角色全名</label><br>
+                                        <input v-model="editRoleName" type="text" class="form-control" id="role_name_modal_2" placeholder="">
+                                    </div>
+                                </div>
+                                <p class="help-block" style="line-height:50px" id="myDivuRoleName"><br>
+                                </p>
+                            </div>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-8">
+                                        <label for="typeahead_example_modal_3" class="control-label">角色中文名称</label><br>
+                                        <input v-model="editRoleDesc" type="text" class="form-control" id="role_chinesename_modal_2" placeholder=" ">
+                                    </div>
+                                </div>
+                                <p class="help-block" style="line-height:50px" id="mydivrealname"><br>
+                                </p>
+                            </div><br>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                <button type="button" onclick="UserPage.editRole()" class="btn btn-primary">提交</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.modal -->
+            </div>
+        </div>
+    </div>
+</section>
+<script type="text/javascript" src="/YU/javascript/system/role/md5.js"></script>
+<script src="/YU/javascript/system/role/user_manager.js"></script>

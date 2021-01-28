@@ -1,20 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<html lang="en">
 <head>
-	<meta charset="text/html;UTF-8">
+	<meta charset="UTF-8">
 	<title>登录页面</title>
 
+    <link rel="icon" href="/YU/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/YU/favicon.ico" type="image/x-icon"/>
 	<!--引入公用css-->
 	<link rel="stylesheet" href="../../../stylesheet/adminLTE/commons/bootstrap.min.css" />
 	<link rel="stylesheet" href="../../../stylesheet/adminLTE/commons/AdminLTE.min.css" />
 	<link rel="stylesheet" href="../../../stylesheet/adminLTE/commons/_all-skins.min.css" />
 	<link rel="stylesheet" href="../../../stylesheet/adminLTE/commons/font-awesome.min.css" />
 	<link rel="stylesheet" href="../../../stylesheet/adminLTE/commons/ionicons.min.css" />
-
+    <!-- toastr -->
+    <link rel="stylesheet" type="text/css" href="/YU/stylesheet/plugins/toastr/toastr.min.css" />
 </head>
 	<body class="skin-blue-light sidebar-mini" style="font-size: 16px">
-		<div class="wrapper">
+		<div class="wrapper" id="vue">
 
 			 <div class="row">
 				 <div class="login-box">
@@ -22,36 +24,34 @@
 						 <h1><b>YU信息管理系统</b></h1>
 					 </div>
 					 <!-- /.login-logo -->
-					 <div class="login-box-body" >
+					 <div class="login-box-body" style="padding-bottom: 20px" >
 						 <br>
 						 <br>
-						 <form name="form"  action="/login" method="POST">
-							 <div class="form-group has-feedback">
-								 <label for="username">账号</label>
-								 <input class="form-control" name="username" placeholder="账号" type="text" id="username">
+						 <div class="form-group has-feedback">
+							 <label for="username">账号</label>
+							 <input v-model="username" class="form-control" name="username" placeholder="账号" type="text" id="username">
 <!--								 <lable class="nameinfo"></lable>-->
-							 </div>
-							 <div class="form-group has-feedback">
-								 <label for="password">密码</label>
-								 <input class="form-control" name="password" placeholder="密码" type="password" id="password">
+						 </div>
+						 <div class="form-group has-feedback">
+							 <label for="password">密码</label>
+							 <input v-model="password" class="form-control" name="password" placeholder="密码" type="password" id="password">
 <!--								 <lable class="passwordinfo"></lable>-->
-							 </div>
-							 <div class="row">
-								 <div class="col-xs-8">
-								 </div>
-							 </div>
-							 <div class="col-xs-4 pull-right">
-								 <input type="submit" id="login" value="Login" class="btn btn-primary" />
-
-							 </div>
-						 </form>
+						 </div>
+						 <div class="form-group has-feedback pull-right">
+							 <button @click="login" class="btn btn-primary" >登录</button> 
+<!--								 <lable class="passwordinfo"></lable>-->
+						 </div>
 					 </div>
 				 </div>
 
 			 </div>
 		</div>
-
-
-
+		<!-- toastr提示框 -->
+    	<script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
+        <script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
+	    <script type="text/javascript" src="/YU/javascript/system/role/md5.js"></script>
+	    <script type="text/javascript" src="/YU/javascript/common/commons.js"></script>
+		<script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
+		<script src="/YU/javascript/system/role/login.js"></script>
 </body>
-</html>
+</html>  
