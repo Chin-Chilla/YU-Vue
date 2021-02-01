@@ -101,7 +101,7 @@ var app = new Vue({
 		})
 
         //查询关联表
-        this.modalSelect(that.object.classCode,that.databaseId)
+        this.modalSelect(that.object.arci,that.databaseId)
 	},
 	methods:{
 		//初始化树
@@ -366,7 +366,7 @@ var app = new Vue({
 			getDataByPost("/matadata_extract_management/get_property",{
 	        	className:that.object.className,
 	        	databaseId:that.databaseId,
-	        	classCode:that.object.classCode,
+	        	classCode:that.object.arci,
 	        	classId:that.object.classId
 	        },res=>{
 	        	var msg = res.data
