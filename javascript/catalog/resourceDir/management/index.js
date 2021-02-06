@@ -30,6 +30,7 @@ var app = new Vue({
         progressTitle:'',
     },
     mounted() {
+        res.pageLeave();
         that = this;
         $('.objDatepicker').datepicker({
             autoclose: true,

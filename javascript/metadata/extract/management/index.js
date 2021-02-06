@@ -8,6 +8,7 @@ var app = new Vue({
 		dataList:[],//数据源列表
 	},
 	mounted(){
+		res.pageLeave();
 		var settingss = {
             data: {
                 simpleData: {

@@ -1,4 +1,4 @@
-<section class="content" id="vue">
+<section class="content" id="res">
     <div class="row" style="position:relative;">
         <div class="col-md-4" style="position:absolute;float:left;width:33%">
             <div class="box box-solid box-primary">
@@ -15,13 +15,13 @@
                         style="width:20px;height:20px;margin-right: 5px;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/lock2.png') no-repeat"></button>
                     <button id="saveChange" title="保存目录" type="button" @click="saveChange" class="btn btn-primary"
                         style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/unlock2.png') no-repeat"></button>
-                    <button id="showOrHideBtn" title="显示/隐藏" type="button" class="btn btn-primary"
-                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/showorhide.png') no-repeat"></button>
-                    <button id="diaplayNodesBtn" title="显示" type="button" onclick="displayNode()"
-                        class="btn btn-primary"
-                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/show.png') no-repeat"></button>
-                    <button id="hideNodesBtn" title="隐藏" type="button" onclick="hideNodes()" class="btn btn-primary"
-                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/hide.png') no-repeat"></button>
+<!--                    <button id="showOrHideBtn" title="显示/隐藏" type="button" class="btn btn-primary"-->
+<!--                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/showorhide.png') no-repeat"></button>-->
+<!--                    <button id="diaplayNodesBtn" title="显示" type="button" onclick="displayNode()"-->
+<!--                        class="btn btn-primary"-->
+<!--                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/show.png') no-repeat"></button>-->
+<!--                    <button id="hideNodesBtn" title="隐藏" type="button" onclick="hideNodes()" class="btn btn-primary"-->
+<!--                        style="width:20px;height:20px;margin-right: 5px;display:none;background-color:Transparent;border-color:Transparent;border-style:None;background: url('/YU/statics/imgs/hide.png') no-repeat"></button>-->
                 </div>
 
 
@@ -114,16 +114,16 @@
                             </div>
                             <label style="float:left;margin:0px 0px 0px 0px" class="col-sm-1">*</label>
                         </div>
-                        <div class="form-group" style="height:40px;margin:30px 0px 0px 5px;">
-                            <label for="text8" class="col-sm-2 control-label"
-                                style="float:left;white-space:nowrap;">结点路径:&emsp;</label>
+<!--                        <div class="form-group" style="height:40px;margin:30px 0px 0px 5px;">-->
+<!--                            <label for="text8" class="col-sm-2 control-label"-->
+<!--                                style="float:left;white-space:nowrap;">结点路径:&emsp;</label>-->
 
-                            <div class="col-sm-6" style="float:left">
-                                <input type="text" disabled="disabled" class="form-control" id="text8"
-                                    placeholder="路径" />
-                            </div>
-                            <label style="float:left;margin:0px 0px 0px 0px" class="col-sm-1">*</label>
-                        </div>
+<!--                            <div class="col-sm-6" style="float:left">-->
+<!--                                <input type="text" disabled="disabled" class="form-control" id="text8"-->
+<!--                                    placeholder="路径" />-->
+<!--                            </div>-->
+<!--                            <label style="float:left;margin:0px 0px 0px 0px" class="col-sm-1">*</label>-->
+<!--                        </div>-->
 
                         <div class="form-group" style="height:40px;margin:30px 0px 0px 5px;">
                             <label for="text7" class="col-sm-2 control-label"
@@ -192,7 +192,15 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody id="dataUsersTableBody">
-
+                                                        <tr v-for="item in userList">
+                                                            <td><input type="checkbox" class="checkboxes" value="1" name="isChecked"></td>
+                                                            <td style="display: none">{{item.id}}</td>
+                                                            <td>{{item.loginName}}</td>
+                                                            <td>{{item.username}}</td>
+                                                            <td>{{item.orgname}}</td>
+                                                            <td>{{item.depname}}</td>
+                                                            <td>{{item.mobileNumber}}</td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <br>
@@ -207,7 +215,7 @@
                                     </div>
                                     <div class="modal-footer">
                                         <input type="button" class="btn btn-default" data-dismiss="modal"
-                                            onclick="CatalogPage.saveUsersConfig()" value="确认">
+                                            @click="saveUsersConfig" value="确认">
                                         <input type="button" class="btn btn-primary" data-dismiss="modal" onclick=""
                                             value="取消">
                                     </div>
@@ -227,14 +235,14 @@
                             <input class="col-sm-1 pull-right PER_BTN btn btn-primary hidden" permission="ctv,ss"
                                 type="button" id="passBtn"
                                 style="text-align:center;margin-right: 15px;width:80px;height:35px;"
-                                onclick="passReview()" value="审核通过">
+                                @click="passReview" value="审核通过">
                             <input class="col-sm-1 pull-right PER_BTN btn btn-warning hidden" permission="ctv,ss"
                                 type="button" id="refuseBtn"
                                 style="text-align:center;margin-right: 15px;width:80px;height:35px;"
-                                onclick="showRefuseModal()" value="审核拒绝">
+                                @click="showRefuseModal" value="审核拒绝">
                             <input class="col-sm-1 pull-right PER_BTN btn btn-success hidden" type="button"
                                 style="text-align:center;margin-right: 15px;width:80px;height:35px;" data-toggle="modal"
-                                data-target="#usersConfigModal" id="usersConfig" onclick="CatalogPage.usersConfig()"
+                                data-target="#usersConfigModal" id="usersConfig" @click="usersConfig"
                                 value="用户授权">
                         </div>
                         <div class="col-sm-3"></div>
@@ -271,7 +279,7 @@
                     <br><br><br><br><br>
                     <div class="modal-footer">
                         <input type="button" value="确认" class="btn btn-primary" data-dismiss="modal"
-                            onclick="refuseReview()">
+                            @click="refuseReview">
                         <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
                     </div>
                 </div>
@@ -300,7 +308,7 @@
                             <label for="text9" class="col-sm-3 control-label">添加类型:</label>
                             <div class="col-sm-3">
                                 <select class="form-control" id="add_type"
-                                    onchange="addTypeChange(this.options[this.options.selectedIndex].value)">
+                                    @change="addTypeChange">
                                     <option value="0">请选择需要添加的结点类型</option>
                                     <option value="1" id="root_option">部门本级</option>
                                     <option value="2" id="dpt_option">直属部门/单位</option>
@@ -312,7 +320,7 @@
                         <div class="form-group" id="node_name">
                             <label for="text9" class="col-sm-3 control-label">结点名称:</label>
                             <div class="col-sm-3">
-                                <input onblur="blurInputServiceTree()" style="width:300px;" type="text"
+                                <input @blur="blurInputServiceTree" style="width:300px;" type="text"
                                     class="form-control" id="text9" placeholder="名称(*必填)" />
                             </div>
                             <label id="label_1" style="margin:0px 0px 0px 15px"
@@ -353,7 +361,7 @@
                             <!--<button id="increbutton" type="button" onclick="increleafServiceTree()" style="margin:0px 0px 0px 0px;" class="btn btn-primary">添加</button>-->
                             <button id="increbutton" type="button" style="margin:0px 0px 0px 0px;"
                                 class="btn btn-primary">添加</button>
-                            <button type="button" onclick="clearModel()" style="margin-right:50px;"
+                            <button type="button" @click="clearModel()" style="margin-right:50px;"
                                 class="btn btn-default" data-dismiss="modal">取消</button>
                             <!--<button type="button"  style="margin-right:50px;"class="btn btn-default" data-dismiss="modal">取消</button>-->
                         </div>
@@ -543,9 +551,9 @@
                             <h4 class="modal-title">删除分类</h4>
                         </div>
                         <!--中间核心内容-->
-                        <div class="form-group">
-                            <label for="text8" style="font-size:30px;margin:10px 0px 0px 240px;">确认删除？</label>
-                        </div>
+<!--                        <div class="form-group">-->
+<!--                            <label for="text8" style="font-size:30px;margin:10px 0px 0px 240px;">确认删除？</label>-->
+<!--                        </div>-->
                         <div class="modal-footer">
                             <button id="SubDelButton" type="button" onclick="SubDelLeafServiceTree()"
                                 style="margin:0px 0px 0px 0px;" class="btn btn-primary">删除</button>
@@ -561,4 +569,3 @@
     </div>
 </section>
 <script type="text/javascript" src="/YU/javascript/catalog/resourceDir/management/resourceManage.js"></script>
-<script type="text/javascript"></script>

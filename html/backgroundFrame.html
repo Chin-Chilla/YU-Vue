@@ -66,7 +66,7 @@
         <!--    @*内容部分*@-->
         <!--所有的html放到这里来-->
         <div>
-            <div class="content-wrapper">
+            <div class="content-wrapper" id="ceshi">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="box box-solid">
@@ -139,7 +139,7 @@
     <script type="text/javascript" src="/YU/javascript/kgms/objectImport/ObjRelExtract.js"></script>
 
     <!--目录管理-->
-    <script type="text/javascript" src="/YU/javascript/catalog/departmentDir/management/catalogPage.js"></script>
+    <script type="text/javascript" src="/YU/javascript/catalog/resourceDir/management/resourceManage.js"></script>
     <script type="text/javascript" src="/YU/javascript/metadata/release/menuReviewPage.js"></script>
     <script type="text/javascript" src="/YU/javascript/system/schemas/jquery.form.js"></script>
 
@@ -153,11 +153,8 @@
     <script type="text/javascript" src="/YU/javascript/common/query.js"></script>
     <script type="text/javascript" src="/YU/javascript/common/paging.js"></script>
 
-<<<<<<< HEAD
     <!-- vue -->
     <script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
-=======
->>>>>>> b0301b4eef29943c881e58352502ecc74b1605ff
 
     <!-- toastr提示框 -->
     <script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
@@ -188,6 +185,8 @@
                 "hideMethod": "fadeOut"
             }
         });
+        $("#ceshi").bind("change",function(){
+        })
     </script>
 </body>
 

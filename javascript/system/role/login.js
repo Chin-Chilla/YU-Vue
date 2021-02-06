@@ -29,7 +29,7 @@ var login = new Vue({
                 getDataByPost("/user/login",data,function(res){
                     if (res.msg == "SUCCESS") {
                         toastr.success("登录成功!");
-                        sessionStorage.setItem("user",res.data)
+                        sessionStorage.setItem("authCode",res.data.authcode)
                         sessionStorage.setItem("role",res.data.roles.join(","));
                         setTimeout(function(){
                             window.location.href="/YU/html/browse/index/index.html"
