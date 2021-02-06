@@ -268,7 +268,7 @@ var app = new Vue({
 		        }
 		        $("#treeModal").modal("hide");
 		        $('#progressModal').modal({backdrop: 'static', keyboard: false})
-		        var interval = 9.5*that.total/90;
+		        var interval = 3*that.total/90;
 		        if(interval<100){
 		        	interval=100;
 		        }
@@ -289,42 +289,26 @@ var app = new Vue({
         				clearInterval(timer);
         			}
         		},interval)
-		        // if((TaskManage.taskflag=="1")&&(confirm("是否要加入任务队列")==true)){
-		        //     getDataByPost('/TaskManager/addCatalog2Quene', dataString, function (msg) {
-		        //         console.log(msg);
-		        //         if (msg.state== "ok") {
-		        //             alert("成功添加到任务队列中");
-		        //         } else if (msg.state == "exist") {
-		        //             alert("添加任务失败，该任务已存在");
-		        //         } else if (msg.state == "proerr"){
-		        //             alert("添加任务失败, 有相关任务未完成");
-		        //         } else{
-		        //             alert("添加任务失败，有前序任务未完成！");
-		        //         }
-		        //         $("#loading").css('display','none'); //取消 loading 界面
-		        //     });
-		        // }else {
-		            getDataByPost('/metadata_register/catalog_by_class',data,res=> {
-		                if (res.msg == "SUCCESS") {
-		                	that.progress=100;
-		                	setTimeout(function(){
-                        		$("#progressModal").modal('hide')
-                        	},500)
-                            setTimeout(function(){
-			                    toastr.success("编目成功!");
-			                    $('.content-wrapper').load('metadata/manager/index.html', function() {});
-                            },1000)
-		                } else {
-		                	that.progress=0;
-		                	clearInterval(timer);
-		                    toastr.error("编目失败!");
-		                    $("#progressModal").modal('hide')
-		                }
-		            },err=>{
-		            	toastr.error(err.msg);
-		            	$("#progressModal").modal('hide')
-		            });
-		        // }
+	            getDataByPost('/metadata_register/catalog_by_class',data,res=> {
+	                if (res.msg == "SUCCESS") {
+	                	that.progress=100;
+	                	setTimeout(function(){
+                    		$("#progressModal").modal('hide')
+                    	},500)
+                        setTimeout(function(){
+		                    toastr.success("编目成功!");
+		                    $('.content-wrapper').load('metadata/manager/index.html', function() {});
+                        },1000)
+	                } else {
+	                	that.progress=0;
+	                	clearInterval(timer);
+	                    toastr.error("编目失败!");
+	                    $("#progressModal").modal('hide')
+	                }
+	            },err=>{
+	            	toastr.error(err.msg);
+	            	$("#progressModal").modal('hide')
+	            });
 		    }
 		},
 		//查看对象
