@@ -35,7 +35,7 @@ var app = new Vue({
         });
 
         //初始化资源目录树
-        getDataByGet('/resource_dir/initial_resource_dirtree', '', res => {
+        getDataByGet('/resource_dir/initial_objdept_dirtree', '', res => {
             that.zTreeObj = $.fn.zTree.init($("#addTree3"), setting, res.data);
         })
 
@@ -101,7 +101,11 @@ var app = new Vue({
             } else {
                 departmentId = node.nodeId;
                 var text = node.nodeName;
-                $("#department").val(text);
+                if (text == "本级") {
+                    $("#department").val(node.getParentNode().nodeName);
+                } else {
+                    $("#department").val(text);
+                }
             }
             $("#modelTree3").modal("hide");
         },
@@ -288,7 +292,7 @@ var app = new Vue({
 
         //打开编辑的模态框
         edit: function () {
-            getDataByGet('/resource_dir/initial_resource_dirtree', '', res => {
+            getDataByGet('/resource_dir/initial_objdept_dirtree', '', res => {
                 that.zTreeObj = $.fn.zTree.init($("#addTree4"), setting, res.data);
                 var ischeck = document.getElementsByName("isChecked2");
                 var ID = [];

@@ -24,6 +24,7 @@ var app = new Vue({
 		total:''
 	},
 	mounted(){
+		res.pageLeave();
 		that = this
 		getDataByPost('/matadata_management/get_entity_classtable','',res=>{
 			that.entityClassList = res.data;
