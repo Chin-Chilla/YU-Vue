@@ -366,7 +366,7 @@ var app = new Vue({
 	        }
 
 	        $('#progressModal').modal({backdrop: 'static', keyboard: false})
-	        var interval =3*that.total/90;
+	        var interval =4*that.total/90;
 	        //最快100ms
 	        if(interval<100){
 	        	interval=100;

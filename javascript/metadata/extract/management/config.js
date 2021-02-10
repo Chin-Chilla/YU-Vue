@@ -129,7 +129,8 @@ var app = new Vue({
 	        	databaseId:databaseId,
 	        	type:type
 	        },res=>{
-	        	$.fn.zTree.init($("#tree"), settingss, res.data); //初始化树
+	        	var attTree=$.fn.zTree.init($("#tree"), settingss, res.data); //初始化树
+	        	  attTree.expandAll(true);
 	        },err=>{
 	        	toastr.error("初始化树失败")
 	        })
