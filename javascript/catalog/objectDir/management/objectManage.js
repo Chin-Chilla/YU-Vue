@@ -1,6 +1,6 @@
 /***
  * @author: 陈柱帆
- * @Description: “资源目录管理”菜单栏
+ * @Description: “基础对象目录管理”菜单栏
  * @date: 2021/1/24
  ***/
 var that;
@@ -402,8 +402,8 @@ var settingEdit = {
         onAsyncSuccess(event, treeId, treeNode, dataStr) { }
     }
 };
-var res = new Vue({
-    el: "#res",
+var obj = new Vue({
+    el: "#obj",
     data: {
         treeNodes: [],
         data: [],
@@ -414,25 +414,25 @@ var res = new Vue({
         that = this;
         that.pageLeave();
         $(".sidebar-menu .treeview-menu li").removeClass("active");
-        $(".sidebar-menu .catalog").addClass("active");
+        $(".sidebar-menu .object").addClass("active");
         $("#text1").empty();
         $("#pagination").empty();
 
-        //用户授权模态框：点击某行任意位置触发check
-        $("#dataUsersTable").on("click", "tr", function () {
-            var input = $(this).find("input");
-            if (!$(input).prop("checked")) {
-                $(input).prop("checked",true);
-            }else{
-                $(input).prop("checked",false);
-            }
-        });
-        //多选框 防止事件冒泡
-        $("#dataUsersTable").on("click", "input", function (event) {
-            event.stopImmediatePropagation();
-        });
+        // //用户授权模态框：点击某行任意位置触发check
+        // $("#dataUsersTable").on("click", "tr", function () {
+        //     var input = $(this).find("input");
+        //     if (!$(input).prop("checked")) {
+        //         $(input).prop("checked",true);
+        //     }else{
+        //         $(input).prop("checked",false);
+        //     }
+        // });
+        // //多选框 防止事件冒泡
+        // $("#dataUsersTable").on("click", "input", function (event) {
+        //     event.stopImmediatePropagation();
+        // });
 
-        //初始化资源目录树
+        //初始化对象目录树
         getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
         })
