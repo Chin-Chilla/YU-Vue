@@ -5,93 +5,61 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">元数据表导入</h3>
                 </div>
-                    <div class="box-body">
-                        <div style="width: 970px">
-                            <div style="float: left;margin-top: 8px">
+                <div class="box-body">
+                    <div style="width: 970px">
+                        <div style="float: left;margin-top: 8px">
+                            <div>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:120px" class="control-label">资源目录模板:&nbsp;</label>
+
+                                <select style="float: left;width: 400px;height:35px" id="selectOption" v-model="slOption">
+                                    <option value="对象类模板">对象类模板</option>
+                                    <option value="数据库（表格集）类模板">数据库（表格集）类模板</option>
+                                    <option value="其他类模板">其他类模板</option>
+                                    <option value="数据表（表格）类模板">数据表（表格）类模板</option>
+                                    <option value="矢量类模板">矢量类模板</option>
+                                    <option value="栅格类模板">栅格类模板</option>
+                                </select>
+
+                                <button class="btn btn-primary" style="float: left;width:90px;height: 35px;margin-left: 10px"  @click="download">下载模板 </button>
+                                <button class="btn btn-primary" style="float: left;width:105px;height: 35px;margin-left: 10px"  @click="downloadZip">打包下载模板</button>
+                                <!-- <input type="button" class="btn btn-warning" value="下载模板" @click="download" style="float: left;width:90px;height: 35px;margin-left: 10px">
+                                 <input type="button" class="btn btn-warning" value="打包下载模板" @click="downloadZip" style="float: left;width:105px;height: 35px;margin-left: 10px">
+                                 -->
+                                <br><br><br>
+                            </div>
+                            <div>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:120px" class="control-label">数据上传列表:&nbsp;</label>
+                                <div style="width: 700px;margin: 0;display: inline-block;"><table class="table " border="1" id="fileTable" style="width: 92%;margin: 0;display: inline-table;">
+                                    <tbody>
+                                    <tr>
+                                        <th bgcolor="#b0c4de">文件</th>
+                                        <th bgcolor="#b0c4de" style="width: 120px;">内容起始行</th>
+                                        <th bgcolor="#b0c4de">操作</th>
+                                    </tr>
+                                    </tbody>
+                                    <tbody id="fileTableBody">
+                                    </tbody>
+                                </table>
+                                    <button type="button" value="+" class="btn btn-primary" @click="addfile" style="width: 35px;height: 35px;margin-bottom: 10px;margin-left: 10px;">+</button></div>
                                 <div>
-                                    <label style="float: left;text-align:right;padding-top: 5px;width:120px" class="control-label">资源目录模板:&nbsp;</label>
 
-                                    <select style="float: left;width: 400px;height:35px" id="selectOption" v-model="slOption">
-                                        <option value="对象类模板">对象类模板</option>
-                                        <option value="数据库（表格集）类模板">数据库（表格集）类模板</option>
-                                        <option value="其他类模板">其他类模板</option>
-                                        <option value="数据表（表格）类模板">数据表（表格）类模板</option>
-                                        <option value="矢量类模板">矢量类模板</option>
-                                        <option value="栅格类模板">栅格类模板</option>
-                                    </select>
+                                    <div style="float: left;text-align: right;margin: 10px 0 0 335px"> <!--360px  450px-->
+                                        <!-- <button @click="download()" ><i class="btn btn-primary" value="确认" style="width:80px;height: 35px;"></i></button>
+                                        <button @click="loadManage()" ><i class="btn btn-primary" value="管理" style="width:80px;height: 35px;margin-left: 5px"></i></button> -->
 
-                                    <button class="btn btn-primary" style="float: left;width:90px;height: 35px;margin-left: 10px"  @click="download">下载模板 </button>
-                                    <button class="btn btn-primary" style="float: left;width:105px;height: 35px;margin-left: 10px"  @click="downloadZip">打包下载模板</button> 
-                                    <!-- <input type="button" class="btn btn-warning" value="下载模板" @click="download" style="float: left;width:90px;height: 35px;margin-left: 10px">
-                                     <input type="button" class="btn btn-warning" value="打包下载模板" @click="downloadZip" style="float: left;width:105px;height: 35px;margin-left: 10px">
-                                     -->
-                                      <br><br><br>
-                                </div>
-                                <div>
-                                    <label style="float: left;text-align:right;padding-top: 5px;width:120px" class="control-label">数据上传列表:&nbsp;</label>
-                                    <div style="width: 700px;margin: 0;display: inline-block;"><table class="table " border="1" id="fileTable" style="width: 92%;margin: 0;display: inline-table;">
-                                        <tbody>
-                                            <tr>
-                                            <th bgcolor="#b0c4de">文件</th>
-                                            <th bgcolor="#b0c4de" style="width: 120px;">内容起始行</th>
-                                             <th bgcolor="#b0c4de">操作</th>
-                                            </tr>
-                                        </tbody>
-                                        <tbody id="fileTableBody">
-                                        </tbody>
-                                    </table>
-                                        <button type="button" value="+" class="btn btn-primary" @click="addfile" style="width: 35px;height: 35px;margin-bottom: 10px;margin-left: 10px;">+</button></div>
-                                    <div>
+                                        <button type="button" class="btn btn-primary" @click="upload" style="width:80px;height: 35px">确认</button>
 
-                                    <!-- <div class = "addRow">
-                                            <el-col >
-                                            <el-button @click="addfile">+</button>
-                                            </el-col>
-                                            <el-table>
-                                                <el-table
-                                                :data="tableData2"
-                                                style="width: 100%"
-                                                :rules="rules">
-                                            <el-table-column prop="yyfile" label="文件">
-                                            <template slot-scope="scope">
-                                            <el-input v-model="scope.row.yyfh" placeholder="文件"></el-input>
-                                            </template>
-                                            </el-table-column>
-                                            <el-table-column prop="yystart" label="内容起始行">
-                                            <template slot-scope="scope">
-                                            <el-input v-model="scope.row.yyfh" placeholder="内容起始行"></el-input>
-                                            </template>
-                                            </el-table-column>
-                                            <el-table-column prop="bookbuytime" label="操作">
-                                            <el-button
-                                               size="mini"
-                                               type="danger"
-                                               v-if="!scope.row.editing"
-                                               icon="el-icon-delete"
-                                               @click="deleteTaRow(scope.$index, scope.row)">删除
-                                            </el-button>
-                                            </template>
-                                            </el-table-column>
-                                            </el-table>
+                                        <!--  <button type="button" class="btn btn-primary" @click="loadManage" style="width:80px;height: 35px;margin-left: 5px">管理</button> -->
+
+                                        <br><br>
                                     </div>
- -->
-                                        <div style="float: left;text-align: right;margin: 10px 0 0 335px"> <!--360px  450px-->
-                                            <!-- <button @click="download()" ><i class="btn btn-primary" value="确认" style="width:80px;height: 35px;"></i></button>
-                                            <button @click="loadManage()" ><i class="btn btn-primary" value="管理" style="width:80px;height: 35px;margin-left: 5px"></i></button> -->
-                                    
-                                            <button type="button" class="btn btn-primary" @click="upload" style="width:80px;height: 35px">确认</button>
-
-                                            <button type="button" class="btn btn-primary" @click="loadManage" style="width:80px;height: 35px;margin-left: 5px">管理</button>
-                        
-                                            <br><br>
-                                        </div>
-                                    </div><br><br><br>
-                                </div>
-                                <div>
                                 </div><br><br><br>
                             </div>
+                            <div>
+                            </div><br><br><br>
                         </div>
                     </div>
+                </div>
                 <div id="loading" class="overlay" style="display:none;">
                     <i class="fa fa-refresh fa-spin"></i>
                 </div>
