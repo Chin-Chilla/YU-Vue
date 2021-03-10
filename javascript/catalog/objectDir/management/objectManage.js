@@ -379,6 +379,7 @@ var obj = new Vue({
     mounted() {
         that = this;
         that.pageLeave();
+        MainPage.inObj = true;
         $(".sidebar-menu .treeview-menu li").removeClass("active");
         $(".sidebar-menu .object").addClass("active");
         $("#text1").empty();

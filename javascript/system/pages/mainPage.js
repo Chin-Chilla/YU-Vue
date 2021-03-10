@@ -1,5 +1,8 @@
 //菜单栏前端交互逻辑控制
 MainPage={
+    inRes:false,
+    inObj:false,
+    inDep:false,
     //获得菜单栏json
     getMenu:function () {
         getDataByPost('/getMenu?roleCode='+sessionStorage.getItem("role"),'',function (res) {
@@ -10,6 +13,19 @@ MainPage={
         })
     },
     setContent:function(href,classname){
+        if(classname!="catalog"){
+            if(MainPage.inRes){
+                res.pageLeave();
+            }
+        }else if (classname!="object"){
+            if(MainPage.inObj){
+                obj.pageLeave();
+            }
+        }else if (classname!="HWCatalog"){
+            if(MainPage.inDep){
+                dep.pageLeave();
+            }
+        }
        if(classname!='none'){
             $(".sidebar-menu li li").removeClass("active");
             $(".sidebar-menu").find("."+classname).addClass("active");
