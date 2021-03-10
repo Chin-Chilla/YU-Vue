@@ -7,33 +7,9 @@ var that;
 //editState是对树进行了操作的标识，0代表未编辑，1表示进行过了编辑,2表示进入了编辑界面却没有进行操作
 var editState = 0;
 var aJson = {};
-function zTreeOnclick(event, treeId, treeNode){
-    $("#text4").val(treeNode.nodeCode);
+function zTreeOnclick(event, treeId, treeNode) {
     $("#text3").val(treeNode.nodeName);
     $("#text7").val(treeNode.note);
-    var check_state
-    switch (treeNode.checkState) {
-        case "0":
-            check_state = "待审核";
-            break;
-        case "1":
-            check_state = "审核通过";
-            break;
-        case "2":
-            check_state = "审核拒绝";
-            break;
-    }
-    $("#checkState").val(check_state);
-    $("#refuseNote").val(treeNode.refuseNote);
-    $("#usersConfig").addClass("hidden");
-    var nodeCode = treeNode.nodeCode;
-    var code = sessionStorage.getItem("authCode")||'unauth';
-    var role = sessionStorage.getItem("role")
-    if(nodeCode.substring(0,code.length)==code&&(role.indexOf("ss")!=-1||role.indexOf("ctv")!=-1)){
-        $("#usersConfig").removeClass("hidden")
-    }else{
-        $("#usersConfig").addClass("hidden")
-    }
 };
 var setting = {
     data: {
@@ -49,7 +25,7 @@ var setting = {
     },
     callback: {
         //点击树上的结点获取具体信息
-        onClick:zTreeOnclick
+        onClick: zTreeOnclick
     }
 }
 //settingEdit中使用到的对象
@@ -64,44 +40,44 @@ var nodeHasChild;//标记某节点下是否有子节点(true有数据，false无
 var radioType;
 //改变字体颜色
 function getFont(treeId, node) {
-    if(node.checkState=="0"){
+    if (node.checkState == "0") {
         switch (node.flag) {
             case "insert":
                 return {
-                    'color':'red',
-                    'background-color':'rgba(0,0,0,0.3)'
+                    'color': 'red',
+                    'background-color': 'rgba(0,0,0,0.3)'
                 }
             case "delete":
                 return {
-                    'text-decoration':'line-through',
-                    'background-color':'rgba(0,0,0,0.3)'
+                    'text-decoration': 'line-through',
+                    'background-color': 'rgba(0,0,0,0.3)'
                 }
             case "update":
                 return {
-                    'color':'blue',
-                    'background-color':'rgba(0,0,0,0.3)'
+                    'color': 'blue',
+                    'background-color': 'rgba(0,0,0,0.3)'
                 }
         }
-    }else if(node.checkState=="2"){
+    } else if (node.checkState == "2") {
         return {
-            'color':'red',
-            'background-color':'rgba(0,0,0,0.3)'
+            'color': 'red',
+            'background-color': 'rgba(0,0,0,0.3)'
         }
-    }else if(node.flag=='softdelete'){
+    } else if (node.flag == 'softdelete') {
         return {
-            'text-decoration':'line-through'
+            'text-decoration': 'line-through'
         }
-    }else return {};
+    } else return {};
 };
 //新增按钮
-function addHoverDom(treeId, treeNode){
+function addHoverDom(treeId, treeNode) {
     var sObj = $("#" + treeNode.tId + "_span");
-    if (treeNode.editNameFlag || $("#addBtn_"+treeNode.tId).length>0) return;
+    if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
     var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
         + "' title='新增子节点' onfocus='this.blur();'></span>";
     sObj.after(addStr);
-    var btn = $("#addBtn_"+treeNode.tId);
-    if (btn) btn.bind("click", function() {
+    var btn = $("#addBtn_" + treeNode.tId);
+    if (btn) btn.bind("click", function () {
         $("#root_node").addClass("hidden");
         $("#root_option").removeClass("hidden");
         $("#dpt_option").removeClass("hidden");
@@ -111,143 +87,81 @@ function addHoverDom(treeId, treeNode){
         //初始化
         that.clearModel();
         $("#myModal").modal('show');
-        var type;
-        if(treeNode.nodeCode.indexOf("_")==-1) {
-            $("#root_node").removeClass("hidden");
-            $("#node_name").css("margin-top","0px")
-        }else{
-            $("#node_name").css("margin-top","30px")
-        }
-        if(treeNode.level==4){
-            $("#root_option").addClass("hidden");
-        }
-        if(treeNode.level>4){
-            $("#root_option").addClass("hidden");
-            $("#dpt_option").addClass("hidden");
-        }
         //提交按钮绑定点击事件
         var btn = document.getElementById("increbutton");
-        btn.onclick = function(){
-            //nodeCode有“_”时说明不是单位节点，不会在add_type中选择，该下拉框值为0.
-            if(treeNode.nodeCode.indexOf("_")==-1) {
-                type = $("#add_type").val();
-            }else{
-                type =4;
-            }
+        btn.onclick = function () {
             var pnodeId = treeNode.nodeId;
-            var pnodeCode = treeNode.nodeCode;
             var nodeName = $("#text9").val();
             var note = $("#text12").val();
-            var level = treeNode.level;
-
-            if(type == "3"){
-                //增加固定节点
+            if (nodeName == "") {
+                toastr.error("信息不完整！");
+            } else {
+                //信息完整，调用后台方法
                 var data = {
-                    pNodeId:pnodeId,
-                    pNodeCode:pnodeCode
+                    pNodeId: pnodeId,
+                    note: note,
+                    nodeName: nodeName
                 }
-                that.clearModel();
-                $("#myModal").modal('hide');
                 getDataByPost(
-                    '/resource_manage/insertFixed',
+                    '/department_manager/insertSingle',
                     data,
-                    res=>{
+                    res => {
                         editState = 1;
-                        toastr.success("增加固定节点成功！");
-                        that.treeNodes.addNodes(treeNode,res.data);
+                        $("#myModal").modal('hide');
+                        that.treeNodes.addNodes(treeNode, res.data);
+                        toastr.success("增加节点成功！")
                     },
-                    err=>{
-                        toastr.error("增加固定节点出错！");
+                    err => {
+                        $("#myModal").modal('hide');
+                        toastr.error("增加节点出错！")
                     }
                 )
-            }else{
-                //增加单个节点（单位名称/部门本级/资源分类）
-                //判断填写信息是否完整
-                /**
-                 * 以下三种情况下为信息填写不完整：
-                 * 1.nodeNmae为空时：
-                 *        （1）add_type == 0 && type ==4;(添加资源分类节点却没有填写节点名称)
-                 *        （2）type != 1;(不是部门本级)；
-                 * 2.没有选择节点类型，此时无论是否填写了节点名称都会报错：
-                 *        （3）add_type == 0 && type !=4
-                 */
-                if( ((nodeName == "")&&( type!=1 || ($("#add_type").val()=="0"&&type=="4") ))  ||  ($("#add_type").val()=="0"&&type!="4")    ){
-                    toastr.error("信息不完整！")
-                }else{
-                    //信息完整，调用后台方法
-                    var data = {
-                        pNodeId:pnodeId,
-                        pNodeCode:pnodeCode,
-                        note:note,
-                        type:type,
-                        level:level,
-                        nodeName:nodeName
-                    }
-                    getDataByPost(
-                        '/resource_manage/insertSingle',
-                        data,
-                        res=>{
-                            editState = 1;
-                            $("#myModal").modal('hide');
-                            that.treeNodes.addNodes(treeNode,res.data);
-                            toastr.success("增加节点成功！")
-                        },
-                        err=>{
-                            $("#myModal").modal('hide');
-                            toastr.error("增加节点出错！")
-                        }
-                    )
-                }
             }
         };
-        // getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
-        //     that.treeNodes.addNodes(treeNode,res);
-        // })
-        // that.treeNodes.addNodes(treeNode,res);
     });
 };
 function removeHoverDom(treeId, treeNode) {
-    $("#addBtn_"+treeNode.tId).unbind().remove();
+    $("#addBtn_" + treeNode.tId).unbind().remove();
 };
-function beforeRemove(treeId,treeNode){
+function beforeRemove(treeId, treeNode) {
     var res = confirm("确定删除该节点吗？")
-    if(!res){
+    if (!res) {
         return false;
     }
     var nodeId = treeNode.nodeId;
     var data = {
-        nodeId:nodeId,
+        nodeId: nodeId,
     }
     //查询该节点下是否有数据,有数据不可删除节点,此处getDataByPost1为同步方法（async：false），否则在进入该方法前就会将节点删除。
     getDataByPost1(
         '/department_manager/hasDataAndChild',
         data,
-        res=>{
-            nodeHasData = res.data[0];
-            nodeHasChild = res.data[1];
+        res => {
+            nodeHasData = res.data;
+            nodeHasChild = treeNode.isParent;
         },
-        err=>{
+        err => {
             toastr.error("请求错误！");
         }
     )
-    if(!nodeHasData){
-        if(nodeHasChild){
+    if (!nodeHasData) {
+        if (nodeHasChild) {
             var cue = confirm("是否要删除该节点下所有节点？");
-            if(cue){
+            if (cue) {
                 return true;
             }
             return false;
-        }else{
+        } else {
             return true;
         }
-    }else{
+    } else {
         toastr.warning("该节点下有数据不能删除！");
         return false;
     }
 };
-function beforeRename(treeId,treeNode,newName,isCancel){
+function beforeRename(treeId, treeNode, newName, isCancel) {
     if (newName.length == 0) {
-        setTimeout(function() {
+        setTimeout(function () {
             var zTree = $.fn.zTree.getZTreeObj("serviceTree");
             zTree.cancelEditName();
             toastr.warning("节点名称不能为空.");
@@ -256,61 +170,42 @@ function beforeRename(treeId,treeNode,newName,isCancel){
     }
     return true;
 };
-function zTreeEditOnclick(event, treeId, treeNode){
-    $("#text4").val(treeNode.nodeCode);
+function zTreeEditOnclick(event, treeId, treeNode) {
     $("#text3").val(treeNode.nodeName);
     $("#text7").val(treeNode.note);
-    console.log(treeNode);
-    var check_state
-    switch (treeNode.checkState) {
-        case "0":
-            check_state = "待审核";
-            break;
-        case "1":
-            check_state = "审核通过";
-            break;
-        case "2":
-            check_state = "审核拒绝";
-            break;
-    }
-    $("#checkState").val(check_state);
-    $("#refuseNote").val(treeNode.refuseNote);
-    $("#passBtn").addClass("hidden")
-    $("#refuseBtn").addClass("hidden")
-    $("#usersConfig").addClass("hidden");
 };
-function zTreeOnRemove(event, treeId, treeNode){
+function zTreeOnRemove(event, treeId, treeNode) {
     var nodeId = treeNode.nodeId;
     var data = {
-        nodeId:nodeId
+        nodeId: nodeId
     }
     getDataByPost(
-        '/resource_manage/delete',
+        '/department_manager/delete',
         data,
-        res=>{
+        res => {
             editState = 1;
             toastr.success("删除节点成功！")
         },
-        err=>{
+        err => {
             toastr.error("删除节点失败！");
         }
     )
 };
-function zTreeOnRename(event, treeId, treeNode, isCancel){
+function zTreeOnRename(event, treeId, treeNode, isCancel) {
     var nodeId = treeNode.nodeId;
     var nodeName = treeNode.nodeName;
     var data = {
-        nodeId:nodeId,
-        nodeName:nodeName
+        nodeId: nodeId,
+        nodeName: nodeName
     }
     getDataByPost(
-        '/resource_manage/rename',
+        '/department_manager/rename',
         data,
-        res=>{
+        res => {
             editState = 1;
             toastr.success("重命名成功！");
         },
-        err=>{
+        err => {
             isCancel = true;
             toastr.error("载入目录树错误！");
         }
@@ -331,27 +226,27 @@ var settingEdit = {
         editNameSelectAll: true
     },
     data: {
-        simpleData:{
-            enable:true,
-            idKey:"nodeId",
-            pIdKey:"pnodeId",
-            rootPId:"0"
+        simpleData: {
+            enable: true,
+            idKey: "nodeId",
+            pIdKey: "pnodeId",
+            rootPId: "0"
         },
         key: {
             name: "nodeName",
-            nodepath:"nodePath",
-            flag:"flag"
+            nodepath: "nodePath",
+            flag: "flag"
         }
     },
-    callback:{
-        onClick:zTreeEditOnclick,
+    callback: {
+        onClick: zTreeEditOnclick,
         beforeRemove: beforeRemove,
         beforeRename: beforeRename,
         onRemove: zTreeOnRemove,
-        onRename:zTreeOnRename,
+        onRename: zTreeOnRename,
         //禁止拖拽
-        beforeDrag(){return false},
-        beforeDrop(){return false},
+        beforeDrag() { return false },
+        beforeDrop() { return false },
     }
 };
 var dep = new Vue({
@@ -359,8 +254,8 @@ var dep = new Vue({
     data: {
         treeNodes: [],
         data: [],
-        userList:[],
-        totalCount:0
+        userList: [],
+        totalCount: 0
     },
     mounted() {
         that = this;
@@ -382,6 +277,8 @@ var dep = new Vue({
                 var ask = confirm("资源目录树有改动数据尚未保存，是否保存？");
                 if (ask == true) {
                     that.saveChange();
+                } else {
+                    getDataByGet('/department_manager/clearTemp', aJson);
                 }
                 //重置编辑状态标志位
                 editState = 0;
@@ -412,24 +309,24 @@ var dep = new Vue({
         },
 
         //保存编辑，使树进入锁定状态
-        saveChange(){
-            if(editState == 1){
+        saveChange() {
+            if (editState == 1) {
                 getDataByGet(
                     '/department_manager/saveChange',
                     aJson,
-                    res=>{
+                    res => {
                         toastr.success("保存编辑成功！");
                         getDataByGet('/department_manager/getDepartTree', aJson, res => {
                             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res.data);
                         })
                     },
-                    err=>{
+                    err => {
                         toastr.error("保存编辑出错！");
                     }
                 )
-            }else{
+            } else {
                 toastr.warning("当前未做任何编辑");
-                getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
+                getDataByGet('/department_manager/getDepartTree', aJson, res => {
                     that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
                 })
             }
@@ -437,8 +334,8 @@ var dep = new Vue({
             $("#refuseBtn").addClass("hidden")
             $("#usersConfig").addClass("hidden");
             editState = 0;
-            document.getElementById("saveChange").style.display="none";
-            document.getElementById("editChange").style.display="";
+            document.getElementById("saveChange").style.display = "none";
+            document.getElementById("editChange").style.display = "";
             // document.getElementById("showOrHideBtn").style.display="none";
             // document.getElementById("diaplayNodesBtn").style.display="none";
             // document.getElementById("hideNodesBtn").style.display="none";
@@ -448,18 +345,18 @@ var dep = new Vue({
             var node_name = $("#text9").val();
             var tip = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/error_icon.png'/></span>";
             var primary = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/correct_icon.png'/></span>";
-            if(node_name == ""){
+            if (node_name == "") {
                 document.getElementById("label_1").innerHTML = tip;
-            }else{
+            } else {
                 document.getElementById("label_1").innerHTML = primary;
             }
         },
 
         //初始化模态框
-        clearModel(){
+        clearModel() {
             var radio = document.getElementsByName("nodeType");
-            for(var i=0;i<radio.length;i++){
-                if(radio[i].checked){
+            for (var i = 0; i < radio.length; i++) {
+                if (radio[i].checked) {
                     radio[i].checked = false;
                     break;
                 }

@@ -396,6 +396,8 @@ var obj = new Vue({
                 var ask = confirm("资源目录树有改动数据尚未保存，是否保存？");
                 if (ask == true) {
                     that.saveChange();
+                } else {
+                    getDataByGet('/object_manage/clearTemp', aJson);
                 }
                 //重置编辑状态标志位
                 editState = 0;
