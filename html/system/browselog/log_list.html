@@ -1,0 +1,29 @@
+<section class="content" id="vue">
+    <div class="row">
+        <!-- 用户信息显示表 -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">日志列表</h3>
+                </div>
+                <div style="width: 320px; float: left;"><label class="col-xs-1 control-label" style="float: left; text-align: right; padding-top: 6px; padding-right: 3px; width: 120px;">日志等级:&nbsp;</label> <select @change="changeType()" id="state" v-model="type" class="form-control" style="float: left; padding-top: 3px; width: 200px;">
+                        <option value="info">INFO</option>
+                        <option value="error">ERROR</option>
+                    </select></div>
+                <div id="example1_wrapper" class="dataTables_wrapper form-inline dt-bootstrap">
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table id="sample_1" class="table table-bordered table-hover">
+                            <tbody id="modaltbody1">
+                                <tr v-for="item in list">
+                                    <td style="cursor: pointer;color:#2440B3" @click="goDetail(item)">{{item}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/YU/javascript/system/browselog/log_list.js"></script>

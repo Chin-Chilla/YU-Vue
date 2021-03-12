@@ -1,0 +1,21 @@
+
+<section class="content" id="vue">
+    <div class="row">
+        <!-- 用户信息显示表 -->
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">日志详情（{{path}}）</h3>
+                </div>
+                <div v-html="content">
+                </div>
+                <div style="margin-right: 2.5%;float: right;">
+                    <div class="btn-group" @click="back">
+                        <input type="button" value="返回" class="btn btn-primary" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<script src="/YU/javascript/system/browselog/log_detail.js"></script>
