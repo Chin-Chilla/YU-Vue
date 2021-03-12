@@ -380,7 +380,6 @@ var app = new Vue({
                 dbtype: dbtype,
                 databasechinesename: databasechinesename,
                 database_sid: database_sid,
-                IP: IP,
                 IPaddr: IPaddr,
                 user_name: user_name,
                 key: key,

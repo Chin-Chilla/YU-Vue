@@ -1,6 +1,6 @@
 /***
  * @author: 陈柱帆
- * @Description: “资源目录管理”菜单栏
+ * @Description: “基础对象目录管理”菜单栏
  * @date: 2021/1/24
  ***/
 var that;
@@ -40,7 +40,7 @@ var setting = {
         enable: true,
         type: "GET",
         dataType: 'json',
-        url: BASE_URL + "/index_manager/getResTreeById",
+        url: BASE_URL + "/index_manager/getObjIncludeUncheckById",
         autoParam: ["nodeId"]
     },
     data: {
@@ -103,6 +103,9 @@ function getFont(treeId, node) {
 };
 //新增按钮
 function addHoverDom(treeId, treeNode) {
+    if (treeNode.level < 2) {
+        return;
+    }
     var sObj = $("#" + treeNode.tId + "_span");
     if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
     var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
@@ -110,45 +113,20 @@ function addHoverDom(treeId, treeNode) {
     sObj.after(addStr);
     var btn = $("#addBtn_" + treeNode.tId);
     if (btn) btn.bind("click", function () {
-        $("#root_node").addClass("hidden");
-        $("#root_option").removeClass("hidden");
-        $("#dpt_option").removeClass("hidden");
-        $("#node_name").removeClass("hidden")
-        $("#note").removeClass("hidden")
-        $("#add_type").val("0");
         //初始化
         that.clearModel();
         $("#myModal").modal('show');
         var type;
-        if (treeNode.nodeCode.indexOf("_") == -1) {
-            $("#root_node").removeClass("hidden");
-            $("#node_name").css("margin-top", "0px")
-        } else {
-            $("#node_name").css("margin-top", "30px")
-        }
-        if (treeNode.level == 4) {
-            $("#root_option").addClass("hidden");
-        }
-        if (treeNode.level > 4) {
-            $("#root_option").addClass("hidden");
-            $("#dpt_option").addClass("hidden");
-        }
         //提交按钮绑定点击事件
         var btn = document.getElementById("increbutton");
         btn.onclick = function () {
-            //nodeCode有“_”时说明不是单位节点，不会在add_type中选择，该下拉框值为0.
-            if (treeNode.nodeCode.indexOf("_") == -1) {
-                type = $("#add_type").val();
-            } else {
-                type = 4;
-            }
+            var type = $("#add_type").val();
             var pnodeId = treeNode.nodeId;
             var pnodeCode = treeNode.nodeCode;
             var nodeName = $("#text9").val();
-            var note = $("#text12").val();
-            var level = treeNode.level;
+            var nodeCode = $("#code_input").val();
 
-            if (type == "3") {
+            if (type == "1") {
                 //增加固定节点
                 var data = {
                     pNodeId: pnodeId,
@@ -157,7 +135,7 @@ function addHoverDom(treeId, treeNode) {
                 that.clearModel();
                 $("#myModal").modal('hide');
                 getDataByPost(
-                    '/resource_manage/insertFixed',
+                    '/object_manage/insertFixed',
                     data,
                     res => {
                         editState = 1;
@@ -170,29 +148,18 @@ function addHoverDom(treeId, treeNode) {
                 )
             } else {
                 //增加单个节点（单位名称/部门本级/资源分类）
-                //判断填写信息是否完整
-                /**
-                 * 以下三种情况下为信息填写不完整：
-                 * 1.nodeNmae为空时：
-                 *        （1）add_type == 0 && type ==4;(添加资源分类节点却没有填写节点名称)
-                 *        （2）type != 1;(不是部门本级)；
-                 * 2.没有选择节点类型，此时无论是否填写了节点名称都会报错：
-                 *        （3）add_type == 0 && type !=4
-                 */
-                if (((nodeName == "") && (type != 1 || ($("#add_type").val() == "0" && type == "4"))) || ($("#add_type").val() == "0" && type != "4")) {
+                if ((nodeName == "") || (nodeCode == "")) {
                     toastr.error("信息不完整！")
                 } else {
                     //信息完整，调用后台方法
                     var data = {
                         pNodeId: pnodeId,
                         pNodeCode: pnodeCode,
-                        note: note,
-                        type: type,
-                        level: level,
-                        nodeName: nodeName
+                        nodeName: nodeName,
+                        nodeCode: nodeCode
                     }
                     getDataByPost(
-                        '/resource_manage/insertSingle',
+                        '/object_manage/insertSingle',
                         data,
                         res => {
                             editState = 1;
@@ -208,10 +175,6 @@ function addHoverDom(treeId, treeNode) {
                 }
             }
         };
-        // getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
-        //     that.treeNodes.addNodes(treeNode,res);
-        // })
-        // that.treeNodes.addNodes(treeNode,res);
     });
 };
 function removeHoverDom(treeId, treeNode) {
@@ -228,7 +191,7 @@ function beforeRemove(treeId, treeNode) {
     }
     //查询该节点下是否有数据,有数据不可删除节点,此处getDataByPost1为同步方法（async：false），否则在进入该方法前就会将节点删除。
     getDataByPost1(
-        '/resource_manage/hasDataAndChild',
+        '/object_manage/hasDataAndChild',
         data,
         res => {
             nodeHasData = res.data[0];
@@ -269,6 +232,9 @@ function showRenameOrRemoveBtn(treeId, treeNode) {
     //权限判断
     var code = sessionStorage.getItem("authCode") || 'unauth';
     var role = sessionStorage.getItem("role")
+    if (treeNode.level < 3) {
+        return;
+    }
     if (role.indexOf("ss") != -1) {
         return true;
     }
@@ -301,23 +267,23 @@ function zTreeEditOnclick(event, treeId, treeNode) {
     }
     $("#checkState").val(check_state);
     $("#refuseNote").val(treeNode.refuseNote);
-    var code = sessionStorage.getItem("authCode") || 'unauth';
-    var role = sessionStorage.getItem("role")
-    var nodeCode = treeNode.nodeCode;
-    $("#passBtn").addClass("hidden")
-    $("#refuseBtn").addClass("hidden")
-    $("#usersConfig").addClass("hidden");
-    if (role.indexOf("ss") != -1 || role.indexOf("ctv") != -1) {
-        if (nodeCode.substring(0, code.length) == code) {
-            $("#passBtn").removeClass("hidden")
-            $("#refuseBtn").removeClass("hidden")
-        }
-    }
-    if (nodeCode.substring(0, code.length) == code && (role.indexOf("ss") != -1 || role.indexOf("ctv") != -1)) {
-        $("#usersConfig").removeClass("hidden")
-    } else {
-        $("#usersConfig").addClass("hidden")
-    }
+    // var code = sessionStorage.getItem("authCode") || 'unauth';
+    // var role = sessionStorage.getItem("role")
+    // var nodeCode = treeNode.nodeCode;
+    // $("#passBtn").addClass("hidden")
+    // $("#refuseBtn").addClass("hidden")
+    // $("#usersConfig").addClass("hidden");
+    // if (role.indexOf("ss") != -1 || role.indexOf("ctv") != -1) {
+    //     if (nodeCode.substring(0, code.length) == code) {
+    //         $("#passBtn").removeClass("hidden")
+    //         $("#refuseBtn").removeClass("hidden")
+    //     }
+    // }
+    // if (nodeCode.substring(0, code.length) == code && (role.indexOf("ss") != -1 || role.indexOf("ctv") != -1)) {
+    //     $("#usersConfig").removeClass("hidden")
+    // } else {
+    //     $("#usersConfig").addClass("hidden")
+    // }
 };
 function zTreeOnRemove(event, treeId, treeNode) {
     var nodeId = treeNode.nodeId;
@@ -325,7 +291,7 @@ function zTreeOnRemove(event, treeId, treeNode) {
         nodeId: nodeId
     }
     getDataByPost(
-        '/resource_manage/delete',
+        '/object_manage/delete',
         data,
         res => {
             editState = 1;
@@ -344,7 +310,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
         nodeName: nodeName
     }
     getDataByPost(
-        '/resource_manage/rename',
+        '/object_manage/rename',
         data,
         res => {
             editState = 1;
@@ -387,7 +353,7 @@ var settingEdit = {
         enable: true,
         type: "GET",
         dataType: 'json',
-        url: BASE_URL + "/index_manager/getResIncludeUncheckById",
+        url: BASE_URL + "/index_manager/getObjIncludeUncheckById",
         autoParam: ["nodeId"]
     },
     callback: {
@@ -402,8 +368,8 @@ var settingEdit = {
         onAsyncSuccess(event, treeId, treeNode, dataStr) { }
     }
 };
-var res = new Vue({
-    el: "#res",
+var obj = new Vue({
+    el: "#obj",
     data: {
         treeNodes: [],
         data: [],
@@ -413,28 +379,13 @@ var res = new Vue({
     mounted() {
         that = this;
         that.pageLeave();
-        MainPage.inRes = true;
+        MainPage.inObj = true;
         $(".sidebar-menu .treeview-menu li").removeClass("active");
-        $(".sidebar-menu .catalog").addClass("active");
+        $(".sidebar-menu .object").addClass("active");
         $("#text1").empty();
         $("#pagination").empty();
-
-        //用户授权模态框：点击某行任意位置触发check
-        $("#dataUsersTable").on("click", "tr", function () {
-            var input = $(this).find("input");
-            if (!$(input).prop("checked")) {
-                $(input).prop("checked", true);
-            } else {
-                $(input).prop("checked", false);
-            }
-        });
-        //多选框 防止事件冒泡
-        $("#dataUsersTable").on("click", "input", function (event) {
-            event.stopImmediatePropagation();
-        });
-
-        //初始化资源目录树
-        getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
+        //初始化对象目录树
+        getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
         })
     },
@@ -446,7 +397,7 @@ var res = new Vue({
                 if (ask == true) {
                     that.saveChange();
                 } else {
-                    getDataByGet('/resource_manage/clearTemp', aJson);
+                    getDataByGet('/object_manage/clearTemp', aJson);
                 }
                 //重置编辑状态标志位
                 editState = 0;
@@ -455,10 +406,10 @@ var res = new Vue({
 
         //节点编辑，使树进入一个可编辑的状态
         editChange() {
-            getDataByGet('/resource_manage/lockOrNot', aJson, res => {
+            getDataByGet('/object_manage/lockOrNot', aJson, res => {
                 if (res.data == "1") {
                     //可以编辑
-                    getDataByGet('/index_manager/getResIncludeUncheckById?nodeId=1000', aJson, res => {
+                    getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
                         that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingEdit, res);
                     })
                     $("#passBtn").addClass("hidden")
@@ -466,9 +417,6 @@ var res = new Vue({
                     $("#usersConfig").addClass("hidden");
                     document.getElementById("saveChange").style.display = "";
                     document.getElementById("editChange").style.display = "none";
-                    // document.getElementById("diaplayNodesBtn").style.display = "none";
-                    // document.getElementById("hideNodesBtn").style.display = "none";
-                    // document.getElementById("showOrHideBtn").style.display = "";
                     editState = 2;
                 }
             }, err => {
@@ -480,11 +428,11 @@ var res = new Vue({
         saveChange() {
             if (editState == 1) {
                 getDataByGet(
-                    '/resource_manage/saveChange',
+                    '/object_manage/saveChange',
                     aJson,
                     res => {
                         toastr.success("保存编辑成功！");
-                        getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
+                        getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
                             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
                         })
                     },
@@ -494,7 +442,7 @@ var res = new Vue({
                 )
             } else {
                 toastr.warning("当前未做任何编辑");
-                getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
+                getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
                     that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
                 })
             }
@@ -511,15 +459,12 @@ var res = new Vue({
 
         addTypeChange() {
             var e = $("#add_type").find("option:selected").val();
-            if (e == 3) {
+            if (e != 2) {
                 $("#node_name").addClass("hidden")
-                $("#note").addClass("hidden")
+                $("#node_code").addClass("hidden")
             } else {
                 $("#node_name").removeClass("hidden")
-                $("#note").removeClass("hidden")
-                if (e == 1) {
-                    $("#node_name").addClass("hidden")
-                }
+                $("#node_code").removeClass("hidden")
             }
         },
 
@@ -545,15 +490,9 @@ var res = new Vue({
                 }
             }
             var text1 = document.getElementById("text9");
-            var text2 = document.getElementById("textArci");
             var text3 = document.getElementById("showorder");
             var text4 = document.getElementById("text11");
             var text5 = document.getElementById("text12");
-            text1.disabled = false;
-            text2.disabled = false;
-            text3.disabled = false;
-            text4.disabled = false;
-            text5.disabled = false;
             $("#text9").val("");
             $("#textArci").val("");
             $("#showorder").val(1);
@@ -561,181 +500,7 @@ var res = new Vue({
             var tip = "<label class=\"form-group\" id=\"label_1\" style=\"margin:0px 0px 0px 15px\" class=\"col-sm-4 control-label\">*(必填)</label>";
             document.getElementById("label_1").innerHTML = tip;
             document.getElementById("label_2").innerHTML = tip;
-            document.getElementById("label_3").innerHTML = tip;
-        },
-
-        //用户授权按钮
-        usersConfig() {
-            var data = {
-                page: 1,
-                size: 5
-            }
-            getDataByPost(
-                '/user/getAuthUsersInfo',
-                data,
-                res => {
-                    $("#dataUsersPage").empty();
-                    $("#searchUsers").val("");
-                    that.totalCount = res.data.total;
-                    that.userList = res.data.list;
-                    $("#dataUsersPage").Paging({
-                        pagesize: 5,
-                        count: that.totalCount,
-                        toolbar: true,
-                        callback: function (page, size, count) {
-                            that.usersPage(page, size);
-                        }
-                    });
-                },
-                err => {
-                    toastr.error("获取用户列表失败!");
-                }
-            )
-        },
-
-        //用户授权模态框分页
-        usersPage(page, size) {
-            var data = {
-                page: page,
-                size: size
-            }
-            getDataByPost(
-                '/user/getAuthUsersInfo',
-                data,
-                res => {
-                    that.userList = res.data.list;
-                    that.totalCount = res.data.total;
-                },
-                err => {
-                    toastr.error("加载用户信息失败！")
-                }
-            )
-        },
-
-        //确认用户授权
-        saveUsersConfig() {
-            var ischeck = document.getElementsByName("isChecked");
-            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
-            var nodes = treeObj.getSelectedNodes();
-            var nodeCode = nodes[0].nodeCode;
-            var authCode = nodeCode.substring(0, nodes[0].level * 2);
-            var userId = []
-            for (var i = 0; i < ischeck.length; i++) {
-                if (ischeck[i].checked == true) {
-                    var node = ischeck[i].parentNode.nextSibling.nextSibling;
-                    var id = node.innerHTML;
-                    userId.push(id);
-                }
-            }
-            var role_code = "";
-            var ctvIsCheck = $("#ctv")[0].checked;
-            var ctmIsCheck = $("#ctm")[0].checked;
-            var mdmIsCheck = $("#mdm")[0].checked;
-            if (ctmIsCheck == true) {
-                role_code += "ctm,"
-            }
-            if (ctvIsCheck == true) {
-                role_code += "ctv,"
-            }
-            if (mdmIsCheck == true) {
-                role_code += "mdm,"
-            }
-            if (ctmIsCheck == false && ctvIsCheck == false && mdmIsCheck == false) {
-                toastr.warning("请选择权限！");
-                return false;
-            }
-            role_code = role_code.substring(0, role_code.length - 1)
-            var data = {
-                userId: userId,
-                authCode: authCode,
-                role_code: role_code
-            };
-            getDataByPost(
-                '/user/saveUsersAuth',
-                data,
-                res => {
-                    toastr.success("授权成功！");
-                },
-                err => {
-                    toastr.error("授权失败！");
-                }
-            )
-            // $.ajax
-            // ({
-            //     url: '/UserManager/saveUsersAuth',
-            //     data: data,
-            //     dataType: "JSON",
-            //     async: false,
-            //     type: "GET",
-            //     success: function (msg) {
-            //         if (msg.state == "OK") {
-            //             toastr.success("授权成功");
-            //             $("#usersConfigModal").modal('hide');
-            //         }
-            //     }
-            // });
-        },
-
-        //审核通过
-        passReview() {
-            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
-            var nodes = treeObj.getSelectedNodes();
-            var tId = nodes[0].tId;
-            var isAll = confirm("是否统一通过其所有子节点？")
-            var data = {
-                node_id: nodes[0].nodeId,
-                isAll: isAll
-            }
-            getDataByPost("/resource_manage/passNodeReview", data, res => {
-                editState = 1
-                try {
-                    $("#checkState").val("审核通过");
-                    $("#refuseNote").val("");
-                    nodes[0].checkState = "1";
-                    nodes[0].refuse_note = "";
-                    var dom = $("#" + tId + "_span");
-                    dom.css({ "color": "", "background-color": "" });
-                    toastr.success("操作成功！")
-                } catch (e) {
-                    toastr.error("操作失败！")
-                    console.log(e)
-                }
-            })
-        },
-
-        //填写审核拒绝理由
-        showRefuseModal() {
-            $("#refuse_note").val("")
-            $("#refuseModal").modal("show");
-        },
-
-        //审核拒绝确认按钮
-        refuseReview() {
-            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
-            var nodes = treeObj.getSelectedNodes();
-            var tId = nodes[0].tId;
-            var isAll = confirm("是否统一拒绝其所有子节点？")
-            var data = {
-                isAll: isAll,
-                node_id: nodes[0].nodeId,
-                refuse_note: $("#refuse_note").val()
-            }
-            getDataByPost("/resource_manage/refuseReview", data, res => {
-                editState = 1;
-                try {
-                    $("#checkState").val("审核拒绝");
-                    $("#refuseNote").val($("#refuse_note").val());
-                    nodes[0].checkState = "2";
-                    nodes[0].refuse_note = $("#refuse_note").val();
-                    var dom = $("#" + tId + "_span");
-                    dom.css({ "color": "red", "background-color": "rgba(0,0,0,0.3)" });
-                    toastr.success("操作成功！")
-                } catch (e) {
-                    toastr.error("操作失败！")
-                    console.log(e)
-                }
-            })
-        },
-    },
+        }
+    }
 
 })

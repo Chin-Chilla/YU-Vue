@@ -126,7 +126,7 @@ var app = new Vue({
                 '/system_rdbms/getTabInfoByCon',
                 data,
                 res => {
-                    console.log(res.data);
+                    console.log(res.data[0]);
                     var num = 0;
                     $("#property_body").empty();
                     for (var o in res.data) {
