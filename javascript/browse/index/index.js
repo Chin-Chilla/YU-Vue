@@ -1,4 +1,27 @@
 var that;
+//快速排序
+function quickSort(nums,l,h){
+    if(l<h){
+        var i=l, j=h, x=nums[l];
+        while(i<j){
+            while( i<j && nums[j].value<=x.value ){
+                j--;
+            }
+            if (i<j){
+                nums[i++] = nums[j];
+            }
+            while( i<j && nums[i].value>x.value){
+                i++;
+            }
+            if (i<j){
+                nums[j--] = nums[i];
+            }
+        }
+        nums[i] = x;
+        quickSort(nums,l,i-1);
+        quickSort(nums,i+1,h);
+    }
+}
 var index = new Vue({
     el: "#vue", //绑定之前html写的ID
     data: { //相当于成员变量
@@ -694,6 +717,7 @@ var index = new Vue({
     },
     methods: { //相当于成员方法
         load() {
+            //45个部门结点
             for (var i = 0; i < 45; i++) {
                 that.arrayData.push(new Array());
                 that.arrayLegend.push(new Array());
@@ -703,6 +727,7 @@ var index = new Vue({
                 that.downmax.push(0);
                 that.arrayBar.push(new Array());
             }
+            //34类数据对象
             for (i = 0; i < 34; i++) {
                 that.arrayObjTotal.push(new Array());
                 that.arrayObjlegendAll.push(new Array());
@@ -1502,8 +1527,14 @@ var index = new Vue({
 	        that.leftoption.title.text = '水利信息目录资源分布图';
 	        //that.leftoption.series[0].data = that.firstPieTreeData;
 	        //that.leftoption.legend.data = that.firstPieTreeLegend;
+            quickSort(that.firstPieTreeDataAll,0,that.firstPieTreeDataAll.length-1)
+            var legend = [];
+            var length = that.firstPieTreeDataAll.length<5?that.firstPieTreeDataAll.length:5;
+            for (var i = 0; i < length; i++) {
+                legend.push(that.firstPieTreeDataAll[i].name);
+            }
 	        that.leftoption.series[0].data = that.firstPieTreeDataAll;
-	        that.leftoption.legend.data = that.firstPieTreeLegendAll.slice(0,5);
+	        that.leftoption.legend.data = legend;
 	        that.myChartleft.setOption(that.leftoption);
 	        that.myChartleft.hideLoading();
 	    },
@@ -1524,11 +1555,18 @@ var index = new Vue({
 	    rightPictureShow() {
 	        //var that.myChartright = echarts.init(document.getElementById('right'));
 	        that.rightoption.title.text = '水利信息目录资源对象分布图';
-	        that.rightoption.series.data = that.arrayObjTotal;
-	        that.rightoption.legend.data = that.arrayObjlegendAll.slice(0,5);
+            quickSort(that.arrayObjTotal,0,that.arrayObjTotal.length-1);
+	        var legend = [];
+	        var length = that.arrayObjTotal.length<5?that.arrayObjTotal.length:5;
+            for (var i = 0; i < length; i++) {
+                legend.push(that.arrayObjTotal[i].name);
+            }
+            that.rightoption.series.data = that.arrayObjTotal;
+	        that.rightoption.legend.data = legend;
 	        that.myChartright.setOption(that.rightoption);
 	        that.myChartright.hideLoading();
 	    },
+
 	    leftDownPictureShow() {
 	        // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
 	        var options = $("#level2 option:selected");
@@ -1636,8 +1674,14 @@ var index = new Vue({
 	            //数据量不为0，可继续点击查看  否则返回第一个饼图
 	            if (that.firstPieTreeSecondData.length > 0) {
 	                that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
-	                that.leftoption.series[0].data = that.firstPieTreeSecondData;
-	                that.leftoption.legend.data = that.firstPieTreeSecondLegend.slice(0,5);
+                    quickSort(that.firstPieTreeSecondData,0,that.firstPieTreeSecondData.length-1)
+                    var legend = [];
+                    var length = that.firstPieTreeSecondData.length<5?that.firstPieTreeSecondData.length:5;
+                    for (var i = 0; i < length; i++) {
+                        legend.push(that.firstPieTreeSecondData[i].name);
+                    }
+                    that.leftoption.series[0].data = that.firstPieTreeSecondData;
+                    that.leftoption.legend.data = legend;
 	                myChartleft.setOption(that.leftoption);
 	            } else {
 	                //that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
