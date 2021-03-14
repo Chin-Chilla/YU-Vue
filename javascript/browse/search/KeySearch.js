@@ -48,17 +48,17 @@ var keySearch = new Vue({
             };
             getDataByGet("/key_search/initialRevokeReSourceDirTreeWithDataCat",data,function (dataStr) {
                 HRCindex.catalogTreeData=dataStr;
-                $.fn.zTree.init($("#tree"), setting, dataStr);
+                $.fn.zTree.init($("#resTreeDyn"), setting, dataStr);
             });
 
             getDataByGet("/key_search/initialRevokeClassDirTreeWithDataCat",JSON.stringify(data),function (dataStr) {
                 HRCindex.objectTreeData=dataStr;
-                $.fn.zTree.init($("#objectTree"), settingObject, dataStr);
+                $.fn.zTree.init($("#objTreeDyn"), settingObject, dataStr);
                 $("#loading").css("display","none");
 
             });
         },
-        renderDynamicTree: function () {
+        renderDynamicTree: function (flag,treeId) {
             //动态树
             var settings = {
                 data: {
@@ -77,22 +77,53 @@ var keySearch = new Vue({
                         var nodeId=treeNode.node_id;
                         keySearch.nodeId=nodeId;
                         //keySearch.loadFromTree1();
-                        keySearch.keySearch(2)//当前目录
+                        keySearch.keySearch(3,treeId)//当前目录
                     }
                 }
             }
             var value1 = $("#keyWord").val();
             var nodeId= keySearch.nodeId;
             var data = { dataJson:value1,node:nodeId,key2:keySearch.keyWord2 };
-            getDataByPost('/key_search/dynamictree', data, function (res){
-                try{
-                    var msg = res.data;
-                    $.fn.zTree.init($("#treeDemos"), settings, msg);//初始化检索结果分布树(jquery树形控件ztree)
+            if ( flag != 3){
+                getDataByPost('/key_search/dynamictree', data, res=>{
+                    try{
+                        $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
+                    }
+                    catch(cer){
+                        console.log(cer);
+                    }
+                });
+                getDataByPost('/key_search/dynamicObjTree', data, res=>{
+                    try{
+                        $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
+                    }
+                    catch(cer){
+                        console.log(cer);
+                    }
+                })
+            }else{
+                //如果是点击右侧树节点搜索的，只加载相应的单棵动态树即可
+                if (treeId == "ReSourceTree") {
+                    getDataByPost('/key_search/dynamictree', data, res=>{
+                        try{
+                            $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
+                        }
+                        catch(cer){
+                            console.log(cer);
+                        }
+                    });
+                }else if(treeId=="ObjectTree"){
+                    getDataByPost('/key_search/dynamicObjTree', data, res=>{
+                        try{
+                            $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
+                        }
+                        catch(cer){
+                            console.log(cer);
+                        }
+                    })
                 }
-                catch(cer){
-                    console.log(cer);
-                }
-            })
+            }
+
         },
         loadFromTree: function (nodeId,treeType) {
             var data = {};
@@ -107,16 +138,15 @@ var keySearch = new Vue({
                     keySearch.nodeId = nodeId;
                     keySearch.treeType = treeType;
                     $("#keyWord").val("");
-                    keySearch.keySearch(3);//节点搜索
+                    keySearch.keySearch(3,treeType);//节点搜索
                 }
             });
         },
 
         //1是全局 2是当前目录 3是结点 4是二次搜索
-        keySearch: function (flag) {
+        keySearch: function (flag,treeId) {
             keySearch.pageNo = 1;
             keySearch.count = 0;
-
 
             if (keyWord == "") {
                 toastr.warning("关键词不能为空!");
@@ -180,7 +210,7 @@ var keySearch = new Vue({
                             ahtml += "</div>";
                         }
                         $(".facet").append(ahtml);//精炼检索结果
-                        keySearch.renderDynamicTree();
+                        keySearch.renderDynamicTree(flag,treeId);
                     } else {
                         ;
                     }

@@ -800,7 +800,7 @@ var index = new Vue({
             //资源目录树的懒加载  加载所有一级节点和水利部子节点
             getDataByGet('/index_manager/getResById?nodeId=1000',aJson, dataStr =>{
             	that.catalogTreeData = dataStr
-                    that.resZtree = $.fn.zTree.init($("#tree"), setting, dataStr);
+                    that.resZtree = $.fn.zTree.init($("#resTree"), setting, dataStr);
                     for (var i = 0; i < dataStr.length; i++) {
                         //父节点为水利信息资源目录结点
                         if (dataStr[i].pnodeId == 1001) {
@@ -897,7 +897,7 @@ var index = new Vue({
                             that.arrayRightBarObj.push(num);
                         }
                     }
-                    that.objZtree = $.fn.zTree.init($("#objectTree"), settingObject, dataStr);
+                    that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
             })
             
 
