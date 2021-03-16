@@ -26,7 +26,7 @@ var keySearch = new Vue({
             var data = {};
             $("#pagination").empty();
             $("#text1").empty();
-            keySearch.keyWord2 = $("#keyWord2").val();
+            keySearch.keyWord2 = $("#keyWord2").val();//二次搜索输入的关键词
         
             $.ajax({
                 type:'GET',
@@ -37,8 +37,7 @@ var keySearch = new Vue({
                     keySearch.firstName = "";
                     keySearch.secondName = "";
                     keySearch.keyWord = $("#keyWord").val();
-                
-                    keySearch.keySearch(sign);
+                    keySearch.keySearch(sign,keySearch.treeType);
                 }
             });
         },
@@ -84,7 +83,7 @@ var keySearch = new Vue({
             var value1 = $("#keyWord").val();
             var nodeId= keySearch.nodeId;
             var data = { dataJson:value1,node:nodeId,key2:keySearch.keyWord2 };
-            if ( flag != 3){
+            if ( flag != 3 && flag != 2){
                 getDataByPost('/key_search/dynamictree', data, res=>{
                     try{
                         $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
@@ -102,7 +101,7 @@ var keySearch = new Vue({
                     }
                 })
             }else{
-                //如果是点击右侧树节点搜索的，只加载相应的单棵动态树即可
+                //如果是点击右侧树节点或搜索当前目录搜索的，只加载相应的单棵动态树即可
                 if (treeId == "ReSourceTree") {
                     getDataByPost('/key_search/dynamictree', data, res=>{
                         try{
