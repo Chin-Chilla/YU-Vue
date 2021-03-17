@@ -83,42 +83,22 @@ var keySearch = new Vue({
             var value1 = $("#keyWord").val();
             var nodeId= keySearch.nodeId;
             var data = { dataJson:value1,node:nodeId,key2:keySearch.keyWord2 };
-            if ( flag != 3 && flag != 2){
+            if ( treeId == "" || flag == "1" ){
                 getDataByPost('/key_search/dynamictree', data, res=>{
-                    try{
-                        $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
-                    }
-                    catch(cer){
-                        console.log(cer);
-                    }
+                    $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
                 });
                 getDataByPost('/key_search/dynamicObjTree', data, res=>{
-                    try{
-                        $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
-                    }
-                    catch(cer){
-                        console.log(cer);
-                    }
+                    $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
                 })
             }else{
                 //如果是点击右侧树节点或搜索当前目录搜索的，只加载相应的单棵动态树即可
                 if (treeId == "ReSourceTree") {
                     getDataByPost('/key_search/dynamictree', data, res=>{
-                        try{
-                            $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
-                        }
-                        catch(cer){
-                            console.log(cer);
-                        }
+                        $.fn.zTree.init($("#resTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
                     });
                 }else if(treeId=="ObjectTree"){
                     getDataByPost('/key_search/dynamicObjTree', data, res=>{
-                        try{
-                            $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
-                        }
-                        catch(cer){
-                            console.log(cer);
-                        }
+                        $.fn.zTree.init($("#objTreeDyn"), settings, res.data);//初始化检索结果分布树(jquery树形控件ztree)
                     })
                 }
             }
