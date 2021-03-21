@@ -141,7 +141,7 @@ var index = new Vue({
             calculable: true,
             series: {
                 //minAngle: 5,
-                name: '半径模式',
+                name: '对象数据分布',
                 type: 'pie',
                 radius: ['35%', '70%'],
                 label: {
@@ -682,6 +682,12 @@ var index = new Vue({
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
+        var authCode = getUrlKey("authCode");
+        var role = getUrlKey("role");
+        if(authCode!=null&&authCode!=''&&authCode!=undefined){
+            sessionStorage.setItem("authCode",authCode);
+            sessionStorage.setItem("role",role);
+        }
         toastr.options = {
             "closeButton": false,
             "debug": false,
