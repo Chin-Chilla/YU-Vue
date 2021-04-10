@@ -509,6 +509,7 @@ var keySearch = new Vue({
                     })
                 }
             }else /*if(readConf.value=="nanjing_test")*/{ 
+                var buttonhtml;
                 if(is_first){
                     var msg=keySearch.msg;
                     if(msg.result.length==0){      //不为0
@@ -517,6 +518,7 @@ var keySearch = new Vue({
                     }else {
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
+                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"','"+msg.result[i][0].source+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
                             for (j = 2; j < msg.result[i].length; j++) {
                                 if (msg.result[i][j].name == 'classId') {
                                     keySearch.classID = msg.result[i][j].value;
@@ -531,7 +533,7 @@ var keySearch = new Vue({
                                     "<div class=\"row\">" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].
                                         source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
-                                    msg.result[i][1].value
+                                    msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                                 // "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"btn btn-primary\" style=\"width:80px;height: " +
                                 // "30px;margin: 0px 5px 5px 5px\" onclick=onclick=keySearch.detail('"+$.trim(msg.result[i][4].value)+"','"+$.trim(msg.result[i][3].value)+"','" + $.trim(msg.result[i][0].id) + "','" +
                                 // msg.result[i][0].source + "')>摘要信息</a>"+
@@ -546,7 +548,7 @@ var keySearch = new Vue({
                                 var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\" >" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
-                                    msg.result[i][1].value + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class=\"row\" style=\"margin-left: 100px\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                                    msg.result[i][1].value +"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                             }
 
                             keySearch.classID='';
@@ -583,11 +585,13 @@ var keySearch = new Vue({
                         }
                     }
                 }else {
+
                     getDataByPost('/key_search/queryforindex', data, function (res) {
                         var msg = res.data;
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
-
+                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"','"+msg.result[i][0].source+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                            
                             for (j = 2; j < msg.result[i].length; j++) {
 
                                 if (msg.result[i][j].name == 'classId') {
@@ -604,7 +608,7 @@ var keySearch = new Vue({
                                     "<div class=\"row\">" +
                                     "<a target=\"_blank\" onclick='" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].
                                         source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
-                                    msg.result[i][1].value
+                                    msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                                 // "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class=\"btn btn-primary\" style=\"width:80px;height: " +
                                 // "30px;margin: 0px 5px 5px 5px\" onclick=onclick=keySearch.detail('"+$.trim(msg.result[i][4].value)+"','"+$.trim(msg.result[i][3].value)+"','" + $.trim(msg.result[i][0].id) + "','" +
                                 // msg.result[i][0].source + "')>摘要信息</a>"+
@@ -619,7 +623,7 @@ var keySearch = new Vue({
                                 var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\">" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
-                                    msg.result[i][1].value + "</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div><div class=\"row\" style=\"margin-left: 100px\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                                    msg.result[i][1].value +"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                             }
                             keySearch.classID='';
                             for (var j = 2; j < msg.result[i].length; j++) {
@@ -656,6 +660,19 @@ var keySearch = new Vue({
                 }
             }
         },
+        subscribe: function(id,name,loc){
+            getDataByPost('/user/subscribe',{
+                id:id,
+                name:name,
+                loc:loc
+            },res=>{
+                if(res.code==200){
+                    toastr.success("订阅成功！");
+                }else{
+                    toastr.error(res.msg);
+                }
+            })
+        },
         //封面搜索
         facetSearch: function (firstName, secondName, e) {
             keySearch.firstName = firstName;
@@ -665,10 +682,11 @@ var keySearch = new Vue({
         //详情页
         detail:function (metadataId,source) {
             $("html,body").animate({scrollTop:0}, 100);
-            if (source == "") {
+            if (source == ""||source == "null") {
                 detailPage.load(metadataId,1);
             } else {
                 detailPage.autoOpenCurrentData(metadataId);
+                
                 var data = {
                     id:metadataId
                 }
@@ -676,6 +694,7 @@ var keySearch = new Vue({
                     var msg = res.data;
                     var aDiv = $(".left_down");
                     detailPage.keySearch_html = aDiv.html();
+                    $("#pagination").empty()
                     var name = msg.name||msg.idtitle||' ';
                     var abs = msg.abs||msg.idabs||' ';
                     var key = msg.key||msg.keyword||' ';
@@ -686,7 +705,7 @@ var keySearch = new Vue({
                     if(source=='http://10.1.7.92:8090'){
                         loc="";
                     }
-                    $(".left_down").html("<style type=\"text/css\">body,html{width:100%;height:100%;margin:0;font-family:\"Microsoft YaHei\"}#mapDiv{width:50%}input,b,p{margin-left:5px;font-size:14px}</style><div class=\"row\">    <div class=\"col-md-2\"></div>    <div class=\"col-md-8\" style=\"border-bottom: 1px solid #9d9d9d;        text-align: center;        margin: 20px 0 20px 0\">        " +
+                    $(".right_down").html("<style type=\"text/css\">body,html{width:100%;height:100%;margin:0;font-family:\"Microsoft YaHei\"}#mapDiv{width:50%}input,b,p{margin-left:5px;font-size:14px}</style><div class=\"row\">    <div class=\"col-md-2\"></div>    <div class=\"col-md-8\" style=\"border-bottom: 1px solid #9d9d9d;        text-align: center;        margin: 20px 0 20px 0\">        " +
                         "<h3 id=\"title\">" +name+
                         "（汇交数据）</h3>    " +
                         "</div></div><div class=\"row\" style=\"margin-top: 0;\">    " +
