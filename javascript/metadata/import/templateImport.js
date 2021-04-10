@@ -82,7 +82,7 @@ var app = new Vue({
                         }
                         // $("#loading").css('display', 'none'); //取消 loading 界面
                         if (msgJson.data.state == 'ok') {
-                            alert("导入成功！");
+                            toastr.success("导入成功！");
                         }
                     },
                     "error": function (msgJson) {
