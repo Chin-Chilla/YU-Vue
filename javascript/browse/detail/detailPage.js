@@ -39,6 +39,9 @@ var detailPage = new Vue({
             //ajax 根据id获取node
             var zTree = $.fn.zTree.getZTreeObj("tree");//treeDemo界面中加载ztree的div
             var objTree = $.fn.zTree.getZTreeObj("objectTree");//treeDemo界面中加载ztree的div
+            if(zTree==null){
+                return;
+            }
             //var dataString = JSON.stringify(data);
             getDataByPost('/show_detail/queryNodeById', {
                 nodeId: metadataId,
@@ -156,7 +159,7 @@ var detailPage = new Vue({
                     {
                         tplData: detailPage.detailContent,
                     });
-                var aDiv = $(".left_down");
+                var aDiv = $(".right_down");
                 $("#pagination").empty();
                 aDiv.html(html);
                 aDiv.trigger("create");
