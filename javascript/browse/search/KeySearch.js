@@ -738,7 +738,7 @@ var keySearch = new Vue({
                         "<tr><td>发布日期</td><td>" +msg.uptime+
                         "</td></tr>" +
                         loc +
-                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    </div></div></div>")
+                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.subscribe('" + msg.id + "','"+name+"','"+msg.LOC+"')\">   </div></div></div>")
                     
                 });
                 
