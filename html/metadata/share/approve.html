@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <!--  单页面应用（自己测试静态页面用）需要先引入vue，跑项目注释掉就行  -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- import CSS -->
+    <!--  使用组件库element，需要在body前引入这两个文件，跑项目像vue.js一样全局引入就可以  -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+</head>
+<body>
+<section class="content" id="vue">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box" style="border: 1px solid #eaeefb">
+                <div style="display: flex; justify-content: space-around; width: 60%; height: 100px;text-align: center; align-items: center">
+
+                    <!-- Unnamed (矩形) -->
+                    <div style="width: 25%; height: 60%;display: flex; justify-content: space-around; flex-direction: column">
+                        <span style="color:rgba(245, 154, 35, 0.901960784313726);font-size:14px;display: block">审核中</span>
+                        <span style="color:rgba(0, 0, 0, 0.847058823529412);font-size:20px; display: block">{{reviewNum}}个</span>
+                    </div>
+
+
+                    <!-- Unnamed (矩形) -->
+                    <div style="width: 25%; height: 60%;border-left: 1px solid #9F9F9F; display: flex; justify-content: space-around; flex-direction: column">
+                        <span style="color:rgba(2, 215, 125, 0.886274509803922);font-size:14px;display: block">已通过</span>
+                        <span style="color:rgba(0, 0, 0, 0.847058823529412);font-size:20px; display: block">{{passNum}}个</span>
+                    </div>
+
+                    <!-- Unnamed (矩形) -->
+                    <div style="width: 25%; height: 60%;border-left: 1px solid #9F9F9F; display: flex; justify-content: space-around; flex-direction: column">
+                        <span style="color:rgba(217, 0, 27, 0.8);font-size:14px;display: block">未通过</span>
+                        <span style="color:rgba(0, 0, 0, 0.847058823529412);font-size:20px; display: block">{{refuseNum}}个</span>
+                    </div>
+
+                    <!-- Unnamed (矩形) -->
+                    <div style="width: 25%; height: 60%;border-left: 1px solid #9F9F9F; display: flex; justify-content: space-around; flex-direction: column">
+                        <span style="color:rgba(0, 0, 0, 0.447058823529412);font-size:14px;display: block">总申请数</span>
+                        <span style="color:rgba(0, 0, 0, 0.847058823529412);font-size:20px; display: block">{{reqNum}}个</span>
+                    </div>
+
+                </div>
+                <div style="display: flex; justify-content: space-around; width: 60%; height: 100px;text-align: center; align-items: center">
+                   <div id="u294" class="ax_default" data-left="1209" data-top="117" data-width="298" data-height="28">
+                       <el-button  type="warning" size="mini">审核中</el-button>
+                       <el-button  type="primary" size="mini">全部</el-button>
+                       <el-button  type="danger" size="mini">未通过</el-button>
+                       <el-button  type="success" size="mini">已通过</el-button>
+                   </div>
+                    <div  class="ax_default" data-left="1209" data-top="117" data-width="298" data-height="28">
+                            <input type= "text" placeholder="请输入标题" id="dataReqKeyword"style="width: 300px">
+                            <a class="btn btn-primary" style="width: 50px;border-radius: 5px;height: 30px" >
+                                <i class="fa fa-search"></i>
+                            </a>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin: 10px 0; width: 100%">
+                <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
+                    <thead>
+                    <tr>
+                        <th style="min-width: 150px">元数据ID</th>
+                        <th style="min-width: 150px">元数据名称</th>
+                        <th style="min-width: 150px">订阅时间</th>
+                        <th style="min-width: 150px">状态</th>
+                        <th style="min-width: 150px">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+<!-- 自己测试静态页面，静态数据放在js里面，需要使用绝对路径引入，跑项目需时要改成相对路径，否则会报错，切记！！！ -->
+<!--<script src="F:/YU/yu_front/nginx-1.15.10/html/YU/javascript/metadata/share/approve.js"></script>-->
+<!-- import Vue before Element -->
+<!--<script src="https://unpkg.com/vue/dist/vue.js"></script>-->
+<!-- import JavaScript -->
+<!--<script src="/YU/javascript/common/baiduTpls.js" type="text/javascript"></script>-->
+<!--<script src="/YU/javascript/browse/detail/map.js" type="text/javascript"></script>-->
+<!--<script src="/YU/javascript/browse/detail/detailPage.js" type="text/javascript"></script>-->
+<!--<script type="text/javascript" src="/YU/javascript/browse/search/keySearch.js"></script>-->
+<script src="/YU/javascript/metadata/share/approve.js"></script>
+<script type="text/javascript" src="/YU/javascript/browse/search/keySearch.js"></script>
+<script type="text/javascript" src="/YU/javascript/browse/detail/detailPage.js"></script>
+<script src="/YU/javascript/common/baiduTpls.js" type="text/javascript"></script>
+<script src="/YU/javascript/browse/detail/map.js" type="text/javascript"></script>
+</html>
