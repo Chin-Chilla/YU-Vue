@@ -16,10 +16,12 @@ var keySearch = new Vue({
         md_file_id:'',
         datacat:'',
         value: '',
+        sub_id:'',
+        sub_name:'',
+        sub_loc:''
     },
 
     mounted(){
-        
     },
     methods: {
         load(sign){
@@ -527,7 +529,18 @@ var keySearch = new Vue({
                     }else {
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
-                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"','"+msg.result[i][0].source+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                            //根据关键字从solr检索数据，返回的数据会给检索文字标红，此处要去掉<font color="red"></font>标签。
+                            var str = msg.result[i][1].value
+                            var index1 = str.indexOf('<');
+                            var content1 = str.substring(0,index1);
+                            var index2 = str.indexOf('>');
+                            var str1 = str.substring(index2+1,str.length);
+                            var index3 = str1.indexOf('<');
+                            var content2 = str1.substring(0,index3);
+                            var index4 = str1.indexOf('>');
+                            var content3 = str1.substring(index4+1,str1.length);
+                            var name = content1 + content2 + content3;
+                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+name+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
                             for (j = 2; j < msg.result[i].length; j++) {
                                 if (msg.result[i][j].name == 'classId') {
                                     keySearch.classID = msg.result[i][j].value;
@@ -599,7 +612,8 @@ var keySearch = new Vue({
                         var msg = res.data;
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
-                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"','"+msg.result[i][0].source+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                            console.log(msg.result)
+                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
                             
                             for (j = 2; j < msg.result[i].length; j++) {
 
@@ -669,11 +683,25 @@ var keySearch = new Vue({
                 }
             }
         },
-        subscribe: function(id,name,loc){
+        showModal: function(id,name,loc){
+            $("#myModal").modal("show");
+            this.sub_id = id;
+            this.sub_name = name;
+            this.sub_loc = loc;
+        },
+        subscribe: function(){
+            var proposer = $("#proposer").val();
+            var org = $("#org").val();
+            var contact = $("#contact").val();
+            var description = $("#description").val();
             getDataByPost('/user/subscribe',{
-                id:id,
-                name:name,
-                loc:loc
+                id:this.sub_id,
+                name:this.sub_name,
+                loc:this.sub_loc,
+                proposer:proposer,
+                org:org,
+                contact:contact,
+                description:description
             },res=>{
                 if(res.code==200){
                     toastr.success("订阅成功！");
@@ -738,7 +766,7 @@ var keySearch = new Vue({
                         "<tr><td>发布日期</td><td>" +msg.uptime+
                         "</td></tr>" +
                         loc +
-                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.subscribe('" + msg.id + "','"+name+"','"+msg.LOC+"')\">   </div></div></div>")
+                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.showModal('" + msg.id + "','"+name+"')\">   </div></div></div>")
                     
                 });
                 

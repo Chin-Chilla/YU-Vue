@@ -221,7 +221,6 @@ var app = new Vue({
 	        }
 	        else{
 	            toastr.warning("请选择");
-	        
 	        }
         },
         //审核拒绝
