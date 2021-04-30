@@ -14,6 +14,7 @@ var UserPage = new Vue({
         checkedLoginname:'',//用户名
         checkedRole:'',//角色
         //编辑角色信息
+        key:'',
         editRoleId:'',
         editRoleCode:'',
         editRoleName:'',
@@ -166,6 +167,7 @@ var UserPage = new Vue({
 	                    $("#example_modal_6").val(res.data.depname);
 	                    $("#example_modal_7").val(res.data.depcode);
 	                    $("#example_modal_8").val(res.data.mobileNumber);
+	                    that.key = res.data.key
 	                    $("#exampleModal1").modal('show');
 	                }, function(err) {
 	                    toastr.error("获取用户信息失败！")
@@ -263,7 +265,8 @@ var UserPage = new Vue({
                                 depname: tm6,
                                 depcode: tm7,
                                 mobileNumber: tm8,
-                                password: tm9,
+                                password: hex_md5(tm9),
+                                key:that.key,
                                 id: id
                             }, function(res) {
                                 if (res.msg == "SUCCESS") {
