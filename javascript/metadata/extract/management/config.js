@@ -43,10 +43,16 @@ var app = new Vue({
 		searchContact:'',//联系人搜索关键词
 		contactList:[],//联系人列表
 		contactSelect:'',//选中联系人
+
+		//测验属性
+		typeList:['计数','最近记录时间','最早记录时间','最大值','最小值'],
+		statisticList:[],
+		fieldMap:'',
+		fieldList:[]
 	},
 	mounted(){
 		that = this;
-		
+		this.fieldMap = new Map();
 		that.object = JSON.parse(sessionStorage.getItem("metadataSelect"));
 		that.databaseId = sessionStorage.getItem("metadataDatabaseId")
 		this.title= that.object.className + "元数据抽取方案配置";
@@ -173,10 +179,7 @@ var app = new Vue({
 	            }
 
 	            //清除统计字段
-	            // var row=$("#attributeCount tr").length;
-	            // for(row;row>1;row--){
-	            //     AttributeManager.deleteCount();
-	            // }
+	            that.statisticList=[]
 
 	            //遮盖层
 	            if(treeNode.attributestyle=="描述属性"){
@@ -203,12 +206,7 @@ var app = new Vue({
 	            	var msg = res.data
 					that.relationList = msg.tablerelation;
 
-                    // $("#attributeCountBody").empty();
-                    // for(var o in msg.countList){
-                    //   //  $("#attributeCount").append("<tr><td>msg.countList[o].STS_ORDER</td><td><select id='' style='width:200px' onchange='AttributeManager.CountFiled($(this))'></select></td>")
-                    //     $("#attributeCount").append("<tr><td>"+msg.countList[o].stsOrder+"</td><td><select style='width:200px'><option>"+msg.countList[o].stsType+"</option></select></td>" +
-                    //         "<td><select style='width:400px'><option>"+msg.countList[o].stsBase+"</option></select></td>")
-                    // }
+					that.statisticList = msg.countList;
 	            },err=>{
 	            	toastr.error("获取关联表失败")
 	            })
@@ -470,10 +468,30 @@ var app = new Vue({
 		//增加测验
 		//增加属性统计
 		addCount(){
-
+			if(this.relationTableName==""){
+				toastr.warning("请添加关联");
+				return;
+			}
+			var list = this.fieldMap.get(that.relationTableName)
+			//如果没有缓存去请求该表的字段
+			if(list==undefined){
+				getDataByPost('/matadata_extract_management/initcountfield',{
+					attributeDataTable:that.relationTableName,
+					dataSource:that.databaseId
+				},res=>{
+					//缓存下来
+					that.fieldMap.set(that.relationTableName,res.data);
+					that.fieldList = res.data;
+				})
+			}else{
+				if(that.fieldList!=list){
+					that.fieldList = list;
+				}
+			}
+			this.statisticList.push({})
 		},
 		deleteCount(){
-
+			this.statisticList.pop()
 		},
 		addProperty(){
 			if (that.relationList.length==0) {
@@ -565,7 +583,11 @@ var app = new Vue({
                         if(n==0){
                             attCountTable[m][n] = $(this).text();
                         }else{
-                            attCountTable[m][n] = $(this).find("option:selected").text();
+                        	if($(this).find("option:selected").text()!=""){
+                        		attCountTable[m][n] = $(this).find("option:selected").text()
+                        	}else{
+                        		attCountTable[m][n] = $(this).text();
+                        	}
                         }
                         n++;
                     });
@@ -581,7 +603,7 @@ var app = new Vue({
                 	enumerationCode:that.enumeration,
                 	databaseId:that.databaseId,
                 	table:that.relationList,
-                	attCountTable:JSON.stringify(attCountTable),
+                	attributeCountTable:JSON.stringify(attCountTable),
                 	classId:that.object.classId
                 },res=>{
 					if (res.msg == "SUCCESS") {
