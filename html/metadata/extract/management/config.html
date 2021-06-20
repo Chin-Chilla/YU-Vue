@@ -125,7 +125,16 @@
                                                             <th Bgcolor=#b0c4de style="width:100px;">统计项</th>
                                                             <th Bgcolor=#b0c4de>统计字段</th>
                                                         </tr>
-                                                        <tbody id="attributeCountBody">
+                                                        <tbody id="attributeCountBody" v-for="(item,index) in statisticList">
+                                                            <tr>
+                                                                <td>{{index+1}}</td>
+                                                                <td><select v-if="item.stsType==undefined" style='width:200px' :id="'attributeCountItme'+(index+1)" @change="">
+                                                                        <option v-for="optType in typeList" >{{optType}}</option>
+                                                                    </select><template v-else>{{item.stsType}}</template></td>
+                                                                <td><select v-if="item.stsBase==undefined" :id="'attributeCountItme'+(index+1)" style='width:400px'>
+                                                                    <option v-for="opt in fieldList">{{opt.fdName}}</option>
+                                                                </select><template v-else>{{item.stsBase}}</template></td>
+                                                            </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
