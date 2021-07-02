@@ -20,8 +20,7 @@ var app = new Vue({
 
 		isUpdate:false,//是否更新节点
 
-		zTree:'',//zTree
-		objZtree:'',//objZtree
+		zTreeObj:'',//zTree
 
 		progress:0,
 		progressTitle:''
@@ -82,47 +81,9 @@ var app = new Vue({
 		        enable: true
 		    }
 		};
-		// var settingRes={
-		// 	async:  {
-		// 		enable: true,
-		// 		type: "GET",
-		// 		dataType: 'json',
-		// 		url: BASE_URL+"/index_manager/getResById",
-		// 		autoParam: ["nodeId"]
-		// 	},
-		// 	data: {
-		// 		simpleData: {
-		// 			enable: true,
-		// 			idKey: "nodeId",
-		// 			pIdKey: "pnodeId",
-		// 			rootPId: "0"
-		// 		},
-		// 		key: {
-		// 			name: "nodeName"
-		// 		}
-		// 	},
-		// 	callback: {
-		// 		onClick: function zTreeOnClickSearch(event, treeId, treeNode) {
-		// 			var nodeId = treeNode.nodeId;
-		// 			keySearch.loadFromTree(nodeId,"tree");
-		// 		},
-		// 		onAsyncSuccess:function zTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
-		// 		}
-		// 	}
-		// }
-		// //资源目录树的懒加载  加载所有一级节点和水利部子节点
-		// getDataByGet('/index_manager/getResById?nodeId=1000',aJson, dataStr =>{
-		// 	that.resZtree = $.fn.zTree.init($("#tree"), settingRes, res.data);
-		// })
 
-		// getDataByGet('/resource_dir/initial_objdept_dirtree','',res=>{
-		// 	that.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data);
-		// })
-		getDataByGet('/resource_dir/initial_resource_dirtree','',res=>{
-			that.zTreeRes = $.fn.zTree.init($("#tree"), setting, res.data);
-		})
-		getDataByGet('/resource_dir/initial_obj_dirtree','',res=>{
-			that.zTreeObj = $.fn.zTree.init($("#objectTree"), setting, res.data);
+		getDataByGet('/resource_dir/initial_objdept_dirtree','',res=>{
+			that.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data);
 		})
 	},
 	methods:{
@@ -368,11 +329,16 @@ var app = new Vue({
             var nodeList = []
             if(flag==0||flag==2){
             	var nodes = that.zTreeObj.getCheckedNodes(true);
-            	for (var i = 0; i < nodes.length; i++) {
+            	if (nodes.length !=2) {
+			        toastr.warning("二级结点必须选择一个！");
+			        return;
+			    }else{
+			    	for (var i = 0; i < nodes.length; i++) {
 			            nodeList.push(nodes[i].nodeId);
-            	}
+			        }
+			    }
             }
-            var ch = $("input[name='choose']");//选择到的要编目的数据
+            var ch = $("input[name='choose']");
             var entityArray = []
             //alert(ObjectMetadataDetail.classId);
             for (var i = 0; i < ch.length; i++) {
@@ -388,14 +354,10 @@ var app = new Vue({
 				hasCataLog:'0'
         	}
 			var nodes = that.zTreeObj.getCheckedNodes(true);
-			var nodeCode = []
-            if(nodes.length >= 5){
-            	for(i = 4 ; i< nodes.length ;i++)
-				nodeCode [i-4]= nodes[i].nodeCode;
-			}
+			var nodeCode = nodes[1].nodeCode+"_"+sessionStorage.getItem("objClassCode");
 	        var data = {
-            	nodeCode:JSON.stringify(nodeCode),
-	            // classId: that.classId,
+            	nodeCode:nodeCode,
+	            classId: that.classId,
 	            nodeId: JSON.stringify(nodeList),
 	            entityArray:JSON.stringify(entityArray),
 	            state: state,
@@ -447,94 +409,6 @@ var app = new Vue({
             	toastr.error(err.msg);
             	$("#progressModal").modal('hide')
             });
-		},
-		catalogueRes(flag){
-			var state = -1;
-			if ($("#thisPage").is(':checked')) {
-				state = 1;
-			} else if ($("#all").is(':checked')) {
-				state = 2;
-			} else if ($("#clear").is(':checked')) {
-				state = 0;
-			}
-			var nodeList = []
-			if(flag==0||flag==2){
-				var nodes = that.zTreeRes.getCheckedNodes(true);
-				for (var i = 0; i < nodes.length; i++) {
-					nodeList.push(nodes[i].nodeId);
-				}
-			}
-			var ch = $("input[name='choose']");
-			var entityArray = []
-			//alert(ObjectMetadataDetail.classId);
-			for (var i = 0; i < ch.length; i++) {
-				if (ch[i].checked) {
-					entityArray.push(ch[i].value);
-				}
-			}
-			var queryData = {
-				entityName:that.entityName,
-				keyword:that.keyword,
-				beginTime:$("#beginTime").val(),
-				endTime:$("#endTime").val(),
-				hasCataLog:'0'
-			}
-			var nodes = that.zTreeRes.getCheckedNodes(true);
-			var nodeCode = nodes[1].nodeCode+"_"+sessionStorage.getItem("objClassCode");
-			var data = {
-				nodeCode:nodeCode,
-				classId: that.classId,
-				nodeId: JSON.stringify(nodeList),
-				entityArray:JSON.stringify(entityArray),
-				state: state,
-				flag:flag,
-				queryCondition:JSON.stringify(queryData)
-			}
-
-			$('#progressModal').modal({backdrop: 'static', keyboard: false})
-			var interval =4*that.total/90;
-			//最快100ms
-			if(interval<100){
-				interval=100;
-			}
-			var	timer = setInterval(function(){
-				if(that.progress==100){
-					clearInterval(timer)
-					return;
-				}
-				var tmp = Math.random()/2
-				if(Math.random()>0.5){
-					tmp = 1+tmp
-				}else{
-					tmp =1-tmp
-				}
-				that.progress = Math.round((that.progress+tmp)*10)/10
-				if(that.progress>99){
-					that.progress = 99
-					clearInterval(timer);
-				}
-			},interval)
-			getDataByPost('/metadata_register/catalog_by_class',data,res=> {
-				if (res.msg == "SUCCESS") {
-					that.progress=100;
-					setTimeout(function(){
-						$("#progressModal").modal('hide')
-						$("#treeModal").modal('hide')
-					},500)
-					setTimeout(function(){
-						toastr.success("编目成功!");
-						$('.content-wrapper').load('metadata/manager/detail.html', function() {});
-					},1000)
-				} else {
-					that.progress=0;
-					clearInterval(timer);
-					toastr.error("编目失败!");
-					$("#progressModal").modal('hide')
-				}
-			},err=>{
-				toastr.error(err.msg);
-				$("#progressModal").modal('hide')
-			});
 		},
 		//取消编目
 		deleteCatalog(){

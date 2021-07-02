@@ -120,59 +120,9 @@
                     <h4 class="modal-title">编目节点选择</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="alert alert-warning">
-                        <strong>提示：</strong>至少选择一个结点！
+                    <div class="ztree">
+                        <ul id="tree" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>
                     </div>
-<!--                    <div class="ztree">-->
-<!--                        <ul id="tree" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>-->
-<!--                        <ul id="objectTree" style="height: 500px; overflow: auto; -moz-user-select: none;"></ul>-->
-<!--                        <ul class="ztree" style="text-align: center">-->
-<!--                            <li class="active" style="width: 50%"><a id="tree" href="#tab_catalog" data-toggle="tab" aria-expanded="true" style="font-size: 16px">资源目录树</a></li>-->
-<!--                            <li class="" style="width:50%"><a id="objectTree" href="#tab_obj" data-toggle="tab" aria-expanded="false" style="font-size: 16px">对象分类树</a></li>-->
-<!--                        </ul>-->
-                    <div class="col-md-12">
-                        <div class="box box-primary" style="overflow: auto;
-                                margin: 10px 20px 10px 0px;
-                                border: 2px solid #3c8dbc;">
-                            <div class="nav-tabs-custom">
-                                <ul class="nav nav-tabs" style="text-align: center">
-                                    <li class="active" style="width: 50%"><a id="tab_catalog_title" href="#tab_catalog" data-toggle="tab" aria-expanded="true" style="font-size: 16px">资源目录树</a></li>
-                                    <li class="" style="width:50%"><a id="tab_obj_title" href="#tab_obj" data-toggle="tab" aria-expanded="false" style="font-size: 16px">对象分类树</a></li>
-                                </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_catalog">
-                                        <div class="ztree">
-                                            <ul id="tree" style="height: 600px;
-                                                overflow: auto;
-                                                -moz-user-select: none;"></ul>
-                                        </div>
-                                    </div>
-                                    <!-- /.tab-pane -->
-                                    <div class="tab-pane" id="tab_obj">
-                                        <div class="ztree">
-                                            <ul id="objectTree" style="height: 600px;
-                                                overflow: auto;
-                                                -moz-user-select: none;"></ul>
-                                        </div>
-                                    </div>
-                                    <!-- /.tab-pane -->
-<!--                                    <div class="tab-pane" id="tab_department">-->
-<!--                                        <div class="ztree">-->
-<!--                                            <ul id="departTree" style="height: 100%;-->
-<!--                                                min-height: 900px;-->
-<!--                                                overflow: auto;-->
-<!--                                                -moz-user-select: none;"></ul>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
-<!--                                    <div id="loading" class="overlay" style="display:none;">-->
-<!--                                        <i class="fa fa-refresh fa-spin"></i>-->
-<!--                                    </div>-->
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-<!--                    </div>-->
-
                 </div>
                 <div class="modal-footer">
                     <input type="button" value="更换联系人信息" data-target="#contactConfigModal" class="btn btn-primary pull-left" @click="showContactModal">
