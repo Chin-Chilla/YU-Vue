@@ -65,10 +65,10 @@ var app = new Vue({
     methods:{
         load(){
             $(".sidebar-menu .treeview-menu li").removeClass("active");
-            $(".sidebar-menu .menu_objSync").addClass("active");
+            $(".sidebar-menu .menuObjSync").addClass("active");
             $("#count").empty();
             $("#pagination").empty();
-            //初始化对象目录树
+            //初始化目录树
             getDataByGet(
                 '/index_manager/getObjById?nodeId=1000',
                 aJson,
@@ -308,7 +308,8 @@ var app = new Vue({
         treeShow(){
             var targetName = $("#syncTo").val();
             var data = {
-                nodeName:targetName
+                nodeName:targetName,
+                nodeType:"obj_node"
             };
             getDataByGet(
                 '/index_sync/showRevokeTree',
