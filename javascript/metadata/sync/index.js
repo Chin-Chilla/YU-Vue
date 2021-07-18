@@ -221,6 +221,7 @@ var app = new Vue({
 					data,
 					res=>{
 						$("#count").text("结果数量:  "+res.data);
+						console.log('click tree detail')
 						$("#pagination").empty();
 						$("#pagination").Paging({pagesize:10,count:res.data,toolbar:true,callback:function(page,size,count){
 								that.changePage1(page,size);
@@ -308,7 +309,8 @@ var app = new Vue({
 		treeShow(){
 			var targetName = $("#syncTo").val();
 			var data = {
-				nodeName:targetName
+				nodeName:targetName,
+				nodeType:"node"
 			};
 			getDataByGet(
 				'/index_sync/showRevokeTree',
