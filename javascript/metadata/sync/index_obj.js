@@ -65,10 +65,10 @@ var app = new Vue({
     methods:{
         load(){
             $(".sidebar-menu .treeview-menu li").removeClass("active");
-            $(".sidebar-menu .menuSync").addClass("active");
+            $(".sidebar-menu .menu_objSync").addClass("active");
             $("#count").empty();
             $("#pagination").empty();
-            //初始化目录树
+            //初始化对象目录树
             getDataByGet(
                 '/index_manager/getObjById?nodeId=1000',
                 aJson,
@@ -94,7 +94,7 @@ var app = new Vue({
             $("#select2-ifSync-container").prepend(str);
             $("#ifSync").find("option[value = '2']").prop("selected","selected");
             getDataByPost(
-                '/index_sync/querySolrNumByNodeId',
+                '/index_sync/querySolrNumByObj_NodeId',
                 {nodeId:nodeId},
                 res=>{
                     $("#count").text("结果数量:  "+res.data);
@@ -118,7 +118,7 @@ var app = new Vue({
                 nodeId:nodeId
             }
             getDataByPost(
-                '/index_sync/querySolrDataByNodeId',
+                '/index_sync/querySolrDataByObj_NodeId',
                 data,
                 res=>{
                     $("#modaltbody1").empty();
