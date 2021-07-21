@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="/zyml/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/adminLTE/commons/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/common/commons.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/toastr/toastr.min.js"></script>
+
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/core.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/md5.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/enc-utf16.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/evpkdf.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/enc-base64.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/cipher-core.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/aes.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/mode-ecb.js"></script>
+    <script type="text/javascript" src="/zyml/YU/javascript/plugins/crypto/pad-nopadding.js"></script>
+</head>
+<body>
+<div id="xzSsoLogin">请稍等</div>
+<script>
+    var inORout = window.location.href;
+    var baseUrl = "https://www.xzsl.info/api/slzh/session";
+    var backUrl = "https://www.xzsl.info/sjzyml";
+    if (inORout.indexOf("www") == -1){
+        baseUrl = "https://xzsl.info/api/slzh/session";
+        backUrl = "https://xzsl.info/sjzyml";
+    }
+    sessionStorage.setItem("backUrl",backUrl);
+    setTimeout(function(){
+        var key = localStorage.getItem("kpst-key");
+        var token = localStorage.getItem("kpst-token");
+        key = CryptoJS.enc.Utf8.parse(key);
+        $.ajax({
+            type:"GET",
+            url:baseUrl,
+            headers:{
+                sessionId:token
+            },
+            success:function (result) {    // 秘钥
+                var message = result.msg;   // 待解密密文
+                var decrypted = CryptoJS.AES.decrypt(message,key, { mode:CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+                var userInfo = JSON.parse(CryptoJS.enc.Utf8.stringify(decrypted));
+                var login_name = userInfo.yhzh;
+                var mobile_number = userInfo.sjhm;
+                var dxid = userInfo.dxid;
+                var username = userInfo.zrrmc;
+                var data = {
+                    login_name:login_name,
+                    mobile_number:mobile_number,
+                    dxid:dxid,
+                    username:username
+                }
+                $.ajax({
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    url:backUrl+"/xzSsoLogin",           //该路径在route中定义
+                    contentType: "application/json",
+                    data:JSON.stringify(data),
+                    dataType:"JSON",
+                    async : true,
+                    type:"POST",
+                    success:function(res){
+                        if(res.code ==RES_CODE.UNAUTHENTICATED){
+                            toastr.error(res.msg);
+                            setTimeout(function(){
+                                window.location.href="/"
+                            },1500)
+                        }else if(res.code ==RES_CODE.UNAUTHORIZED){
+                            toastr.error(res.msg);
+                        }else{
+                            sessionStorage.setItem("authCode",res.data.authcode)
+                            sessionStorage.setItem("role",res.data.roles.join(","));
+                            setTimeout(function () {
+                                window.location.href="/zyml/YU/html/browse/index/index.html";
+                            },1000);
+                        }
+                    },
+                    error:function(res){
+                        toastr.error(res.msg)
+                    }
+                })
+            }
+        })
+    },1000)
+
+</script>
+</body>
+</html>
