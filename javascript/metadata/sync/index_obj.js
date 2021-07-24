@@ -94,17 +94,18 @@ var app = new Vue({
             $("#select2-ifSync-container").prepend(str);
             $("#ifSync").find("option[value = '2']").prop("selected", "selected");
             getDataByPost(
+                //查询结果数量修改处
                 '/index_sync/querySolrNumByObj_NodeId',
                 {nodeId: nodeId},
                 res => {
                     $("#count").text("结果数量:  " + res.data);
                     $("#pagination").empty();
                     $("#pagination").Paging({
-                        pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                        pagesize: 100, count: res.data, toolbar: true, callback: function (page, size, count) {
                             that.changePage(page, size);
                         }
                     });
-                    that.changePage(1, 10);
+                    that.changePage(1, 100);
                 },
                 err => {
                     toastr.error("查询数据失败！");
@@ -203,14 +204,15 @@ var app = new Vue({
                 })
             }
         },
-
+    //该地方是否同步
         ifSync() {
             var syncTo = $("#syncTo").val();
             var ifSync = $("#ifSync").val();
             var data = {
                 nodeName: syncTo,
                 ifSync: ifSync,
-                nodeId: nodeId
+                nodeId: nodeId,
+                nodeType: "obj_node"
             }
             if (ifSync == 1 || ifSync == 0) {
                 if (ifSync == 1) {
@@ -225,11 +227,11 @@ var app = new Vue({
                         $("#count").text("结果数量:  " + res.data);
                         $("#pagination").empty();
                         $("#pagination").Paging({
-                            pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                            pagesize: 100, count: res.data, toolbar: true, callback: function (page, size, count) {
                                 that.changePage1(page, size);
                             }
                         });
-                        that.changePage1(1, 10);
+                        that.changePage1(1, 100);
                     },
                     err => {
                         toastr.error("查询数据失败!")
@@ -247,7 +249,8 @@ var app = new Vue({
                 nowPage: nowPage,
                 size: size,
                 nodeId: nodeId,
-                ifSync: ifSync
+                ifSync: ifSync,
+                nodeType: "obj_node"
             }
             getDataByPost(
                 '/index_sync/querySolrDataifSync',
@@ -351,7 +354,6 @@ var app = new Vue({
             synInfo.sourceNode = nodeId;
             synInfo.syncTo = $("#syncTo").val();
             synInfo.ifSync = $("#ifSync").val();
-            synInfo.nodeType = "obj_node";
             //区别处理部分数据或全部结果
             if (document.getElementById("allpage").checked == true) {
                 // 处理全部结果
