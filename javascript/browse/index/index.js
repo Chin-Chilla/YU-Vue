@@ -706,6 +706,8 @@ var index = new Vue({
         //更新榜
         getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
         	var msg= res.data;
+            //index.updateData = msg.slice(0,16);
+            console.log("ok",msg,"ok");
             index.updateData = msg.slice(0,10);
         })
         
@@ -742,17 +744,20 @@ var index = new Vue({
             that.myChartmid = echarts.init(document.getElementById('mid'));
             that.myChartright = echarts.init(document.getElementById('right'));
             that.myChartAllData = echarts.init(document.getElementById('all_data_pic'));
-            that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
-            that.myChartleftDown = echarts.init(document.getElementById('left_down'));
+           // that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
+          //  that.myChartleftDown = echarts.init(document.getElementById('left_down'));
             that.myChartrightDown = echarts.init(document.getElementById('right_down'));
             //加载动画
             that.showLoading(that.myChartleft);
             that.showLoading(that.myChartmid);
             that.showLoading(that.myChartright);
             that.showLoading(that.myChartAllData);
-            that.showLoading(that.myChartRightData);
-            that.showLoading(that.myChartleftDown);
+        //    that.showLoading(that.myChartRightData);
+      //     that.showLoading(that.myChartleftDown);
             that.showLoading(that.myChartrightDown);
+
+            that.showPictrue();
+
 
             // that.findusermessage();
 
@@ -921,16 +926,17 @@ var index = new Vue({
                 that.myChartmid.resize();
                 that.myChartright.resize();
                 that.myChartAllData.resize();
-                that.myChartRightData.resize();
-                that.myChartleftDown.resize();
+           //     that.myChartRightData.resize();
+           //     that.myChartleftDown.resize();
                 that.myChartrightDown.resize();
             }
             //tab栏绑定点击
+
             $('#myTab li a').on('shown.bs.tab', function(e) {
-                that.myChartRightData.setOption(that.rightBaroption);
-                that.myChartRightData.hideLoading();
+                //that.myChartRightData.setOption(that.rightBaroption);
+                //that.myChartRightData.hideLoading();
                 that.myChartAllData.resize();
-                that.myChartRightData.resize();
+              //  that.myChartRightData.resize();
             })
 
             //水利信息目录资源分布图点击事件绑定
@@ -942,14 +948,14 @@ var index = new Vue({
                 console.log(cer);
             }
             //水利部/省级/流域资源目录分布图
-            try {
+          /*try {
                 that.myChartleftDown.on('click', function(params) {
                     that.leftDownPictureClick(params, that.myChartleftDown);
                 });
             } catch (cer) {
                 console.log(cer);
             }
-
+           */
 
         },
         search(flag){
@@ -1289,7 +1295,7 @@ var index = new Vue({
 		            that.rightPictureShow();
 		            that.getObjNum();
 		            that.midPictureShow();
-		            that.showLevel2();
+		      //      that.showLevel2();
                     that.setRankData();
 	        	}else{
 	        		toastr.warning(res.msg);
@@ -1370,22 +1376,26 @@ var index = new Vue({
 	        var aJson = {};
 	        getDataByGet("/index_manager/queryObjNum",aJson,res=>{
 	        	var dataStr = res.data;
+                console.log(dataStr);
 	            //全国汇交情况图
 	            for (var i = 0; i < that.arrayNodeId.length; i++) {
+	                //that.allDataObj.push(dataStr[0][10]);
 	                that.allDataObj.push(dataStr[0][that.arrayNodeId[i]]);
+                   // that.allDataObj.push(1000);
 	            }
 	            //水利部汇交情况图
+                /*
 	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
 	                that.rightBarObj.push(dataStr[1][that.arrayNodeId1[i]]);
-	            }
+	            }*/
 	            that.AllDataoption.series[1].data = that.allDataObj;
-	            that.rightBaroption.series[1].data = that.rightBarObj;
+	         //  that.rightBaroption.series[1].data = that.rightBarObj;
 	            that.myChartAllData.setOption(that.AllDataoption);
-	            that.myChartRightData.setOption(that.rightBaroption);
+	          //  that.myChartRightData.setOption(that.rightBaroption);
 	            that.myChartAllData.hideLoading();
-	            that.myChartRightData.hideLoading();
+	         //   that.myChartRightData.hideLoading();
 	            that.myChartAllData.resize();
-	            that.myChartRightData.resize();
+	         //   that.myChartRightData.resize();
 	        })
 
 	        //水利信息目录资源分布图点击事件绑定
@@ -1398,13 +1408,14 @@ var index = new Vue({
 	        }
 	     
 	        //水利部/省级/流域资源目录分布图
-	        try {
+	      /*  try {
 	            that.myChartleftDown.on('click', function(params) {
 	                that.leftDownPictureClick(params, that.myChartleftDown);
 	            });
 	        } catch (cer) {
 	            console.log(cer);
 	        }
+	        */
 	     
 	    },
 	    showLoading(echartObj){
@@ -1413,6 +1424,7 @@ var index = new Vue({
 	            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
 	        });
 	    },
+        /*
 	    showLevel2() {
 	        $("#level2").empty();
 	        var level1 = $("#level1").val();
@@ -1466,7 +1478,7 @@ var index = new Vue({
 	            $("#level2").append("<option value='39251' objdep_id='73'>深圳</option>");
 	        }
 	        that.showPictrue();
-	    },
+	    },*/
 	    showObjLev2(){
 	        $("#obj-sel-lev2").empty();
 	        var level1 = $("#obj-sel-lev1").val();
@@ -1511,12 +1523,15 @@ var index = new Vue({
 	        }
 	    },
 	    showPictrue() {
-	        that.showLoading(that.myChartleftDown);
+	      //  that.showLoading(that.myChartleftDown);
 	        that.showLoading(that.myChartrightDown);
-	        that.leftDownPictureShow();
+	   //    that.leftDownPictureShow();
 
-	        var depobjId = $("#level2").find("option:selected").attr("objdep_id");
+            var depobjId = "54";
+	        // var depobjId = $("#level2").find("option:selected").attr("objdep_id");
 	        //请求数据
+          //  console.log("ok",depobjId,"ok");
+
 	        that.getObjTree(depobjId);
 	    },
 	    rightDownBtnClick(flag){
@@ -1572,7 +1587,7 @@ var index = new Vue({
 	        that.myChartright.setOption(that.rightoption);
 	        that.myChartright.hideLoading();
 	    },
-
+/*
 	    leftDownPictureShow() {
 	        // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
 	        var options = $("#level2 option:selected");
@@ -1596,11 +1611,15 @@ var index = new Vue({
 	        }
 	        that.myChartleftDown.hideLoading();
 	    },
+
+ */
 	    rightDownPictureShow() {
-	        var options = $("#level2 option:selected");
-	        var depart = options.text();
+	       // var options = $("#level2 option:selected");
+	       // var depart = options.text();
+            var depart="西藏水利厅";
 	        that.rightdownoption.title.text = depart + '对象分布图';
 	        var dataString = that.arrayDepObjTotal.join('');
+	       // console.log(dataString);
 	        if (dataString=='0'*4){
 	            $("#right_down").addClass("hidden");
 	            $("#right_downall").addClass("hidden");
@@ -1617,8 +1636,9 @@ var index = new Vue({
 	        that.myChartrightDown.hideLoading();
 	    },
 	    rightDownPictureShowAll() {
-	        var options = $("#level2 option:selected");
-	        var depart = options.text();
+	        //var options = $("#level2 option:selected");
+	        //var depart = options.text();
+            var depart="西藏水利厅";
 	        that.rightdownoptionall.title.text = depart + '对象分布图';
 	        var dataString = that.arrayDepObj.join('');
 	        if (dataString=='0'*35){
@@ -1752,10 +1772,12 @@ var index = new Vue({
 	            });
 	        });
 	    },
-	    //筛选条件刷新按钮
+
+
+        //筛选条件刷新按钮
 	    refreshChart(){
 	        that.showLoading(that.myChartAllData);
-	        that.showLoading(that.myChartRightData);
+	     //   that.showLoading(that.myChartRightData);
 	        //datacat
 	        var arr = $("#filter-box div label input")
 	        var datacat = "";
@@ -1805,25 +1827,26 @@ var index = new Vue({
 	            that.AllDataoption.series[1].data = data2;
 	            that.rightBaroption.series[1].data = data3;
 	            that.myChartAllData.setOption(that.AllDataoption);
-	            that.myChartRightData.setOption(that.rightBaroption);
+	  //          that.myChartRightData.setOption(that.rightBaroption);
 	            that.myChartAllData.hideLoading();
-	            that.myChartRightData.hideLoading();
+	   //         that.myChartRightData.hideLoading();
 	        })
 	    },
+
 	    reSet(){
             console.log("hhh")
 	        that.myChartAllData.showLoading();
-	        that.myChartRightData.showLoading();
+	  //      that.myChartRightData.showLoading();
 	        that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40);
 	        that.AllDataoption.series[1].data = that.allDataObj;
 	        that.rightBaroption.series[0].data = that.arrayRightBar;
 	        that.rightBaroption.series[1].data = that.rightBarObj;
             that.myChartAllData.clear();
-            that.myChartRightData.clear();
+   //         that.myChartRightData.clear();
 	        that.myChartAllData.setOption(that.AllDataoption);
-	        that.myChartRightData.setOption(that.rightBaroption);
+	    //    that.myChartRightData.setOption(that.rightBaroption);
 	        that.myChartAllData.hideLoading();
-	        that.myChartRightData.hideLoading();
+	 //       that.myChartRightData.hideLoading();
 	    }
 
     },
