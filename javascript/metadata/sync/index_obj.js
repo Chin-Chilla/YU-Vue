@@ -11,38 +11,38 @@ var synInfo = {};
 var setting;
 var setting1 = {
     data: {
-        simpleData:{
-            enable:true,
-            idKey:"id",
-            pIdKey:"parentId",
-            rootPId:"0"
+        simpleData: {
+            enable: true,
+            idKey: "id",
+            pIdKey: "parentId",
+            rootPId: "0"
         },
         key: {
             name: "text"
         }
-    }, check:{
-        enable:true,
+    }, check: {
+        enable: true,
         chkStyle: "checkbox",
-        chkboxType: { "Y": "ps", "N": "s" }
+        chkboxType: {"Y": "ps", "N": "s"}
     }
 };
 var app = new Vue({
     //绑定html页面的id
-    el:"#vue",
+    el: "#vue",
     //成员变量
-    data:{
-        nodeId:'',
+    data: {
+        nodeId: '',
     },
     //初始化方法
     mounted() {
         that = this;
         that.load();
         setting = {
-            async:  {
+            async: {
                 enable: true,
                 type: "GET",
                 dataType: 'json',
-                url: BASE_URL+"/index_manager/getObjById",
+                url: BASE_URL + "/index_manager/getObjById",
                 autoParam: ["nodeId"]
             },
             data: {
@@ -56,14 +56,14 @@ var app = new Vue({
                     name: "nodeName"
                 }
             },
-            callback:{
-                onClick:that.zTreeSolr
+            callback: {
+                onClick: that.zTreeSolr
             }
         };
     },
     //成员方法
-    methods:{
-        load(){
+    methods: {
+        load() {
             $(".sidebar-menu .treeview-menu li").removeClass("active");
             $(".sidebar-menu .menuObjSync").addClass("active");
             $("#count").empty();
@@ -76,202 +76,207 @@ var app = new Vue({
                     $.fn.zTree.init($("#serviceTree"), setting, res);
                 }
             )
-            $('#tbody').on('click','tr', function() {
-                $("input:checked").prop("checked",false);
-                $(this).find("input[name='optionsRadios']").prop("checked",true);
+            $('#tbody').on('click', 'tr', function () {
+                $("input:checked").prop("checked", false);
+                $(this).find("input[name='optionsRadios']").prop("checked", true);
             });
         },
 
-        zTreeSolr(event,treeId, treeNode){
+        zTreeSolr(event, treeId, treeNode) {
             nodeId = treeNode.nodeId;
             that.showTable();
         },
 
-        showTable(){
-            $('#select2-ifSync-container').attr("title","所有资源");
+        showTable() {
+            $('#select2-ifSync-container').attr("title", "所有资源");
             $("#select2-ifSync-container").empty();
-            var str="所有资源";
+            var str = "所有资源";
             $("#select2-ifSync-container").prepend(str);
-            $("#ifSync").find("option[value = '2']").prop("selected","selected");
+            $("#ifSync").find("option[value = '2']").prop("selected", "selected");
             getDataByPost(
                 '/index_sync/querySolrNumByObj_NodeId',
-                {nodeId:nodeId},
-                res=>{
-                    $("#count").text("结果数量:  "+res.data);
+                {nodeId: nodeId},
+                res => {
+                    $("#count").text("结果数量:  " + res.data);
                     $("#pagination").empty();
-                    $("#pagination").Paging({pagesize:10,count:res.data,toolbar:true,callback:function(page,size,count){
-                            that.changePage(page,size);
-                        }});
-                    that.changePage(1,10);
+                    $("#pagination").Paging({
+                        pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                            that.changePage(page, size);
+                        }
+                    });
+                    that.changePage(1, 10);
                 },
-                err=>{
+                err => {
                     toastr.error("查询数据失败！");
                 }
             )
         },
 
-        changePage(nowPage,size){
+        changePage(nowPage, size) {
             var ifSync = $("#ifSync").val();
             var data = {
-                page:nowPage,
-                size:size,
-                nodeId:nodeId
+                page: nowPage,
+                size: size,
+                nodeId: nodeId
             }
             getDataByPost(
                 '/index_sync/querySolrDataByObj_NodeId',
                 data,
-                res=>{
+                res => {
                     $("#modaltbody1").empty();
                     $("#sample_1").append("<tbody id='modaltbody1'>");
                     var msg = res.data;
                     for (var o in msg) {
-                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>"+msg[o].id+"</td><td>"+msg[o].idtitle+"</td><td title='"+msg[o].idabs+"' style='width:250px'><div title='"+msg[o].idabs+"' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>"+msg[o].idabs+"</div></td><td title='"+msg[o].usr_abs+"' style='width:250px'><div title='"+msg[o].usr_abs+"' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>"+msg[o].usr_abs+"</div></td></tr>");
+                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].idtitle + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
                         var icheck1 = document.getElementById("allpage");
                         if (icheck1.checked == true) {
-                            $("input[name='cellChecker']").each( function() {
-                                if(!($(this).prop('checked'))){
-                                    $(this).prop('checked',true );
+                            $("input[name='cellChecker']").each(function () {
+                                if (!($(this).prop('checked'))) {
+                                    $(this).prop('checked', true);
                                 }
                             });
                         }
                     }
                     $("#sample_1").append("</tbody>");
                 },
-                err=>{
+                err => {
 
                 }
             )
         },
 
-        selectTable(){
+        selectTable() {
             console.log("--------")
             var pageChecker = document.getElementById("thispage");
             var tableChecker = document.getElementById("tableChecker");
             var allChecker = document.getElementById("allpage");
 
-            if (tableChecker.checked == true){
+            if (tableChecker.checked == true) {
                 pageChecker.checked = true;
                 allChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',true);
+                    $(this).prop('checked', true);
                 })
-            }else{
+            } else {
                 pageChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',false);
+                    $(this).prop('checked', false);
                 })
             }
         },
 
-        selectThisPage(){
+        selectThisPage() {
             var pageChecker = document.getElementById("thispage");
             var tableChecker = document.getElementById("tableChecker");
             var allChecker = document.getElementById("allpage");
 
-            if (pageChecker.checked == true){
+            if (pageChecker.checked == true) {
                 tableChecker.checked = true;
                 allChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',true);
+                    $(this).prop('checked', true);
                 })
             } else {
                 tableChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',false);
+                    $(this).prop('checked', false);
                 })
             }
         },
 
-        selectAllPage(){
+        selectAllPage() {
             var pageChecker = document.getElementById("thispage");
             var tableChecker = document.getElementById("tableChecker");
             var allChecker = document.getElementById("allpage");
 
-            if (allChecker.checked == true){
+            if (allChecker.checked == true) {
                 pageChecker.checked = false;
                 tableChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',true);
+                    $(this).prop('checked', true);
                 })
             } else {
                 pageChecker.checked = false;
                 tableChecker.checked = false;
                 $("input[name='cellChecker']").each(function () {
-                    $(this).prop('checked',false);
+                    $(this).prop('checked', false);
                 })
             }
         },
 
-        ifSync(){
+        ifSync() {
             var syncTo = $("#syncTo").val();
             var ifSync = $("#ifSync").val();
             var data = {
-                nodeName:syncTo,
-                ifSync:ifSync,
-                nodeId:nodeId
+                nodeName: syncTo,
+                ifSync: ifSync,
+                nodeId: nodeId
             }
-            if (ifSync==1||ifSync==0){
-                if (ifSync==1){
+            if (ifSync == 1 || ifSync == 0) {
+                if (ifSync == 1) {
                     $("#delete").removeAttr("disabled");
-                }else{
-                    $("#delete").attr("disabled","disabled");
+                } else {
+                    $("#delete").attr("disabled", "disabled");
                 }
                 getDataByPost(
                     '/index_sync/querySolrNumifSync',
                     data,
-                    res=>{
-                        $("#count").text("结果数量:  "+res.data);
+                    res => {
+                        $("#count").text("结果数量:  " + res.data);
                         $("#pagination").empty();
-                        $("#pagination").Paging({pagesize:10,count:res.data,toolbar:true,callback:function(page,size,count){
-                                that.changePage1(page,size);
-                            }});
-                        that.changePage1(1,10);
+                        $("#pagination").Paging({
+                            pagesize: 10, count: res.data, toolbar: true, callback: function (page, size, count) {
+                                that.changePage1(page, size);
+                            }
+                        });
+                        that.changePage1(1, 10);
                     },
-                    err=>{
+                    err => {
                         toastr.error("查询数据失败!")
                     }
                 )
-            }else{
-                $("#delete").attr("disabled","disabled");
+            } else {
+                $("#delete").attr("disabled", "disabled");
                 that.showTable();
             }
         },
 
-        changePage1(nowPage,size){
+        changePage1(nowPage, size) {
             var ifSync = $("#ifSync").val();
             var data = {
-                nowPage:nowPage,
-                size:size,
-                nodeId:nodeId,
-                ifSync:ifSync
+                nowPage: nowPage,
+                size: size,
+                nodeId: nodeId,
+                ifSync: ifSync
             }
             getDataByPost(
                 '/index_sync/querySolrDataifSync',
                 data,
-                res=>{
+                res => {
                     $("#modaltbody1").empty();
                     $("#sample_1").append("<tbody id='modaltbody1'>");
                     var msg = res.data;
                     for (var o in msg) {
-                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>"+msg[o].id+"</td><td>"+msg[o].idtitle+"</td><td title='"+msg[o].idabs+"' style='width:250px'><div title='"+msg[o].idabs+"' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>"+msg[o].idabs+"</div></td><td title='"+msg[o].usr_abs+"' style='width:250px'><div title='"+msg[o].usr_abs+"' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>"+msg[o].usr_abs+"</div></td></tr>");
+                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].idtitle + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
                         var icheck1 = document.getElementById("allpage");
                         if (icheck1.checked == true) {
-                            $("input[name='cellChecker']").each( function() {
-                                if(!($(this).prop('checked'))){
-                                    $(this).prop('checked',true );
+                            $("input[name='cellChecker']").each(function () {
+                                if (!($(this).prop('checked'))) {
+                                    $(this).prop('checked', true);
                                 }
                             });
                         }
                     }
                     $("#sample_1").append("</tbody>");
                 },
-                err=>{
+                err => {
                     toastr.error("查询数据失败")
                 }
             )
         },
 
-        showModel(){
+        //点击同步按钮后弹窗
+        showModel() {
             var icheck1 = document.getElementById("allpage");
             if (icheck1.checked != true) {
                 //  选择部分结果
@@ -294,50 +299,50 @@ var app = new Vue({
                     synInfo.mdfileidList = selectedMdFileIdList;
                     $("#targetCatalogTree").modal("show");
                     that.treeShow();
-                }else {
+                } else {
                     toastr.warning("请选择需要同步的内容");
                 }
-            }
-            else {
+            } else {
                 //todo
                 $("#targetCatalogTree").modal("show");
                 that.treeShow();
             }
         },
 
-        treeShow(){
+        treeShow() {
             var targetName = $("#syncTo").val();
             var data = {
-                nodeName:targetName,
-                nodeType:"obj_node"
+                nodeName: targetName,
+                nodeType: "obj_node"
             };
             getDataByGet(
                 '/index_sync/showRevokeTree',
                 data,
-                res=>{
+                res => {
                     console.log(res)
                     $.fn.zTree.init($("#serviceTree2"), setting1, res);
                 },
-                err=>{
+                err => {
                     toastr.error("加载目录树失败！");
                 }
             )
         },
 
-        syncFunc(){
+        //同步函数
+        syncFunc() {
             var treeObj = $.fn.zTree.getZTreeObj("serviceTree2");
             //目标树被点击的节点
             var nodes = treeObj.getCheckedNodes(true);
             var array = new Array();
             var arrayNode = new Array();
-            for (var i=0;i<nodes.length;i++){
+            for (var i = 0; i < nodes.length; i++) {
                 array.push(nodes[i].id);
                 //如果父节点是根节点，则将该节点的node_code加进数组
-                if(nodes[i].parentId==1000){
+                if (nodes[i].parentId == 1000) {
                     arrayNode.push(nodes[i].node_code);
                 }
             }
-            if(array.length==0) {
+            if (array.length == 0) {
                 toastr.warning("请选择目的节点");
                 return;
             }
@@ -346,37 +351,38 @@ var app = new Vue({
             synInfo.sourceNode = nodeId;
             synInfo.syncTo = $("#syncTo").val();
             synInfo.ifSync = $("#ifSync").val();
+            synInfo.nodeType = "obj_node";
             //区别处理部分数据或全部结果
-            if (document.getElementById("allpage").checked == true){
+            if (document.getElementById("allpage").checked == true) {
                 // 处理全部结果
                 synInfo.mdfileidList = new Array(); //清空部分选择的记录
             }
             that.sync();
         },
 
-        sync(){
+        sync() {
             $("#loading").css('display', 'block');
             var data = {
-                synInfo:synInfo
+                synInfo: synInfo
             };
             getDataByPost(
                 '/index_sync/syncData',
                 data,
-                res=>{
+                res => {
                     if (res.code == 200) {
                         toastr.success("同步成功！");
-                    }else if(res.data == "Permission denied"){
+                    } else if (res.data == "Permission denied") {
                         toastr.warning("不允许在该节点下进行同步（本地与目标主管部门不一致）！");
-                    }else if(res.data == "data nonexistence"){
+                    } else if (res.data == "data nonexistence") {
                         toastr.warning("未找到同步的数据");
-                    }else if(res.data == "node nonexistence"){
+                    } else if (res.data == "node nonexistence") {
                         toastr.warning("未选中要同步的节点");
-                    }else if(res.data == "source nonexistence"){
+                    } else if (res.data == "source nonexistence") {
                         toastr.warning("未找到本系统源地址");
                     }
                     $("#loading").css('display', 'none');
                 },
-                err=>{
+                err => {
                     toastr.error("同步失败！");
                 }
             )
