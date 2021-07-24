@@ -693,6 +693,11 @@ var keySearch = new Vue({
             var proposer = $("#proposer").val();
             var org = $("#org").val();
             var contact = $("#contact").val();
+
+
+          //  console.log("调用了sub功能");
+
+
             var description = $("#description").val();
             getDataByPost('/user/subscribe',{
                 id:this.sub_id,
@@ -701,14 +706,25 @@ var keySearch = new Vue({
                 proposer:proposer,
                 org:org,
                 contact:contact,
-                description:description
+                description:description,
+                status:0
+
             },res=>{
+                console.log(res);
                 if(res.code==200){
+
+                    console.log("status的值是：" + status);
+
                     toastr.success("订阅成功！");
+
                 }else{
                     toastr.error(res.msg);
                 }
             })
+
+
+
+
         },
         //封面搜索
         facetSearch: function (firstName, secondName, e) {
