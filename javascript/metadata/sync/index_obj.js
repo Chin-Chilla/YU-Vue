@@ -354,6 +354,7 @@ var app = new Vue({
             synInfo.sourceNode = nodeId;
             synInfo.syncTo = $("#syncTo").val();
             synInfo.ifSync = $("#ifSync").val();
+            synInfo.nodeType = "obj_node";
             //区别处理部分数据或全部结果
             if (document.getElementById("allpage").checked == true) {
                 // 处理全部结果
@@ -368,7 +369,7 @@ var app = new Vue({
                 synInfo: synInfo
             };
             getDataByPost(
-                '/index_sync/syncData',
+                '/yuIndexSync/syncData',
                 data,
                 res => {
                     if (res.code == 200) {

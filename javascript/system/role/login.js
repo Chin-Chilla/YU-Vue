@@ -29,8 +29,11 @@ var login = new Vue({
                 getDataByPost("/user/login",data,function(res){
                     if (res.msg == "SUCCESS") {
                         toastr.success("登录成功!");
+                        console.log(res.data);
                         sessionStorage.setItem("authCode",res.data.authcode)
                         sessionStorage.setItem("role",res.data.roles.join(","));
+                        sessionStorage.setItem("loginName",res.data.loginName)
+                        sessionStorage.setItem("userName",res.data.username)
                         setTimeout(function(){
                             window.location.href="/YU/html/browse/index/index.html"
                         },1500)

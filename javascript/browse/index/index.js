@@ -678,10 +678,12 @@ var index = new Vue({
         rightBarObj: [],
         //用于测试
         test: [],
-
+        loginName:sessionStorage.getItem("loginName"),
+        userName:sessionStorage.getItem("userName"),
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
+        console.log(loginName)
         var authCode = getUrlKey("authCode");
         var role = getUrlKey("role");
         if(authCode!=null&&authCode!=''&&authCode!=undefined){
@@ -1847,7 +1849,20 @@ var index = new Vue({
 	    //    that.myChartRightData.setOption(that.rightBaroption);
 	        that.myChartAllData.hideLoading();
 	 //       that.myChartRightData.hideLoading();
-	    }
+	    },
+	    logOut(){
+            console.log('into logOut')
+            getDataByPost("/user/logout", {}, res=> {
+                console.log(res);
+                sessionStorage.setItem("authCode",null);
+                sessionStorage.setItem("role",null);
+                sessionStorage.setItem("loginName",null);
+                sessionStorage.setItem("userName",null);
+                setTimeout(function(){
+                    window.location.href="/YU/html/system/role/login.html"
+                },1500)
+            })
+        }
 
     },
 
