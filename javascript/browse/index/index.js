@@ -678,12 +678,11 @@ var index = new Vue({
         rightBarObj: [],
         //用于测试
         test: [],
-        loginName:sessionStorage.getItem("loginName"),
-        userName:sessionStorage.getItem("userName"),
+        // loginName:'',
+        // userName:'',
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
-        console.log(loginName)
         var authCode = getUrlKey("authCode");
         var role = getUrlKey("role");
         if(authCode!=null&&authCode!=''&&authCode!=undefined){
@@ -728,6 +727,8 @@ var index = new Vue({
     methods: { //相当于成员方法
         load() {
             //45个部门结点
+            // that.loginName = sessionStorage.getItem("loginName")
+            // that.userName = sessionStorage.getItem("userName")
             for (var i = 0; i < 45; i++) {
                 that.arrayData.push(new Array());
                 that.arrayLegend.push(new Array());

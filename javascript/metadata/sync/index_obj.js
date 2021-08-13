@@ -322,7 +322,6 @@ var app = new Vue({
                 '/index_sync/showRevokeTree',
                 data,
                 res => {
-                    console.log(res)
                     $.fn.zTree.init($("#serviceTree2"), setting1, res);
                 },
                 err => {
@@ -369,7 +368,7 @@ var app = new Vue({
                 synInfo: synInfo
             };
             getDataByPost(
-                '/yuIndexSync/syncData',
+                '/index_sync/syncData',
                 data,
                 res => {
                     if (res.code == 200) {
