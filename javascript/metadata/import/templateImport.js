@@ -125,6 +125,53 @@ var app = new Vue({
             //         $("#loading").css('display', 'none');
             //     }
             // })
+        },
+        uploadJson(){
+            console.log("upload调用了");
+            // node_str = $("#txtNumber_"+this.index).val() + ",1000,1001,9592,9595";
+            node_code = "0000000000101";
+            file = $("#fileTableBody").find("input");
+            // files = file[0].files[0];
+            var formdata = new FormData();
+            file_num = file.length;
+            i = 0;
+            while( i < file_num){
+                formdata.append("file",file[i].files[0]);
+                node_str = file[i+1].value + ",1000,1001,9592,9595";
+                $.ajax({
+                    xhrFields:{
+                        withCredentials:true
+                    },
+                    // "url":BASE_URL+"/matadata_import_fixed/upload",
+                    "url":BASE_URL+"/matadata_import/uploadJson"+ "?node_strs=" + node_str + "&node_code=" + node_code,
+                    "data":formdata,
+                    "type":"POST",
+                    "processData":false,
+                    "contentType":false,
+                    // "dataType":"json",
+                    "success": function (msgJson) {
+                        if (msgJson.data.state == 'exceed') {
+                            alert(file_name+"起始行超出行数！");
+                        }
+                        if (msgJson.data.state == 'Permission denied') {
+                            alert(file_name+"当前用户不能在该节点下进行文件上传！");
+                        }
+                        if (msgJson.data.state == 'inconsistent') {
+                            alert(file_name+"Excel中的部门与选择结点不一致！");
+                        }
+                        // $("#loading").css('display', 'none'); //取消 loading 界面
+                        if (msgJson.data.state == 'ok') {
+                            toastr.success("导入成功！");
+                        }
+                    },
+                    "error": function (msgJson) {
+                        alert("导入错误！");
+                        $("#loading").css('display', 'none');
+                    }
+                })
+                i++;i++;
+                formdata.delete("file");
+            }
         }
     }
 })
