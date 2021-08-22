@@ -48,16 +48,35 @@
                                         <button @click="loadManage()" ><i class="btn btn-primary" value="管理" style="width:80px;height: 35px;margin-left: 5px"></i></button> -->
 
                                         <button type="button" class="btn btn-primary" @click="upload" style="width:80px;height: 35px">确认</button>
-                                        <button type="button" class="btn btn-primary" @click="uploadJson" style="width:80px;height: 35px">上传JSON</button>
-
                                         <!--  <button type="button" class="btn btn-primary" @click="loadManage" style="width:80px;height: 35px;margin-left: 5px">管理</button> -->
 
                                         <br><br>
                                     </div>
                                 </div><br><br><br>
                             </div>
-                            <div>
-                            </div><br><br><br>
+                            <div style="float: left">
+                                <label style="float:left;text-align:right;padding-top: 5px;width:120px">原始文件上传:&nbsp;</label>
+                                <div style="width:700px;margin: 0;display: inline-block;">
+                                    <table class="table " border="1" id="fileTableJson" style="width: 92%;margin: 0;display: inline-table;">
+                                    <tbody>
+                                    <tr>
+                                        <th bgcolor="#b0c4de">文件</th>
+                                        <th bgcolor="#b0c4de" style="width: 300px">节点列表</th>
+                                        <th bgcolor="#b0c4de" style="width: 120px">操作</th>
+                                    </tr>
+                                    </tbody>
+                                    <tbody id="fileTableBodyJson">
+                                    </tbody>
+                                </table>
+                                    <button type="button" value="+" class="btn btn-primary" @click="addfileJson"
+                                            style="width: 35px;height: 35px;margin-bottom: 10px;margin-left: 10px;">+</button></div>
+                                <div>
+                                    <div style="float: left;text-align: right;margin: 10px 0 0 335px"> <!--360px  450px-->
+                                        <button type="button" class="btn btn-primary" @click="uploadJson" style="width:80px;height: 35px">上传JSON</button>
+                                        <br><br>
+                                    </div>
+                                </div><br><br><br>
+                            </div>
                         </div>
                     </div>
                 </div>

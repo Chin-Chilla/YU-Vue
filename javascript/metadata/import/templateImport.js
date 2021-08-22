@@ -4,6 +4,8 @@ var app = new Vue({
         slOption: '对象类模板',
         index:0,
         count:0,
+        indexJson:0,
+        countJson:0,
         simpleData:{
             enable:true,
             idKey:"node_id",
@@ -127,23 +129,21 @@ var app = new Vue({
             // })
         },
         uploadJson(){
-            console.log("upload调用了");
-            // node_str = $("#txtNumber_"+this.index).val() + ",1000,1001,9592,9595";
-            node_code = "0000000000101";
-            file = $("#fileTableBody").find("input");
-            // files = file[0].files[0];
+            file = $("#fileTableBodyJson").find("input");
             var formdata = new FormData();
             file_num = file.length;
             i = 0;
+            console.log("in uploadJson")
+            console.log(file_num)
             while( i < file_num){
                 formdata.append("file",file[i].files[0]);
-                node_str = file[i+1].value + ",1000,1001,9592,9595";
+                node_list = file[i+1].value;
                 $.ajax({
                     xhrFields:{
                         withCredentials:true
                     },
                     // "url":BASE_URL+"/matadata_import_fixed/upload",
-                    "url":BASE_URL+"/matadata_import/uploadJson"+ "?node_strs=" + node_str + "&node_code=" + node_code,
+                    "url":BASE_URL+"/matadata_import/uploadJson"+ "?node_list=" + node_list,
                     "data":formdata,
                     "type":"POST",
                     "processData":false,
@@ -172,7 +172,21 @@ var app = new Vue({
                 i++;i++;
                 formdata.delete("file");
             }
-        }
+        },
+        addfileJson(){
+            this.indexJson++;
+            this.countJson++;
+            $("#fileTableBodyJson").append("<tr id=\"row_"+this.indexJson+"\">" +
+                "<td><form method=\"post\" id=\"upload_"+this.indexJson+"\" enctype=\"multipart/form-data\" action=\"/matadata_import_fixed/batchRegisterResourceMetadata\">" +
+                // "<input type=\"file\" name=\"showfilename_"+this.index+"\" style=\"float:left;width: 300px;height: 30px;\">" +
+                "<input type=\"file\" id=\"showfilename"+this.indexJson+"\"  name=\"showfilename\" style=\"float:left;width: 230px;height: 30px;\">" +
+                "</form></td>"+
+                "<td><dl style=\"float: left;margin:0 0 0 1px\">\n" +
+                "<dt><input type=\"text\" id=\"txtNumber_"+this.indexJson+"\" value=\"0,0,0,0\"  style=\"height:30px;width:270px;margin-left: 10px;\"/></dt></dl>\n" +
+                "</td>"+
+                "<td><button onclick=\"app.deleteTaRow("+this.indexJson+")\" style=\"width: 50px;height: 30px;margin-bottom: 6px;margin-left: 10px;\">删除</button></td>"+
+                "</tr>");
+        },
     }
 })
 
