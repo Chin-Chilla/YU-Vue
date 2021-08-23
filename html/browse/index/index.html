@@ -75,13 +75,6 @@
                         <div class="col-xs-3">
                             <!--<div class="pull-left"
                     style="font-size: 16px;  font-family: Times New Roman;  padding-left: 20px;  color: #017ebc;" id="welcomeDocument"></div>-->
-                            <div class="pull-left">
-<!--                                <span style="font-size: 16px;color:palevioletred">{{userName}}</span>-->
-<!--                                <span style="font-size: 16px;">: {{loginName}}</span>-->
-<!--                                <a style="font-size: 16px;padding-left: 20px;cursor:pointer" onclick="index.logOut()">登出</a>-->
-                                <!-- <a href="/logout" style="font-size: 16px;
-                                padding-right: 10px;color:red;">注销</a> -->
-                            </div>
                         </div>
                         <div class="col-xs-6">
                             <div style="text-align: center;">
@@ -147,122 +140,25 @@
                         </div>
                         <div class="row" style="margin: 0px 0px 10px 30px;">
                             <div class="row" style="margin-top: 10px;">
-
-                                <ul class="nav nav-tabs" id="myTab" style="text-align: center">
-                                    <li class="active" style="width: 100%"><a href="#tab_all" data-toggle="tab" aria-expanded="true" style="font-size: 20px">全国汇交情况</a></li>
-                                    <!--
-                                   <li class="" style="width:50%"><a href="#tab_dep" data-toggle="tab" aria-expanded="false" style="font-size: 20px">水利部汇交情况</a></li>
-                                   -->
-                                </ul>
-
-
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="tab_all">
-
-                                        <div class="col-md-12">
-                                            <div id="all_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
-                                        </div>
-
+                                <div class="col-md-12">
+                                    <div class="col-md-3" style="z-index: 999; float: right; margin: 10px;margin-right: -30px;position: absolute;right:0px;">
+                                        <button class="btn-primary" type="button" id="objbtn1" height="38px" @click="rightDownBtnClick(true)">对象分类</button>
+                                        <button class="btn-primary" type="button" id="objbtn2" height="38px" @click="rightDownBtnClick(false)">全部对象</button>
                                     </div>
-                                 </div>
-                                    <!-- /.tab-pane -->
-                                <!--
-                                    <div class="tab-pane" id="tab_dep">
-                                        <div class="col-md-12">
-                                            <div id="right_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                    <div id="right_down" style="height: 438px;
+                                              border: 1px solid #9d9d9d;
+                                              margin-left: 10px;">
+                                    </div>
+                                    <div id="no_objdata" class="hidden" style="height: 438px; border: 1px solid rgb(157, 157, 157); margin-left: 10px; text-align: center; position: relative;">
+                                        <div style="margin-top: 120px;">
+                                            <div><span class="iconfont icon-zanwushuju" style="
+                                                      font-size: 100px;
+                                                      color: gray;"></span>
+                                            </div>
+                                            <font size="6" style="font-size: 20px; color: gray;"> 暂无对象数据</font>
                                         </div>
                                     </div>
-                                 -->
-
-                                    <aside class="control-sidebar" style="top:509px;height:438px;border: solid 3px skyblue;z-index:auto;background-color: #FFFFFF;">
-
-                                        <div>
-                                            <a href="#" style="position:absolute;left:-27px;width:25px;border: 1px solid skyblue;text-align:center;cursor:pointer;color:black;font-weight:bold" data-toggle="control-sidebar">筛选条件</a>
-                                        </div>
-                                        <div style="padding:10px;margin-top: -10px;border-bottom:1px solid skyblue" id="filter-box">
-                                            <div class="row"><label>数据类型筛选：</label></div>
-                                            <div class="btn btn-default checkbox"><label>
-                                                    <input value="20071" type="checkbox">
-                                                    数据库</label></div>
-                                            <div class="btn btn-default checkbox"><label>
-                                                    <input value="20072" type="checkbox">
-                                                    数据表</label></div>
-                                            <div class="btn btn-default checkbox"><label>
-                                                    <input value="20073" type="checkbox">
-                                                    矢量</label></div>
-                                            <div class="btn btn-default checkbox"><label>
-                                                    <input value="20074" type="checkbox">
-                                                    栅格</label></div>
-                                            <div class="btn btn-default checkbox"><label>
-                                                    <input value="20075" type="checkbox">
-                                                    其他</label></div>
-                                        </div>
-                                        <div style="padding:10px;margin: 0 auto;height: 120px;border-bottom:1px solid skyblue" id="ReSource-filter-box">
-                                            <div class="row"><label style="margin-top: 8px;float:left">资源目录筛选：</label></div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label style="margin: 8px 15px;">业务类型：</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select class="form-control select2" id="re-sel-1" style="height: 30px;" onchange="">
-                                                        <option value="01">全选</option>
-                                                        <option value="NULL">全不选</option>
-                                                        <option value="0101">水文</option>
-                                                        <option value="0102">水资源</option>
-                                                        <option value="0103">水环境</option>
-                                                        <option value="0104">水利工程</option>
-                                                        <option value="0105">农村水利</option>
-                                                        <option value="0106">水旱灾害防御</option>
-                                                        <option value="0107">水土保持</option>
-                                                        <option value="0108">移民</option>
-                                                        <option value="0199">其他</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <label style="margin: 8px 15px;">行政类型：</label>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select class="form-control select2" id="re-sel-2" style="height: 30px;" onchange="">
-                                                        <option value="02">全选</option>
-                                                        <option value="NULL">全不选</option>
-                                                        <option value="0201">综合办公</option>
-                                                        <option value="0202">政策与法规</option>
-                                                        <option value="0203">财务与审计</option>
-                                                        <option value="0204">人事与教育</option>
-                                                        <option value="0205">国际合作</option>
-                                                        <option value="0206">科技管理</option>
-                                                        <option value="0207">监督</option>
-                                                        <option value="0208">纪检与监察</option>
-                                                        <option value="0209">机关管理</option>
-                                                        <option value="0299">其他</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div style="padding:10px;margin: 0 auto;height: 55px;" id="Object-filter-box">
-                                            <div class="row"><label style="margin-top: 8px;float:left">基础对象筛选：</label></div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <select class="form-control select2" id="obj-sel-lev1" style="height: 30px;" @click="showObjLev2">
-                                                        <option value="*">全选</option>
-                                                        <option value="RL">江河湖泊</option>
-                                                        <option value="HP">水利工程</option>
-                                                        <option value="MS">监测站（点）</option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <select class="form-control select2" id="obj-sel-lev2" style="height: 30px;"></select>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="btn btn-default" style="right:10px;bottom: 10px;position:absolute" @click="refreshChart">确认</div>
-                                        <div class="btn btn-default" style="right:80px;bottom: 10px;position:absolute" @click="reSet">重置</div>
-                                    </aside>
-
-
+                                </div>
                             </div>
                         </div>
                         <div class="row" style="margin: 0px 0px 10px 30px;">
@@ -284,6 +180,7 @@
                                                             <th class="text-center">序号</th>
                                                             <th class="text-center">单位</th>
                                                             <th class="text-center">最新更新时间</th>
+                                                            <th class="text-center">总更新数</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -291,6 +188,7 @@
                                                             <td class="text-center">{{index+1}}</td>
                                                             <td class="text-center">{{item.name}}</td>
                                                             <td class="text-center">{{item.uptime}}</td>
+                                                            <td class="text-center">{{item.objSum}}</td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -329,29 +227,127 @@
                                     </div>
                                 </div>
                         </div>
+
                         <div class="row" style="margin: 0px 0px 10px 30px;">
                             <div class="row" style="margin-top: 10px;">
-                                <div class="col-md-12">
-                                      <div class="col-md-3" style="z-index: 999; float: right; margin: 10px;margin-right: -30px;position: absolute;right:0px;">
-                                          <button class="btn-primary" type="button" id="objbtn1" height="38px" @click="rightDownBtnClick(true)">对象分类</button>
-                                          <button class="btn-primary" type="button" id="objbtn2" height="38px" @click="rightDownBtnClick(false)">全部对象</button>
-                                      </div>
-                                     <div id="right_down" style="height: 438px;
-                                              border: 1px solid #9d9d9d;
-                                              margin-left: 10px;">
-                                      </div>
-                                      <div id="no_objdata" class="hidden" style="height: 438px; border: 1px solid rgb(157, 157, 157); margin-left: 10px; text-align: center; position: relative;">
-                                          <div style="margin-top: 120px;">
-                                              <div><span class="iconfont icon-zanwushuju" style="
-                                                      font-size: 100px;
-                                                      color: gray;"></span>
-                                              </div>
-                                              <font size="6" style="font-size: 20px; color: gray;"> 暂无对象数据</font>
-                                          </div>
-                                      </div>
-                                  </div>
-                              </div>
-                          </div>
+
+                                <ul class="nav nav-tabs" id="myTab" style="text-align: center">
+                                    <li class="active" style="width: 100%"><a href="#tab_all" data-toggle="tab" aria-expanded="true" style="font-size: 20px">资源汇交情况</a></li>
+                                    <!--
+                                   <li class="" style="width:50%"><a href="#tab_dep" data-toggle="tab" aria-expanded="false" style="font-size: 20px">水利部汇交情况</a></li>
+                                   -->
+                                </ul>
+
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_all">
+
+                                        <div class="col-md-12">
+                                            <div id="all_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
+                                <!--
+                                    <div class="tab-pane" id="tab_dep">
+                                        <div class="col-md-12">
+                                            <div id="right_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                        </div>
+                                    </div>
+                                 -->
+
+                                <aside class="control-sidebar" style="top:509px;height:438px;border: solid 3px skyblue;z-index:auto;background-color: #FFFFFF;">
+
+                                    <div>
+                                        <a href="#" style="position:absolute;left:-27px;width:25px;border: 1px solid skyblue;text-align:center;cursor:pointer;color:black;font-weight:bold" data-toggle="control-sidebar">筛选条件</a>
+                                    </div>
+                                    <div style="padding:10px;margin-top: -10px;border-bottom:1px solid skyblue" id="filter-box">
+                                        <div class="row"><label>数据类型筛选：</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20071" type="checkbox">
+                                            数据库</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20072" type="checkbox">
+                                            数据表</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20073" type="checkbox">
+                                            矢量</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20074" type="checkbox">
+                                            栅格</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20075" type="checkbox">
+                                            其他</label></div>
+                                    </div>
+                                    <div style="padding:10px;margin: 0 auto;height: 120px;border-bottom:1px solid skyblue" id="ReSource-filter-box">
+                                        <div class="row"><label style="margin-top: 8px;float:left">资源目录筛选：</label></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label style="margin: 8px 15px;">业务类型：</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="re-sel-1" style="height: 30px;" onchange="">
+                                                    <option value="01">全选</option>
+                                                    <option value="NULL">全不选</option>
+                                                    <option value="0101">水文</option>
+                                                    <option value="0102">水资源</option>
+                                                    <option value="0103">水环境</option>
+                                                    <option value="0104">水利工程</option>
+                                                    <option value="0105">农村水利</option>
+                                                    <option value="0106">水旱灾害防御</option>
+                                                    <option value="0107">水土保持</option>
+                                                    <option value="0108">移民</option>
+                                                    <option value="0199">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label style="margin: 8px 15px;">行政类型：</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="re-sel-2" style="height: 30px;" onchange="">
+                                                    <option value="02">全选</option>
+                                                    <option value="NULL">全不选</option>
+                                                    <option value="0201">综合办公</option>
+                                                    <option value="0202">政策与法规</option>
+                                                    <option value="0203">财务与审计</option>
+                                                    <option value="0204">人事与教育</option>
+                                                    <option value="0205">国际合作</option>
+                                                    <option value="0206">科技管理</option>
+                                                    <option value="0207">监督</option>
+                                                    <option value="0208">纪检与监察</option>
+                                                    <option value="0209">机关管理</option>
+                                                    <option value="0299">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="padding:10px;margin: 0 auto;height: 55px;" id="Object-filter-box">
+                                        <div class="row"><label style="margin-top: 8px;float:left">基础对象筛选：</label></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select class="form-control select2" id="obj-sel-lev1" style="height: 30px;" @click="showObjLev2">
+                                                    <option value="*">全选</option>
+                                                    <option value="RL">江河湖泊</option>
+                                                    <option value="HP">水利工程</option>
+                                                    <option value="MS">监测站（点）</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="obj-sel-lev2" style="height: 30px;"></select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="btn btn-default" style="right:10px;bottom: 10px;position:absolute" @click="refreshChart">确认</div>
+                                    <div class="btn btn-default" style="right:80px;bottom: 10px;position:absolute" @click="reSet">重置</div>
+                                </aside>
+
+
+                            </div>
+                        </div>
                       </div>
                       <div class="col-md-3">
                           <div class="box box-primary" style="overflow: auto;

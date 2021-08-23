@@ -123,7 +123,7 @@ var app = new Vue({
 					confirmButtonText: "通过",
 					closeOnConfirm: false
 				}, confirm=> {
-					getDataByPost('/user/pass',{
+					getDataByPost('/user/passSubMeta',{
 						id:id
 					},res=>{
 
@@ -133,6 +133,7 @@ var app = new Vue({
 							that.passNum++;
 							that.status_show = "已通过";
 							$("#tbody").empty();
+							// self.window.location.reload();
 						}else{
 							swal("通过数据失败！", "", "error");
 						}
@@ -155,7 +156,7 @@ var app = new Vue({
 					confirmButtonText: "拒绝",
 					closeOnConfirm: false
 				}, confirm => {
-					getDataByPost('/user/refuse', {
+					getDataByPost('/user/refuseSubMeta', {
 						id: id
 					}, res => {
 

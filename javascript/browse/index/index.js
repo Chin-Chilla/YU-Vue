@@ -1,34 +1,33 @@
-var that;
 
+var that;
 //快速排序
-function quickSort(nums, l, h) {
-    if (l < h) {
-        var i = l, j = h, x = nums[l];
-        while (i < j) {
-            while (i < j && nums[j].value <= x.value) {
+function quickSort(nums,l,h){
+    if(l<h){
+        var i=l, j=h, x=nums[l];
+        while(i<j){
+            while( i<j && nums[j].value<=x.value ){
                 j--;
             }
-            if (i < j) {
+            if (i<j){
                 nums[i++] = nums[j];
             }
-            while (i < j && nums[i].value > x.value) {
+            while( i<j && nums[i].value>x.value){
                 i++;
             }
-            if (i < j) {
+            if (i<j){
                 nums[j--] = nums[i];
             }
         }
         nums[i] = x;
-        quickSort(nums, l, i - 1);
-        quickSort(nums, i + 1, h);
+        quickSort(nums,l,i-1);
+        quickSort(nums,i+1,h);
     }
 }
-
 var index = new Vue({
     el: "#vue", //绑定之前html写的ID
     data: { //相当于成员变量
-        updateData: [],
-        totalData: [],
+        updateData:[],
+        totalData:[],
         resZtree: '',
         objZtree: '',
         leftoption: {
@@ -103,10 +102,10 @@ var index = new Vue({
             },
             radar: {
                 indicator: [
-                    {name: '业务', max: 30000},
-                    {name: '行政', max: 30000},
-                    {name: '综合', max: 30000},
-                    {name: '其他', max: 30000}
+                    { name: '业务', max: 30000 },
+                    { name: '行政', max: 30000 },
+                    { name: '综合', max: 30000 },
+                    { name: '其他', max: 30000 }
                 ],
                 nameGap: 10,
                 radius: '70%'
@@ -185,15 +184,16 @@ var index = new Vue({
             },
             xAxis: {
                 type: 'category',
-                data: ['水利部', '长江委', '黄委', '淮委', '海委', '珠江委', '松辽委', '太湖局',
-                    '北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
-                    '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州',
-                    '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆自治', '新疆兵团'
+                data: ['水利部', '长江委', '西藏自治区水利厅'
+                    // , '淮委', '海委', '珠江委', '松辽委', '太湖局',
+                    // '北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
+                    // '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州',
+                    // '云南', '黄河水利委员会', '陕西', '甘肃', '青海', '宁夏', '新疆自治', '新疆兵团'
                 ],
                 axisLabel: {
                     interval: 0,
-                    formatter: function (value) {
-                        return value.split("").join("\n");
+                    formatter: function(value) {
+                        return value;
                     }
                 },
                 axisTick: {
@@ -211,7 +211,7 @@ var index = new Vue({
                 logBase: 10,
                 min: 1,
                 axisLabel: {
-                    formatter: function (value) {
+                    formatter: function(value) {
                         texts = [];
                         if (value == 1) {
                             texts.push("10⁰")
@@ -282,7 +282,7 @@ var index = new Vue({
                 ],
                 axisLabel: {
                     interval: 0,
-                    formatter: function (value) {
+                    formatter: function(value) {
                         return value.split("").join("\n");
                     }
                 },
@@ -301,7 +301,7 @@ var index = new Vue({
                 logBase: 10,
                 min: 1,
                 axisLabel: {
-                    formatter: function (value) {
+                    formatter: function(value) {
                         texts = [];
                         if (value == 1) {
                             texts.push("10⁰")
@@ -452,7 +452,7 @@ var index = new Vue({
                 logBase: 10,
                 min: 1,
                 axisLabel: {
-                    formatter: function (value) {
+                    formatter: function(value) {
                         texts = [];
                         if (value == 1) {
                             texts.push("10⁰")
@@ -527,7 +527,7 @@ var index = new Vue({
                 ],
                 axisLabel: {
                     inside: false,
-                    formatter: function (value) {
+                    formatter: function(value) {
                         return value.split("").join("\n");
                     }
                 },
@@ -546,7 +546,7 @@ var index = new Vue({
                 logBase: 10,
                 min: 1,
                 axisLabel: {
-                    formatter: function (value) {
+                    formatter: function(value) {
                         texts = [];
                         if (value == 1) {
                             texts.push("10⁰")
@@ -592,7 +592,7 @@ var index = new Vue({
                     //通常情况下：
                     normal: {
                         //每个柱子的颜色即为colorList数组里的每一项，如果柱子数目多于colorList的长度，则柱子颜色循环使用该数组
-                        color: function (params) {
+                        color: function(params) {
 
                             colorList = [];
                             for (i = 0; i < 4; i++) {
@@ -680,16 +680,15 @@ var index = new Vue({
         rightBarObj: [],
         //用于测试
         test: [],
-        // loginName:'',
-        // userName:'',
+
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
         var authCode = getUrlKey("authCode");
         var role = getUrlKey("role");
-        if (authCode != null && authCode != '' && authCode != undefined) {
-            sessionStorage.setItem("authCode", authCode);
-            sessionStorage.setItem("role", role);
+        if(authCode!=null&&authCode!=''&&authCode!=undefined){
+            sessionStorage.setItem("authCode",authCode);
+            sessionStorage.setItem("role",role);
         }
         toastr.options = {
             "closeButton": false,
@@ -707,19 +706,18 @@ var index = new Vue({
             "hideMethod": "fadeOut"
         }
         //更新榜
-        getDataByGet('/index_manager/getUpdateRankData', {}, function (res) {
-            var msg = res.data;
+        getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
+        	var msg= res.data;
             //index.updateData = msg.slice(0,16);
-            console.log("getDataByGet:")
-            console.log("ok", msg, "ok");
-            index.updateData = msg.slice(0, 10);
+           // console.log("ok",msg,"ok");
+            index.updateData = msg.slice(0,10);
         })
-
+        
 
         window.onresize = function loadChart() {
             that.pictureShow();
         }
-
+       
         // $(document).ready(function() {
         //     window.history.replaceState({}, "", 'http://' + window.location.host + '/getPage/?content=');
         // });
@@ -730,8 +728,6 @@ var index = new Vue({
     methods: { //相当于成员方法
         load() {
             //45个部门结点
-            // that.loginName = sessionStorage.getItem("loginName")
-            // that.userName = sessionStorage.getItem("userName")
             for (var i = 0; i < 45; i++) {
                 that.arrayData.push(new Array());
                 that.arrayLegend.push(new Array());
@@ -750,16 +746,16 @@ var index = new Vue({
             that.myChartmid = echarts.init(document.getElementById('mid'));
             that.myChartright = echarts.init(document.getElementById('right'));
             that.myChartAllData = echarts.init(document.getElementById('all_data_pic'));
-            // that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
-            //  that.myChartleftDown = echarts.init(document.getElementById('left_down'));
+           // that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
+          //  that.myChartleftDown = echarts.init(document.getElementById('left_down'));
             that.myChartrightDown = echarts.init(document.getElementById('right_down'));
             //加载动画
             that.showLoading(that.myChartleft);
             that.showLoading(that.myChartmid);
             that.showLoading(that.myChartright);
             that.showLoading(that.myChartAllData);
-            //    that.showLoading(that.myChartRightData);
-            //     that.showLoading(that.myChartleftDown);
+        //    that.showLoading(that.myChartRightData);
+      //     that.showLoading(that.myChartleftDown);
             that.showLoading(that.myChartrightDown);
 
             that.showPictrue();
@@ -768,12 +764,12 @@ var index = new Vue({
             // that.findusermessage();
 
             var aJson = {};
-            var setting = {
-                async: {
+            var setting={
+                async:  {
                     enable: true,
                     type: "GET",
                     dataType: 'json',
-                    url: BASE_URL + "/index_manager/getResById",
+                    url: BASE_URL+"/index_manager/getResById",
                     autoParam: ["nodeId"]
                 },
                 data: {
@@ -790,9 +786,9 @@ var index = new Vue({
                 callback: {
                     onClick: function zTreeOnClickSearch(event, treeId, treeNode) {
                         var nodeId = treeNode.nodeId;
-                        keySearch.loadFromTree(nodeId, "ReSourceTree");
+                        keySearch.loadFromTree(nodeId,"ReSourceTree");
                     },
-                    onAsyncSuccess: function zTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
+                    onAsyncSuccess:function zTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
                         var cur = that.arrayNodeId.indexOf(treeNode.nodeId);
                         for (var i = 0; i < dataStr.length; i++) {
                             if (dataStr[i].pnodeId == treeNode.nodeId) {
@@ -815,44 +811,22 @@ var index = new Vue({
                 }
             }
             //资源目录树的懒加载  加载所有一级节点和水利部子节点
-            getDataByGet('/index_manager/getResById?nodeId=1000', aJson, dataStr => {
-                that.catalogTreeData = dataStr
-                that.resZtree = $.fn.zTree.init($("#resTree"), setting, dataStr);
-                for (var i = 0; i < dataStr.length; i++) {
-                    //父节点为水利信息资源目录结点
-                    if (dataStr[i].pnodeId == 1001) {
-                        that.arrayNodeId1.push(dataStr[i].nodeId);
-                        //存所有一级结点信息
-                        var str = dataStr[i].nodeName + "";
-                        var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-                        that.arrayRightBar.push(num);
-                    }
-                    //父节点为水利信息资源目录结点
-                    if (dataStr[i].pnodeId == 1000) {
-                        that.arrayNodeId.push(dataStr[i].nodeId);
-                        //存所有一级结点信息
-                        var str = dataStr[i].nodeName + "";
-                        var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-                        var name = str.substr(0, str.indexOf("("));
-                        if (num != 0) {
-                            var data = {
-                                value: num,
-                                name: name,
-                                nodeid: dataStr[i].nodeId,
-                            }
-                            that.firstPieTreeDataAll.push(data);
-                            that.firstPieTreeLegendAll.push(name);
-                        }
-                    }
-                }
-                that.rightBaroption.series[0].data = that.arrayRightBar
-
-                that.leftPictureShow();
-                // that.midPictureShow();
-
-                for (var j = 0; j < that.arrayNodeId.length; j++) {
+            getDataByGet('/index_manager/getResById?nodeId=1000',aJson, dataStr =>{
+            	that.catalogTreeData = dataStr
+                    that.resZtree = $.fn.zTree.init($("#resTree"), setting, dataStr);
                     for (var i = 0; i < dataStr.length; i++) {
-                        if (dataStr[i].pnodeId == that.arrayNodeId[j]) {
+                        //父节点为水利信息资源目录结点
+                        if (dataStr[i].pnodeId == 1001) {
+                            that.arrayNodeId1.push(dataStr[i].nodeId);
+                            //存所有一级结点信息
+                            var str = dataStr[i].nodeName + "";
+                            var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                            that.arrayRightBar.push(num);
+                        }
+                        //父节点为水利信息资源目录结点
+                        if (dataStr[i].pnodeId == 1000) {
+                            that.arrayNodeId.push(dataStr[i].nodeId);
+                            //存所有一级结点信息
                             var str = dataStr[i].nodeName + "";
                             var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
                             var name = str.substr(0, str.indexOf("("));
@@ -862,14 +836,36 @@ var index = new Vue({
                                     name: name,
                                     nodeid: dataStr[i].nodeId,
                                 }
-                                that.arrayData[j].push(data);
-                                that.arrayLegend[j].push(name);
+                                that.firstPieTreeDataAll.push(data);
+                                that.firstPieTreeLegendAll.push(name);
                             }
                         }
                     }
-                }
+                    that.rightBaroption.series[0].data = that.arrayRightBar
 
-                that.getChartNum();
+                    that.leftPictureShow();
+                    // that.midPictureShow();
+
+                    for (var j = 0; j < that.arrayNodeId.length; j++) {
+                        for (var i = 0; i < dataStr.length; i++) {
+                            if (dataStr[i].pnodeId == that.arrayNodeId[j]) {
+                                var str = dataStr[i].nodeName + "";
+                                var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                                var name = str.substr(0, str.indexOf("("));
+                                if (num != 0) {
+                                    var data = {
+                                        value: num,
+                                        name: name,
+                                        nodeid: dataStr[i].nodeId,
+                                    }
+                                    that.arrayData[j].push(data);
+                                    that.arrayLegend[j].push(name);
+                                }
+                            }
+                        }
+                    }
+
+                    that.getChartNum();
             })
 
             var settingObject = {
@@ -877,7 +873,7 @@ var index = new Vue({
                     enable: true,
                     type: "GET",
                     dataType: 'json',
-                    url: BASE_URL + "/index_manager/getObjById",
+                    url: BASE_URL+"/index_manager/getObjById",
                     autoParam: ["nodeId"]
                 },
                 data: {
@@ -894,544 +890,544 @@ var index = new Vue({
                     }
                 },
                 callback: {
-                    onClick: function objectTreeClickSearch(event, treeId, treeNode) {
+                    onClick:function objectTreeClickSearch(event, treeId, treeNode) {
                         var nodeId = treeNode.nodeId;
-                        keySearch.loadFromTree(nodeId, "ObjectTree");
+                        keySearch.loadFromTree(nodeId,"ObjectTree");
                     },
                     onAsyncSuccess: function objectTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
                         that.hide0Nodes(that.objZtree,treeNode)
                     }
                 }
             }
-
+         
             //对象树的懒加载
-            getDataByGet('/index_manager/getObjById?nodeId=1000', aJson, dataStr => {
-                that.objectTreeData = dataStr;
-                for (var i = 0; i < dataStr.length; i++) {
-                    if (dataStr[i].pnodeId == 1001) {
-                        var str = dataStr[i].nodeName + "";
-                        var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-                        that.arrayRightBarObj.push(num);
+            getDataByGet('/index_manager/getObjById?nodeId=1000',aJson, dataStr=>{
+            	that.objectTreeData = dataStr;
+                    for (var i = 0; i < dataStr.length; i++) {
+                        if (dataStr[i].pnodeId == 1001) {
+                            var str = dataStr[i].nodeName + "";
+                            var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                            that.arrayRightBarObj.push(num);
+                        }
                     }
-                }
-                that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
-                this.hide0Nodes(that.objZtree)
+                    that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
+                    that.hide0Nodes(that.objZtree);
             })
-
+            
 
             $('.str3-2').liMarquee();
             $('.str4').liMarquee();
-            $("#keyWord").on('keypress', function (event) {
+            $("#keyWord").on('keypress', function(event) {
                 if (event.keyCode == 13) {
                     keySearch.load(1);
                 }
             });
 
             //窗口变化
-            window.onresize = function () {
+            window.onresize = function() {
                 that.myChartleft.resize();
                 that.myChartmid.resize();
                 that.myChartright.resize();
                 that.myChartAllData.resize();
-                //     that.myChartRightData.resize();
-                //     that.myChartleftDown.resize();
+           //     that.myChartRightData.resize();
+           //     that.myChartleftDown.resize();
                 that.myChartrightDown.resize();
             }
             //tab栏绑定点击
 
-            $('#myTab li a').on('shown.bs.tab', function (e) {
+            $('#myTab li a').on('shown.bs.tab', function(e) {
                 //that.myChartRightData.setOption(that.rightBaroption);
                 //that.myChartRightData.hideLoading();
                 that.myChartAllData.resize();
-                //  that.myChartRightData.resize();
+              //  that.myChartRightData.resize();
             })
 
             //水利信息目录资源分布图点击事件绑定
             try {
-                that.myChartleft.on('click', function (params) {
+                that.myChartleft.on('click', function(params) {
                     that.leftPictureClick(params, that.myChartleft);
                 });
             } catch (cer) {
                 console.log(cer);
             }
             //水利部/省级/流域资源目录分布图
-            /*try {
-                  that.myChartleftDown.on('click', function(params) {
-                      that.leftDownPictureClick(params, that.myChartleftDown);
-                  });
-              } catch (cer) {
-                  console.log(cer);
-              }
-             */
+          /*try {
+                that.myChartleftDown.on('click', function(params) {
+                    that.leftDownPictureClick(params, that.myChartleftDown);
+                });
+            } catch (cer) {
+                console.log(cer);
+            }
+           */
 
         },
-        search(flag) {
+        search(flag){
             alert("hhh")
         },
-        getChartNum() {
-            new Promise(function (resolve) {
-                that.getReSourceNum(resolve);
-            }).then(function () {
-                that.getObjTreeNum();
+        getChartNum(){
+	        new Promise(function(resolve){
+	            that.getReSourceNum(resolve);
+	        }).then(function(){
+	            that.getObjTreeNum();
 
-            })
-        },
-        getReSourceNum(resolve) {
-            var aJson = {};
-            getDataByGet("/index_manager/queryReSourceNum", aJson, res => {
-                if (res.code == 200) {
-                    var dataStr = res.data;
-                    var i;
-                    var arr = dataStr.substring(1, dataStr.length - 1).split(",");
-                    var arr1 = new Array();
-                    var indexequal;
-                    for (i = 0; i < arr.length; i++) {
-                        indexequal = arr[i].indexOf("=");
-                        arr1[i] = arr[i].substring(indexequal + 1, arr[i].length);
-                    }
-                    for (i = 0; i < that.arrayRader.length; i++) {
-                        for (var j = 0; j < 4; j++) {
-                            that.arrayRader[i].push(arr1[i * 4 + j]);
-                            if (parseInt(that.arrayRader[i][j]) > parseInt(that.downmax[i])) {
-                                that.downmax[i] = that.arrayRader[i][j];
-                            }
-                        }
-                    }
-                    //通过arrayRader计算水利信息业务、行政、综合、其他数据总量
-                    var RaderAll = new Array();
-                    for (j = 0; j < 4; j++) {
-                        RaderAll[j] = 0;
-                        for (i = 0; i < that.arrayRader.length; i++) {
-                            RaderAll[j] += Number(that.arrayRader[i][j]);
-                        }
-                    }
-                    for (i = 0; i < 4; i++) {
-                        that.arrayRaderTotal.push(RaderAll[i]);
-                    }
+	        })
+    	},
+	    getReSourceNum(resolve){
+	        var aJson = {};
+	        getDataByGet("/index_manager/queryReSourceNum",aJson, res=> {
+	        	if (res.code==200) {
+	        		var dataStr = res.data;
+		            var i;
+		            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
+		            var arr1 = new Array();
+		            var indexequal;
+		            for (i = 0; i < arr.length; i++) {
+		                indexequal = arr[i].indexOf("=");
+		                arr1[i] = arr[i].substring(indexequal+1, arr[i].length);
+		            }
+		            for (i = 0; i < that.arrayRader.length; i++) {
+		                for (var j = 0; j < 4; j++) {
+		                    that.arrayRader[i].push(arr1[i * 4 + j]);
+		                    if (parseInt(that.arrayRader[i][j]) > parseInt(that.downmax[i])) {
+		                        that.downmax[i] = that.arrayRader[i][j];
+		                    }
+		                }
+		            }
+		            //通过arrayRader计算水利信息业务、行政、综合、其他数据总量
+		            var RaderAll = new Array();
+		            for (j = 0; j < 4; j++) {
+		                RaderAll[j] = 0;
+		                for (i = 0; i < that.arrayRader.length; i++) {
+		                    RaderAll[j] += Number(that.arrayRader[i][j]);
+		                }
+		            }
+		            for (i = 0; i < 4; i++) {
+		                that.arrayRaderTotal.push(RaderAll[i]);
+		            }
 
-                    //通过arrayRader计算流域、省级资源目录数据总量
-                    var sum = new Array();
-                    for (i = 0; i < that.arrayRader.length; i++) {
-                        sum[i] = 0;
-                        for (var j = 0; j < 4; j++) {
-                            sum[i] += Number(that.arrayRader[i][j]);
-                            that.arrayBar[i][j] = Number(that.arrayRader[i][j]);
-                        }
-                    }
-                    for (i = 0; i < 45; i++) {
-                        that.arrayAllData.push(sum[i]);
-                    }
-                    that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40)
-                    //显示所有流域省份数据图
-                    that.max = that.downmax[0];
-                    that.radarData = that.arrayRader[0];
-                    resolve();
-                } else {
-                    toastr.warning(res.msg);
-                }
+		            //通过arrayRader计算流域、省级资源目录数据总量
+		            var sum = new Array();
+		            for (i = 0; i < that.arrayRader.length; i++) {
+		                sum[i] = 0;
+		                for (var j = 0; j < 4; j++) {
+		                    sum[i] += Number(that.arrayRader[i][j]);
+		                    that.arrayBar[i][j] = Number(that.arrayRader[i][j]);
+		                }
+		            }
+		            for (i = 0; i < 45; i++) {
+		                that.arrayAllData.push(sum[i]);
+		            }
+		            that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40)
+		            //显示所有流域省份数据图
+		            that.max = that.downmax[0];
+		            that.radarData = that.arrayRader[0];
+		            resolve();
+	        	}else{
+	        		toastr.warning(res.msg);
+	        	}
+	        	
+	        })
+	    },
+	    getObjTreeNum(){
+	        var aJson = {};
+	        getDataByGet("/index_manager/queryObjTreeNum", aJson, res=> {
+	        	if (res.code==200) {
+	        		var dataStr = res.data;
+		            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
+		            var arr1 = new Array();
+		            for (var i = 0; i < arr.length; i++) {
+		                var tmp = arr[i].trim();
+		                arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
+		            }
+		            var arr2 = new Array();
+		            for (var i = 0; i < 45; i++) {
+		                var temp = arr1.slice(i * 34, i * 34 + 34);
+		                arr2.push(temp);
+		            }
+		            for (var i = 0; i < arr2.length; i++) {
+		                var name;
+		                for (var j = 0; j < 34; j++) {
+		                    switch (j + 1) {
+		                        case 1:
+		                            name = "流域";
+		                            break;
+		                        case 2:
+		                            name = "河流";
+		                            break;
+		                        case 3:
+		                            name = "湖泊";
+		                            break;
+		                        case 4:
+		                            name = "水库";
+		                            break;
+		                        case 5:
+		                            name = "水库大坝";
+		                            break;
+		                        case 6:
+		                            name = "水电站";
+		                            break;
+		                        case 7:
+		                            name = "灌区";
+		                            break;
+		                        case 8:
+		                            name = "渠（沟）道";
+		                            break;
+		                        case 9:
+		                            name = "取水井";
+		                            break;
+		                        case 10:
+		                            name = "水闸";
+		                            break;
+		                        case 11:
+		                            name = "渡槽";
+		                            break;
+		                        case 12:
+		                            name = "倒虹吸";
+		                            break;
+		                        case 13:
+		                            name = "泵站";
+		                            break;
+		                        case 14:
+		                            name = "涵洞";
+		                            break;
+		                        case 15:
+		                            name = "引调水工程";
+		                            break;
+		                        case 16:
+		                            name = "农村供水工程";
+		                            break;
+		                        case 17:
+		                            name = "窖池";
+		                            break;
+		                        case 18:
+		                            name = "塘坝";
+		                            break;
+		                        case 19:
+		                            name = "蓄滞洪区";
+		                            break;
+		                        case 20:
+		                            name = "堤防";
+		                            break;
+		                        case 21:
+		                            name = "圩垸";
+		                            break;
+		                        case 22:
+		                            name = "治河工程";
+		                            break;
+		                        case 23:
+		                            name = "淤地坝";
+		                            break;
+		                        case 24:
+		                            name = "橡胶坝";
+		                            break;
+		                        case 25:
+		                            name = "水文监测站";
+		                            break;
+		                        case 26:
+		                            name = "水土保持监测站";
+		                            break;
+		                        case 27:
+		                            name = "水工程安全检测站";
+		                            break;
+		                        case 28:
+		                            name = "供（取）水量监测点";
+		                            break;
+		                        case 29:
+		                            name = "水事影像监测点";
+		                            break;
+		                        case 30:
+		                            name = "其他";
+		                            break;
+		                        case 31:
+		                            name = "其他管理对象";
+		                            break;
+		                        case 32:
+		                            name = "管道";
+		                            break;
+		                        case 33:
+		                            name = "功能区";
+		                            break;
+		                        case 34:
+		                            name = "桥梁";
+		                            break;
+		                    }
+		                    if (arr2[i][j] != 0) {
+		                        var data = {
+		                            value: parseInt(arr2[i][j]),
+		                            name: name,
+		                        }
+		                        that.arrayObjData[i].push(data);
+		                        that.arrayObjLegend[i].push(name);
+		                    }
+		                }
+		            }
+		            //通过arr2计算资源目录对象总数
+		            var ObjAll = new Array();
+		            var data = new Array();
+		            that.arrayObjTotal.length = 0;
+		            that.arrayObjlegendAll.length = 0;
+		            for (j = 0; j < 34; j++) {
+		                ObjAll[j] = 0;
+		                switch (j + 1) {
+		                    case 1:
+		                        name = "流域";
+		                        break;
+		                    case 2:
+		                        name = "河流";
+		                        break;
+		                    case 3:
+		                        name = "湖泊";
+		                        break;
+		                    case 4:
+		                        name = "水库";
+		                        break;
+		                    case 5:
+		                        name = "水库大坝";
+		                        break;
+		                    case 6:
+		                        name = "水电站";
+		                        break;
+		                    case 7:
+		                        name = "灌区";
+		                        break;
+		                    case 8:
+		                        name = "渠（沟）道";
+		                        break;
+		                    case 9:
+		                        name = "取水井";
+		                        break;
+		                    case 10:
+		                        name = "水闸";
+		                        break;
+		                    case 11:
+		                        name = "渡槽";
+		                        break;
+		                    case 12:
+		                        name = "倒虹吸";
+		                        break;
+		                    case 13:
+		                        name = "泵站";
+		                        break;
+		                    case 14:
+		                        name = "涵洞";
+		                        break;
+		                    case 15:
+		                        name = "引调水工程";
+		                        break;
+		                    case 16:
+		                        name = "农村供水工程";
+		                        break;
+		                    case 17:
+		                        name = "窖池";
+		                        break;
+		                    case 18:
+		                        name = "塘坝";
+		                        break;
+		                    case 19:
+		                        name = "蓄滞洪区";
+		                        break;
+		                    case 20:
+		                        name = "堤防";
+		                        break;
+		                    case 21:
+		                        name = "圩垸";
+		                        break;
+		                    case 22:
+		                        name = "治河工程";
+		                        break;
+		                    case 23:
+		                        name = "淤地坝";
+		                        break;
+		                    case 24:
+		                        name = "橡胶坝";
+		                        break;
+		                    case 25:
+		                        name = "水文监测站";
+		                        break;
+		                    case 26:
+		                        name = "水土保持监测站";
+		                        break;
+		                    case 27:
+		                        name = "水工程安全检测站";
+		                        break;
+		                    case 28:
+		                        name = "供（取）水量监测点";
+		                        break;
+		                    case 29:
+		                        name = "水事影像监测点";
+		                        break;
+		                    case 30:
+		                        name = "其他";
+		                        break;
+		                    case 31:
+		                        name = "其他管理对象";
+		                        break;
+		                    case 32:
+		                        name = "管道";
+		                        break;
+		                    case 33:
+		                        name = "功能区";
+		                        break;
+		                    case 34:
+		                        name = "桥梁";
+		                        break;
+		                }
+		                for (i = 0; i < 45; i++) {
+		                    ObjAll[j] += Number(arr2[i][j]);
+		                }
+		                data.push({
+		                    value: ObjAll[j],
+		                    name: name,
+		                });
+		                if (ObjAll[j] != 0) {
+		                    that.arrayObjTotal.push(data[j]);
+		                    that.arrayObjlegendAll.push(data[j].name);
+		                }
+		            }
 
-            })
-        },
-        getObjTreeNum() {
-            var aJson = {};
-            getDataByGet("/index_manager/queryObjTreeNum", aJson, res => {
-                if (res.code == 200) {
-                    var dataStr = res.data;
-                    var arr = dataStr.substring(1, dataStr.length - 1).split(",");
-                    var arr1 = new Array();
-                    for (var i = 0; i < arr.length; i++) {
-                        var tmp = arr[i].trim();
-                        arr1[i] = tmp.substring(tmp.indexOf("=") + 1, arr[i].length);
-                    }
-                    var arr2 = new Array();
-                    for (var i = 0; i < 45; i++) {
-                        var temp = arr1.slice(i * 34, i * 34 + 34);
-                        arr2.push(temp);
-                    }
-                    for (var i = 0; i < arr2.length; i++) {
-                        var name;
-                        for (var j = 0; j < 34; j++) {
-                            switch (j + 1) {
-                                case 1:
-                                    name = "流域";
-                                    break;
-                                case 2:
-                                    name = "河流";
-                                    break;
-                                case 3:
-                                    name = "湖泊";
-                                    break;
-                                case 4:
-                                    name = "水库";
-                                    break;
-                                case 5:
-                                    name = "水库大坝";
-                                    break;
-                                case 6:
-                                    name = "水电站";
-                                    break;
-                                case 7:
-                                    name = "灌区";
-                                    break;
-                                case 8:
-                                    name = "渠（沟）道";
-                                    break;
-                                case 9:
-                                    name = "取水井";
-                                    break;
-                                case 10:
-                                    name = "水闸";
-                                    break;
-                                case 11:
-                                    name = "渡槽";
-                                    break;
-                                case 12:
-                                    name = "倒虹吸";
-                                    break;
-                                case 13:
-                                    name = "泵站";
-                                    break;
-                                case 14:
-                                    name = "涵洞";
-                                    break;
-                                case 15:
-                                    name = "引调水工程";
-                                    break;
-                                case 16:
-                                    name = "农村供水工程";
-                                    break;
-                                case 17:
-                                    name = "窖池";
-                                    break;
-                                case 18:
-                                    name = "塘坝";
-                                    break;
-                                case 19:
-                                    name = "蓄滞洪区";
-                                    break;
-                                case 20:
-                                    name = "堤防";
-                                    break;
-                                case 21:
-                                    name = "圩垸";
-                                    break;
-                                case 22:
-                                    name = "治河工程";
-                                    break;
-                                case 23:
-                                    name = "淤地坝";
-                                    break;
-                                case 24:
-                                    name = "橡胶坝";
-                                    break;
-                                case 25:
-                                    name = "水文监测站";
-                                    break;
-                                case 26:
-                                    name = "水土保持监测站";
-                                    break;
-                                case 27:
-                                    name = "水工程安全检测站";
-                                    break;
-                                case 28:
-                                    name = "供（取）水量监测点";
-                                    break;
-                                case 29:
-                                    name = "水事影像监测点";
-                                    break;
-                                case 30:
-                                    name = "其他";
-                                    break;
-                                case 31:
-                                    name = "其他管理对象";
-                                    break;
-                                case 32:
-                                    name = "管道";
-                                    break;
-                                case 33:
-                                    name = "功能区";
-                                    break;
-                                case 34:
-                                    name = "桥梁";
-                                    break;
-                            }
-                            if (arr2[i][j] != 0) {
-                                var data = {
-                                    value: parseInt(arr2[i][j]),
-                                    name: name,
-                                }
-                                that.arrayObjData[i].push(data);
-                                that.arrayObjLegend[i].push(name);
-                            }
-                        }
-                    }
-                    //通过arr2计算资源目录对象总数
-                    var ObjAll = new Array();
-                    var data = new Array();
-                    that.arrayObjTotal.length = 0;
-                    that.arrayObjlegendAll.length = 0;
-                    for (j = 0; j < 34; j++) {
-                        ObjAll[j] = 0;
-                        switch (j + 1) {
-                            case 1:
-                                name = "流域";
-                                break;
-                            case 2:
-                                name = "河流";
-                                break;
-                            case 3:
-                                name = "湖泊";
-                                break;
-                            case 4:
-                                name = "水库";
-                                break;
-                            case 5:
-                                name = "水库大坝";
-                                break;
-                            case 6:
-                                name = "水电站";
-                                break;
-                            case 7:
-                                name = "灌区";
-                                break;
-                            case 8:
-                                name = "渠（沟）道";
-                                break;
-                            case 9:
-                                name = "取水井";
-                                break;
-                            case 10:
-                                name = "水闸";
-                                break;
-                            case 11:
-                                name = "渡槽";
-                                break;
-                            case 12:
-                                name = "倒虹吸";
-                                break;
-                            case 13:
-                                name = "泵站";
-                                break;
-                            case 14:
-                                name = "涵洞";
-                                break;
-                            case 15:
-                                name = "引调水工程";
-                                break;
-                            case 16:
-                                name = "农村供水工程";
-                                break;
-                            case 17:
-                                name = "窖池";
-                                break;
-                            case 18:
-                                name = "塘坝";
-                                break;
-                            case 19:
-                                name = "蓄滞洪区";
-                                break;
-                            case 20:
-                                name = "堤防";
-                                break;
-                            case 21:
-                                name = "圩垸";
-                                break;
-                            case 22:
-                                name = "治河工程";
-                                break;
-                            case 23:
-                                name = "淤地坝";
-                                break;
-                            case 24:
-                                name = "橡胶坝";
-                                break;
-                            case 25:
-                                name = "水文监测站";
-                                break;
-                            case 26:
-                                name = "水土保持监测站";
-                                break;
-                            case 27:
-                                name = "水工程安全检测站";
-                                break;
-                            case 28:
-                                name = "供（取）水量监测点";
-                                break;
-                            case 29:
-                                name = "水事影像监测点";
-                                break;
-                            case 30:
-                                name = "其他";
-                                break;
-                            case 31:
-                                name = "其他管理对象";
-                                break;
-                            case 32:
-                                name = "管道";
-                                break;
-                            case 33:
-                                name = "功能区";
-                                break;
-                            case 34:
-                                name = "桥梁";
-                                break;
-                        }
-                        for (i = 0; i < 45; i++) {
-                            ObjAll[j] += Number(arr2[i][j]);
-                        }
-                        data.push({
-                            value: ObjAll[j],
-                            name: name,
-                        });
-                        if (ObjAll[j] != 0) {
-                            that.arrayObjTotal.push(data[j]);
-                            that.arrayObjlegendAll.push(data[j].name);
-                        }
-                    }
-
-                    that.rightPictureShow();
-                    var sum;
-                    for (var i = 0; i < that.arrayObjData.length; i++) {
-                        sum = 0;
-                        for (var j = 0; j < that.arrayObjData[i].length; j++) {
-                            sum += Number(that.arrayObjData[i][j].value);
-                        }
-                        //记录所有机构（45个）的对象数据总数
-                        that.arrayAllObjData.push(sum);
-                    }
-                    that.rightPictureShow();
-                    that.getObjNum();
-                    that.midPictureShow();
-                    //      that.showLevel2();
+		            that.rightPictureShow();
+		            var sum;
+		            for (var i = 0; i < that.arrayObjData.length; i++) {
+		                sum = 0;
+		                for (var j = 0; j < that.arrayObjData[i].length; j++) {
+		                    sum += Number(that.arrayObjData[i][j].value);
+		                }
+		                //记录所有机构（45个）的对象数据总数
+		                that.arrayAllObjData.push(sum);
+		            }
+		            that.rightPictureShow();
+		            that.getObjNum();
+		            that.midPictureShow();
+		      //      that.showLevel2();
                     that.setRankData();
-                } else {
-                    toastr.warning(res.msg);
-                }
-
-            })
-        },
-        setRankData() {
+	        	}else{
+	        		toastr.warning(res.msg);
+	        	}
+	        	
+	        })
+	    },
+        setRankData(){
             var nameArr = ['水利部业务网', '长江水利委员会', '黄河水利委员会', '淮河水利委员会', '海河水利委员会', '珠江水利委员会', '松辽水利委员会', '太湖流域管理局', '北京市水务局', '天津市水务局', '河北省水利厅局', '山西省水利厅', '内蒙古自治区水利厅', '辽宁省水利厅', '吉林省水利厅', '黑龙江省水利厅', '上海市水务局', '江苏省水利厅', '浙江省水利厅', '安徽省水利厅', '福建省水利厅', '江西省水利厅', '山东省水利厅', '河南省水利厅', '湖北省水利厅', '湖南省水利厅', '广东省水利厅', '广西壮族自治区水利厅', '海南省水利厅', '重庆市水务局', '四川省水利厅', '贵州省水利厅', '云南省水利厅', '西藏自治区水利厅', '陕西省水利厅', '甘肃省水利厅', '青海省水利厅', '宁夏回族自治区水利厅', '新疆维吾尔族自治区水利厅', '新疆生产建设兵团水利局', '大连', '青岛', '宁波', '厦门', '深圳']
             var totalArr = [];
             for (var i = 0; i < that.arrayAllData.length; i++) {
-                var tmp = {'name': '', value: ''}
+                var tmp = { 'name': '', value: '' }
                 tmp.name = nameArr[i];
                 tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
                 totalArr.push(tmp)
             }
-            totalArr.sort(function (a, b) {
+            totalArr.sort(function(a, b) {
                 return b.value - a.value
             })
-            index.totalData = totalArr.slice(0, 10);
+            index.totalData = totalArr.slice(0,10);
         },
-        getObjTree(objdep_id) {
-            // var data = {
-            //     dep: objdep_id,
-            // };
-            //var dataString = JSON.stringify(data);
-            getDataByPost("/index_manager/queryObjTree", {
-                "dep": objdep_id,
-            }, res => {
-                var dataStr = res.data;
-                var arr = dataStr.substring(1, dataStr.length - 1).split(",");
-                var arr1 = new Array();
-                for (var i = 0; i < arr.length; i++) {
-                    var tmp = arr[i].trim();
-                    arr1[i] = tmp.substring(tmp.indexOf("=") + 1, arr[i].length);
-                }
+	    getObjTree(objdep_id){
+	        // var data = {
+	        //     dep: objdep_id,
+	        // };
+	        //var dataString = JSON.stringify(data);
+	        getDataByPost("/index_manager/queryObjTree", {
+	            "dep": objdep_id,
+	        }, res=> {
+	        	var dataStr = res.data;
+	            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
+	            var arr1 = new Array();
+	            for (var i = 0; i < arr.length; i++) {
+	                var tmp = arr[i].trim();
+	                arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
+	            }
                 //EX_DATA存放其他管理对象的数据
-                var EX_DATA = arr1.slice(33, 37);
+                var EX_DATA = arr1.slice(33,37);
                 var sum = 0;
-                for (var i = 0; i < EX_DATA.length; i++) {
-                    sum += Number(EX_DATA[i]);
+                for(var i=0;i<EX_DATA.length;i++){
+                    sum+=Number(EX_DATA[i]);
                 }
-                that.arrayDepObj = [];
-                for (i = 0; i < 33; i++) {
-                    that.arrayDepObj.push(Number(arr1[i]));
-                }
-                that.arrayDepObj.push(Number(sum));
-                that.arrayDepObj.push(Number(arr1[arr1.length - 1]));
-                //对象分类：江河湖泊、水利工程、监测站点、其他管理对象
-                var RL = that.arrayDepObj.slice(0, 4);
-                var EX = that.arrayDepObj.slice(4, 26);
-                var MS = that.arrayDepObj.slice(26, 32);
-                var HP = that.arrayDepObj.slice(32, 36);
-                var sum1 = sum2 = sum3 = sum4 = 0;
-                that.arrayDepObjTotal = [],
-                    RL.forEach(item => {
-                        sum1 = sum1 + item
-                    });
-                that.arrayDepObjTotal.push(sum1);
-                EX.forEach(item => {
-                    sum2 = sum2 + item
-                });
-                that.arrayDepObjTotal.push(sum2);
-                MS.forEach(item => {
-                    sum3 = sum3 + item
-                });
-                that.arrayDepObjTotal.push(sum3);
-                HP.forEach(item => {
-                    sum4 = sum4 + item
-                });
-                that.arrayDepObjTotal.push(sum4);
+	            that.arrayDepObj = [];
+	            for (i = 0; i < 33; i++){
+	                that.arrayDepObj.push(Number(arr1[i]));
+	            }
+	            that.arrayDepObj.push(Number(sum));
+	            that.arrayDepObj.push(Number(arr1[arr1.length-1]));
+	            //对象分类：江河湖泊、水利工程、监测站点、其他管理对象
+	            var RL = that.arrayDepObj.slice(0,4);
+	            var EX = that.arrayDepObj.slice(4,26);
+	            var MS = that.arrayDepObj.slice(26,32);
+	            var HP = that.arrayDepObj.slice(32,36);
+	            var sum1 = sum2 = sum3 = sum4 =0;
+	            that.arrayDepObjTotal = [],
+	            RL.forEach(item =>{
+	                sum1 = sum1 + item
+	            });
+	            that.arrayDepObjTotal.push(sum1);
+	            EX.forEach(item =>{
+	                sum2 = sum2 + item
+	            });
+	            that.arrayDepObjTotal.push(sum2);
+	            MS.forEach(item =>{
+	                sum3 = sum3 + item
+	            });
+	            that.arrayDepObjTotal.push(sum3);
+	            HP.forEach(item =>{
+	                sum4 = sum4 + item
+	            });
+	            that.arrayDepObjTotal.push(sum4);
 
-                that.rightDownPictureShow();
-            });
-        },
-        getObjNum() {
-            // var data="";
-            var aJson = {};
-            getDataByGet("/index_manager/queryObjNum", aJson, res => {
-                var dataStr = res.data;
-                console.log("getObjNum-dataStr:")
-                console.log(dataStr);
-                //全国汇交情况图
-                for (var i = 0; i < that.arrayNodeId.length; i++) {
-                    //that.allDataObj.push(dataStr[0][10]);
-                    that.allDataObj.push(dataStr[0][that.arrayNodeId[i]]);
-                    // that.allDataObj.push(1000);
-                }
-                //水利部汇交情况图
+	        	that.rightDownPictureShowAll();
+	        });
+	    },
+	    getObjNum(){
+	        // var data="";
+	        var aJson = {};
+	        getDataByGet("/index_manager/queryObjNum",aJson,res=>{
+	        	var dataStr = res.data;
+                console.log("ok",dataStr,"ok");
+	            //全国汇交情况图""
+	            for (var i = 0; i < that.arrayNodeId.length; i++) {
+	                //that.allDataObj.push(dataStr[0][10]);
+	                that.allDataObj.push(dataStr[0][that.arrayNodeId[i]]);
+                   // that.allDataObj.push(1000);
+	            }
+
+	            //水利部汇交情况图
                 /*
 	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
 	                that.rightBarObj.push(dataStr[1][that.arrayNodeId1[i]]);
 	            }*/
-                that.AllDataoption.series[1].data = that.allDataObj;
-                //  that.rightBaroption.series[1].data = that.rightBarObj;
-                that.myChartAllData.setOption(that.AllDataoption);
-                //  that.myChartRightData.setOption(that.rightBaroption);
-                that.myChartAllData.hideLoading();
-                //   that.myChartRightData.hideLoading();
-                that.myChartAllData.resize();
-                //   that.myChartRightData.resize();
-            })
+	            that.AllDataoption.series[1].data = that.allDataObj;
+	         //  that.rightBaroption.series[1].data = that.rightBarObj;
+	            that.myChartAllData.setOption(that.AllDataoption);
+	          //  that.myChartRightData.setOption(that.rightBaroption);
+	            that.myChartAllData.hideLoading();
+	         //   that.myChartRightData.hideLoading();
+	            that.myChartAllData.resize();
+	         //   that.myChartRightData.resize();
+	        })
 
-            //水利信息目录资源分布图点击事件绑定
-            try {
-                that.myChartleft.on('click', function (params) {
-                    that.leftPictureClick(params, that.myChartleft);
-                });
-            } catch (cer) {
-                console.log(cer);
-            }
-
-            //水利部/省级/流域资源目录分布图
-            /*  try {
-                  that.myChartleftDown.on('click', function(params) {
-                      that.leftDownPictureClick(params, that.myChartleftDown);
-                  });
-              } catch (cer) {
-                  console.log(cer);
-              }
-              */
-
-        },
-        showLoading(echartObj) {
-            echartObj.showLoading({
-                color: 'rgb(25, 183, 207)',
-                effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
-            });
-        },
+	        //水利信息目录资源分布图点击事件绑定
+	        try {
+	            that.myChartleft.on('click', function(params) {
+	                that.leftPictureClick(params, that.myChartleft);
+	            });
+	        } catch (cer) {
+	            console.log(cer);
+	        }
+	     
+	        //水利部/省级/流域资源目录分布图
+	      /*  try {
+	            that.myChartleftDown.on('click', function(params) {
+	                that.leftDownPictureClick(params, that.myChartleftDown);
+	            });
+	        } catch (cer) {
+	            console.log(cer);
+	        }
+	        */
+	     
+	    },
+	    showLoading(echartObj){
+	        echartObj.showLoading({
+	            color: 'rgb(25, 183, 207)',
+	            effectOption: {backgroundColor: 'rgba(0, 0, 0, 0)'}
+	        });
+	    },
         /*
 	    showLevel2() {
 	        $("#level2").empty();
@@ -1487,375 +1483,375 @@ var index = new Vue({
 	        }
 	        that.showPictrue();
 	    },*/
-        showObjLev2() {
-            $("#obj-sel-lev2").empty();
-            var level1 = $("#obj-sel-lev1").val();
-            if (level1 == "RL") {
-                $("#obj-sel-lev2").append("<option value='RL*'>全选</option>");
-                $("#obj-sel-lev2").append("<option value='RL001'>流域</option>");
-                $("#obj-sel-lev2").append("<option value='RL002'>河流</option>");
-                $("#obj-sel-lev2").append("<option value='RL003'>湖泊</option>");
-                $("#obj-sel-lev2").append("<option value='RL999'>其他</option>");
-            } else if (level1 == "HP") {
-                $("#obj-sel-lev2").append("<option value='HP*'>全选</option>");
-                $("#obj-sel-lev2").append("<option value='HP001'>水库</option>");
-                $("#obj-sel-lev2").append("<option value='HP002'>水库大坝</option>");
-                $("#obj-sel-lev2").append("<option value='HP003'>水电站</option>");
-                $("#obj-sel-lev2").append("<option value='HP004'>灌区</option>");
-                $("#obj-sel-lev2").append("<option value='HP005'>渠（沟）道</option>");
-                $("#obj-sel-lev2").append("<option value='HP006'>取水井</option>");
-                $("#obj-sel-lev2").append("<option value='HP007'>水闸</option>");
-                $("#obj-sel-lev2").append("<option value='HP008'>渡槽</option>");
-                $("#obj-sel-lev2").append("<option value='HP009'>倒虹吸</option>");
-                $("#obj-sel-lev2").append("<option value='HP010'>泵站</option>");
-                $("#obj-sel-lev2").append("<option value='HP011'>涵洞</option>");
-                $("#obj-sel-lev2").append("<option value='HP012'>引调水工程</option>");
-                $("#obj-sel-lev2").append("<option value='HP013'>农村供水工程</option>");
-                $("#obj-sel-lev2").append("<option value='HP014'>窖池</option>");
-                $("#obj-sel-lev2").append("<option value='HP015'>塘坝</option>");
-                $("#obj-sel-lev2").append("<option value='HP016'>蓄滞洪区</option>");
-                $("#obj-sel-lev2").append("<option value='HP017'>堤防</option>");
-                $("#obj-sel-lev2").append("<option value='HP018'>圩垸</option>");
-                $("#obj-sel-lev2").append("<option value='HP019'>治河工程</option>");
-                $("#obj-sel-lev2").append("<option value='HP020'>淤地坝</option>");
-                $("#obj-sel-lev2").append("<option value='HP021'>橡胶坝</option>");
-                $("#obj-sel-lev2").append("<option value='HP999'>其他</option>");
-            } else if (level1 == "MS") {
-                $("#obj-sel-lev2").append("<option value='MS*'>全选</option>");
-                $("#obj-sel-lev2").append("<option value='MS001'>水文监测站</option>");
-                $("#obj-sel-lev2").append("<option value='MS002'>水土保持监测站</option>");
-                $("#obj-sel-lev2").append("<option value='MS003'>水工程安全监测站</option>");
-                $("#obj-sel-lev2").append("<option value='MS004'>供（取）水量监测点</option>");
-                $("#obj-sel-lev2").append("<option value='MS005'>水事影像监视点</option>");
-                $("#obj-sel-lev2").append("<option value='MS999'>其他</option>");
-            }
-        },
-        showPictrue() {
-            //  that.showLoading(that.myChartleftDown);
-            that.showLoading(that.myChartrightDown);
-            //    that.leftDownPictureShow();
+	    showObjLev2(){
+	        $("#obj-sel-lev2").empty();
+	        var level1 = $("#obj-sel-lev1").val();
+	        if (level1 == "RL"){
+	            $("#obj-sel-lev2").append("<option value='RL*'>全选</option>");
+	            $("#obj-sel-lev2").append("<option value='RL001'>流域</option>");
+	            $("#obj-sel-lev2").append("<option value='RL002'>河流</option>");
+	            $("#obj-sel-lev2").append("<option value='RL003'>湖泊</option>");
+	            $("#obj-sel-lev2").append("<option value='RL999'>其他</option>");
+	        }else if (level1 == "HP") {
+	            $("#obj-sel-lev2").append("<option value='HP*'>全选</option>");
+	            $("#obj-sel-lev2").append("<option value='HP001'>水库</option>");
+	            $("#obj-sel-lev2").append("<option value='HP002'>水库大坝</option>");
+	            $("#obj-sel-lev2").append("<option value='HP003'>水电站</option>");
+	            $("#obj-sel-lev2").append("<option value='HP004'>灌区</option>");
+	            $("#obj-sel-lev2").append("<option value='HP005'>渠（沟）道</option>");
+	            $("#obj-sel-lev2").append("<option value='HP006'>取水井</option>");
+	            $("#obj-sel-lev2").append("<option value='HP007'>水闸</option>");
+	            $("#obj-sel-lev2").append("<option value='HP008'>渡槽</option>");
+	            $("#obj-sel-lev2").append("<option value='HP009'>倒虹吸</option>");
+	            $("#obj-sel-lev2").append("<option value='HP010'>泵站</option>");
+	            $("#obj-sel-lev2").append("<option value='HP011'>涵洞</option>");
+	            $("#obj-sel-lev2").append("<option value='HP012'>引调水工程</option>");
+	            $("#obj-sel-lev2").append("<option value='HP013'>农村供水工程</option>");
+	            $("#obj-sel-lev2").append("<option value='HP014'>窖池</option>");
+	            $("#obj-sel-lev2").append("<option value='HP015'>塘坝</option>");
+	            $("#obj-sel-lev2").append("<option value='HP016'>蓄滞洪区</option>");
+	            $("#obj-sel-lev2").append("<option value='HP017'>堤防</option>");
+	            $("#obj-sel-lev2").append("<option value='HP018'>圩垸</option>");
+	            $("#obj-sel-lev2").append("<option value='HP019'>治河工程</option>");
+	            $("#obj-sel-lev2").append("<option value='HP020'>淤地坝</option>");
+	            $("#obj-sel-lev2").append("<option value='HP021'>橡胶坝</option>");
+	            $("#obj-sel-lev2").append("<option value='HP999'>其他</option>");
+	        }else if(level1 == "MS"){
+	            $("#obj-sel-lev2").append("<option value='MS*'>全选</option>");
+	            $("#obj-sel-lev2").append("<option value='MS001'>水文监测站</option>");
+	            $("#obj-sel-lev2").append("<option value='MS002'>水土保持监测站</option>");
+	            $("#obj-sel-lev2").append("<option value='MS003'>水工程安全监测站</option>");
+	            $("#obj-sel-lev2").append("<option value='MS004'>供（取）水量监测点</option>");
+	            $("#obj-sel-lev2").append("<option value='MS005'>水事影像监视点</option>");
+	            $("#obj-sel-lev2").append("<option value='MS999'>其他</option>");
+	        }
+	    },
+	    showPictrue() {
+	      //  that.showLoading(that.myChartleftDown);
+	        that.showLoading(that.myChartrightDown);
+	   //    that.leftDownPictureShow();
 
             var depobjId = "54";
-            // var depobjId = $("#level2").find("option:selected").attr("objdep_id");
-            //请求数据
-            //  console.log("ok",depobjId,"ok");
+	        // var depobjId = $("#level2").find("option:selected").attr("objdep_id");
+	        //请求数据
+          //  console.log("ok",depobjId,"ok");
 
-            that.getObjTree(depobjId);
-        },
-        rightDownBtnClick(flag) {
-            if (flag) {
-                console.log("我是对象")
-                that.rightDownPictureShow();
-            } else {
-                console.log("我是全部")
-                that.rightDownPictureShowAll();
-            }
-        },
-        leftPictureShow() {
-            // var that.myChartleft = echarts.init(document.getElementById('left'));
-            that.leftoption.title.text = '水利信息目录资源分布图';
-            //that.leftoption.series[0].data = that.firstPieTreeData;
-            //that.leftoption.legend.data = that.firstPieTreeLegend;
-            quickSort(that.firstPieTreeDataAll, 0, that.firstPieTreeDataAll.length - 1)
+	        that.getObjTree(depobjId);
+	    },
+	    rightDownBtnClick(flag){
+	        if(flag){
+	            console.log("我是对象")
+	            that.rightDownPictureShow();
+	        }else{
+	            console.log("我是全部")
+	            that.rightDownPictureShowAll();
+	        }
+	    },
+	    leftPictureShow() {
+	        // var that.myChartleft = echarts.init(document.getElementById('left'));
+	        that.leftoption.title.text = '水利信息目录资源分布图';
+	        //that.leftoption.series[0].data = that.firstPieTreeData;
+	        //that.leftoption.legend.data = that.firstPieTreeLegend;
+            quickSort(that.firstPieTreeDataAll,0,that.firstPieTreeDataAll.length-1)
             var legend = [];
-            var length = that.firstPieTreeDataAll.length < 5 ? that.firstPieTreeDataAll.length : 5;
+            var length = that.firstPieTreeDataAll.length<5?that.firstPieTreeDataAll.length:5;
             for (var i = 0; i < length; i++) {
                 legend.push(that.firstPieTreeDataAll[i].name);
             }
-            that.leftoption.series[0].data = that.firstPieTreeDataAll;
-            that.leftoption.legend.data = legend;
-            that.myChartleft.setOption(that.leftoption);
-            that.myChartleft.hideLoading();
-        },
-        midPictureShow() {
-            //var that.myChartmid = echarts.init(document.getElementById('mid'));
-            var max = -1;
-            that.arrayRaderTotal.forEach(function (e) {
-                if (e > max) {
-                    max = e;
-                }
-            });
-            for (var i = 0; i < that.midoption.radar.indicator.length; i++) {
-                that.midoption.radar.indicator[i].max = max;
-                that.midoption.series[0].data[0].value = that.arrayRaderTotal;
-            }
-            that.myChartmid.setOption(that.midoption);
-            that.myChartmid.hideLoading();
-        },
-        rightPictureShow() {
-            //var that.myChartright = echarts.init(document.getElementById('right'));
-            that.rightoption.title.text = '水利信息目录资源对象分布图';
-            quickSort(that.arrayObjTotal, 0, that.arrayObjTotal.length - 1);
-            var legend = [];
-            var length = that.arrayObjTotal.length < 5 ? that.arrayObjTotal.length : 5;
+	        that.leftoption.series[0].data = that.firstPieTreeDataAll;
+	        that.leftoption.legend.data = legend;
+	        that.myChartleft.setOption(that.leftoption);
+	        that.myChartleft.hideLoading();
+	    },
+	    midPictureShow() {
+	        //var that.myChartmid = echarts.init(document.getElementById('mid'));
+	        var max = -1;
+	        that.arrayRaderTotal.forEach(function(e){
+	            if(e>max){
+	                max = e;}
+	        });
+	        for (var i = 0; i < that.midoption.radar.indicator.length; i++) {
+	            that.midoption.radar.indicator[i].max=max;
+	            that.midoption.series[0].data[0].value = that.arrayRaderTotal;
+	        }
+	        that.myChartmid.setOption(that.midoption);
+	        that.myChartmid.hideLoading();
+	    },
+	    rightPictureShow() {
+	        //var that.myChartright = echarts.init(document.getElementById('right'));
+	        that.rightoption.title.text = '水利信息目录资源对象分布图';
+            quickSort(that.arrayObjTotal,0,that.arrayObjTotal.length-1);
+	        var legend = [];
+	        var length = that.arrayObjTotal.length<5?that.arrayObjTotal.length:5;
             for (var i = 0; i < length; i++) {
                 legend.push(that.arrayObjTotal[i].name);
             }
             that.rightoption.series.data = that.arrayObjTotal;
-            that.rightoption.legend.data = legend;
-            that.myChartright.setOption(that.rightoption);
-            that.myChartright.hideLoading();
-        },
-        /*
-                leftDownPictureShow() {
-                    // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
-                    var options = $("#level2 option:selected");
-                    var depart = options.text();
-                    var nodeId = $("#level2").val();
-                    var curIndex = that.arrayNodeId.indexOf(Number(nodeId));
-                    that.leftdownoption.title.text = depart + '目录资源分布图';
+	        that.rightoption.legend.data = legend;
+	        that.myChartright.setOption(that.rightoption);
+	        that.myChartright.hideLoading();
+	    },
+/*
+	    leftDownPictureShow() {
+	        // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
+	        var options = $("#level2 option:selected");
+	        var depart = options.text();
+	        var nodeId = $("#level2").val();
+	        var curIndex = that.arrayNodeId.indexOf(Number(nodeId));
+	        that.leftdownoption.title.text = depart + '目录资源分布图';
 
-                    if(that.arrayData[curIndex].length==0){
-                        that.setPieData(nodeId,that.arrayData[curIndex],that.arrayLegend[curIndex])
-                    }
-                    if (that.arrayAllData[curIndex]==0){
-                        $("#left_down").addClass("hidden");
-                        $("#no_resdata").removeClass("hidden");
-                    }else {
-                        $("#left_down").removeClass("hidden");
-                        $("#no_resdata").addClass("hidden");
-                        that.leftdownoption.series[0].data = that.arrayData[curIndex];
-                        that.leftdownoption.legend.data = that.arrayLegend[curIndex].slice(0,5);
-                        that.myChartleftDown.setOption(that.leftdownoption);
-                    }
-                    that.myChartleftDown.hideLoading();
-                },
-         */
-        rightDownPictureShow() {
-            // var options = $("#level2 option:selected");
-            // var depart = options.text();
-            var depart = "西藏水利厅";
-            that.rightdownoption.title.text = depart + '对象分布图';
-            var dataString = that.arrayDepObjTotal.join('');
-            // console.log(dataString);
-            if (dataString == '0' * 4) {
-                $("#right_down").addClass("hidden");
-                $("#right_downall").addClass("hidden");
-                $("#no_objdata").removeClass("hidden");
-            } else {
-                $("#right_down").removeClass("hidden");
-                $("#right_downall").addClass("hidden");
-                $("#no_objdata").addClass("hidden");
-                that.rightdownoption.series[0].data = that.arrayDepObjTotal;
-                //that.rightdownoption.legend.data = that.arrayObjLegend[curIndex].slice(0,5);
-                that.myChartrightDown.clear();
-                that.myChartrightDown.setOption(that.rightdownoption);
-            }
-            that.myChartrightDown.hideLoading();
-        },
-        rightDownPictureShowAll() {
-            //var options = $("#level2 option:selected");
-            //var depart = options.text();
-            var depart = "西藏水利厅";
-            that.rightdownoptionall.title.text = depart + '对象分布图';
-            var dataString = that.arrayDepObj.join('');
-            if (dataString == '0' * 35) {
-                $("#right_down").addClass("hidden");
-                $("#right_downall").addClass("hidden");
-                $("#no_objdata").removeClass("hidden");
-            } else {
-                that.rightdownoptionall.series[0].data = that.arrayDepObj;
-                // that.rightdownoption.legend.data = that.arrayObjLegend.slice(0,5);
-                that.myChartrightDown.clear();
-                that.myChartrightDown.setOption(that.rightdownoptionall);
-            }
-            that.myChartrightDown.hideLoading();
-        },
-        pictureShow() {
-            that.leftPictureShow();
-            that.rightPictureShow();
-        },
-        //加载主页饼图的子节点数据
-        setPieData(p_nodeId, data_collection, legend_collection) {
-            var data;
-            if (that.leftDownCatalogTreeData[p_nodeId] == undefined) {
-                //没有查询过，去查
-                var aJson = {};
-                getDataByGet1("/index_manager/getResById?nodeId=" + p_nodeId, aJson, dataStr => {
-                    data = dataStr;
-                    that.leftDownCatalogTreeData[p_nodeId] = data;
-                });
+	        if(that.arrayData[curIndex].length==0){
+	            that.setPieData(nodeId,that.arrayData[curIndex],that.arrayLegend[curIndex])
+	        }
+	        if (that.arrayAllData[curIndex]==0){
+	            $("#left_down").addClass("hidden");
+	            $("#no_resdata").removeClass("hidden");
+	        }else {
+	            $("#left_down").removeClass("hidden");
+	            $("#no_resdata").addClass("hidden");
+	            that.leftdownoption.series[0].data = that.arrayData[curIndex];
+	            that.leftdownoption.legend.data = that.arrayLegend[curIndex].slice(0,5);
+	            that.myChartleftDown.setOption(that.leftdownoption);
+	        }
+	        that.myChartleftDown.hideLoading();
+	    },
 
-            } else {
-                //查过了，直接赋值
-                data = that.leftDownCatalogTreeData[p_nodeId]
-            }
+ */
+	    rightDownPictureShow() {
+	       // var options = $("#level2 option:selected");
+	       // var depart = options.text();
+            var depart="西藏水利厅";
+	        that.rightdownoption.title.text = depart + '对象分布图';
+	        var dataString = that.arrayDepObjTotal.join('');
+	       // console.log(dataString);
+	        if (dataString=='0'*4){
+	            $("#right_down").addClass("hidden");
+	            $("#right_downall").addClass("hidden");
+	            $("#no_objdata").removeClass("hidden");
+	        }else{
+	            $("#right_down").removeClass("hidden");
+	            $("#right_downall").addClass("hidden");
+	            $("#no_objdata").addClass("hidden");
+	            that.rightdownoption.series[0].data = that.arrayDepObjTotal;
+	            //that.rightdownoption.legend.data = that.arrayObjLegend[curIndex].slice(0,5);
+	            that.myChartrightDown.clear();
+	            that.myChartrightDown.setOption(that.rightdownoption);
+	        }
+	        that.myChartrightDown.hideLoading();
+	    },
+	    rightDownPictureShowAll() {
+	        //var options = $("#level2 option:selected");
+	        //var depart = options.text();
+            var depart="西藏水利厅";
+	        that.rightdownoptionall.title.text = depart + '对象分布图';
+	        var dataString = that.arrayDepObj.join('');
+	        if (dataString=='0'*35){
+	            $("#right_down").addClass("hidden");
+	            $("#right_downall").addClass("hidden");
+	            $("#no_objdata").removeClass("hidden");
+	        }else{
+	            that.rightdownoptionall.series[0].data = that.arrayDepObj;
+	            // that.rightdownoption.legend.data = that.arrayObjLegend.slice(0,5);
+	            that.myChartrightDown.clear();
+	            that.myChartrightDown.setOption(that.rightdownoptionall);
+	        }
+	        that.myChartrightDown.hideLoading();
+	    },
+	    pictureShow() {
+	        that.leftPictureShow();
+	        that.rightPictureShow();
+	    },
+	    //加载主页饼图的子节点数据
+	    setPieData(p_nodeId,data_collection,legend_collection){
+	        var data;
+	        if(that.leftDownCatalogTreeData[p_nodeId]==undefined){
+	            //没有查询过，去查
+	            var aJson = {};
+	            getDataByGet1("/index_manager/getResById?nodeId="+p_nodeId,aJson,dataStr=>{
+	        		data = dataStr;
+	                that.leftDownCatalogTreeData[p_nodeId] = data;
+	        	});
 
-            for (var i = 0; i < data.length; i++) {
-                if (data[i].pnodeId == p_nodeId) {
-                    var str = data[i].nodeName + "";
-                    var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-                    var name = str.substr(0, str.indexOf("("));
-                    if (num != 0) {
-                        var tmp = {
-                            value: num,
-                            name: name,
-                            nodeid: data[i].nodeId,
-                        }
-                        data_collection.push(tmp);
-                        legend_collection.push(name);
-                    }
-                }
-            }
-        },
-        leftPictureClick(params, myChartleft) {
-            if (params.componentType === 'series') {
-                that.showLoading(myChartleft);
-                var p_nodeId = that.leftoption.series[0].data[params.dataIndex].nodeid;
-                that.firstPieTreeSecondData = [];
-                that.firstPieTreeSecondLegend = [];
-                that.setPieData(p_nodeId, that.firstPieTreeSecondData, that.firstPieTreeSecondLegend);
-                //数据量不为0，可继续点击查看  否则返回第一个饼图
-                if (that.firstPieTreeSecondData.length > 0) {
-                    that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
-                    quickSort(that.firstPieTreeSecondData, 0, that.firstPieTreeSecondData.length - 1)
+	        }else{
+	            //查过了，直接赋值
+	            data = that.leftDownCatalogTreeData[p_nodeId]
+	        }
+
+	        for (var i = 0; i < data.length; i++) {
+	            if (data[i].pnodeId == p_nodeId) {
+	                var str = data[i].nodeName + "";
+	                var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+	                var name = str.substr(0, str.indexOf("("));
+	                if (num != 0) {
+	                    var tmp = {
+	                        value: num,
+	                        name: name,
+	                        nodeid: data[i].nodeId,
+	                    }
+	                    data_collection.push(tmp);
+	                    legend_collection.push(name);
+	                }
+	            }
+	        }
+	    },
+	    leftPictureClick(params, myChartleft) {
+	        if (params.componentType === 'series') {
+	            that.showLoading(myChartleft);
+	            var p_nodeId = that.leftoption.series[0].data[params.dataIndex].nodeid;
+	            that.firstPieTreeSecondData = [];
+	            that.firstPieTreeSecondLegend = [];
+	            that.setPieData(p_nodeId,that.firstPieTreeSecondData,that.firstPieTreeSecondLegend);
+	            //数据量不为0，可继续点击查看  否则返回第一个饼图
+	            if (that.firstPieTreeSecondData.length > 0) {
+	                that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
+                    quickSort(that.firstPieTreeSecondData,0,that.firstPieTreeSecondData.length-1)
                     var legend = [];
-                    var length = that.firstPieTreeSecondData.length < 5 ? that.firstPieTreeSecondData.length : 5;
+                    var length = that.firstPieTreeSecondData.length<5?that.firstPieTreeSecondData.length:5;
                     for (var i = 0; i < length; i++) {
                         legend.push(that.firstPieTreeSecondData[i].name);
                     }
                     that.leftoption.series[0].data = that.firstPieTreeSecondData;
                     that.leftoption.legend.data = legend;
-                    myChartleft.setOption(that.leftoption);
-                } else {
-                    //that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
-                    that.leftoption.title.text = '水利信息目录资源分布图';
-                    that.leftoption.series[0].data = that.firstPieTreeDataAll;
-                    that.leftoption.legend.data = that.firstPieTreeLegendAll.slice(0, 5);
-                    myChartleft.setOption(that.leftoption);
-                }
-                myChartleft.hideLoading();
-                params.stopPropagation();
-            }
-        },
-        leftDownPictureClick(params, myChartleftDown) {
-            if (params.componentType === 'series') {
-                that.showLoading(myChartleftDown);
-                var nodeId = $("#level2").val();
-                var options = $("#level2 option:selected");
-                var depart = options.text();
-                var curIndex = that.arrayNodeId.indexOf(Number(nodeId));
-                var p_nodeId = that.leftdownoption.series[0].data[params.dataIndex].nodeid;
-                that.firstPieTreeSecondDataDown = [];
-                that.firstPieTreeSecondLegendDown = [];
-                that.setPieData(p_nodeId, that.firstPieTreeSecondDataDown, that.firstPieTreeSecondLegendDown);
+	                myChartleft.setOption(that.leftoption);
+	            } else {
+	                //that.leftoption.title.text = that.leftoption.series[0].data[params.dataIndex].name;
+	                that.leftoption.title.text = '水利信息目录资源分布图';
+	                that.leftoption.series[0].data = that.firstPieTreeDataAll;
+	                that.leftoption.legend.data = that.firstPieTreeLegendAll.slice(0,5);
+	                myChartleft.setOption(that.leftoption);
+	            }
+	            myChartleft.hideLoading();
+	            params.stopPropagation();
+	        }
+	    },
+	    leftDownPictureClick(params, myChartleftDown) {
+	        if (params.componentType === 'series') {
+	            that.showLoading(myChartleftDown);
+	            var nodeId = $("#level2").val();
+	            var options = $("#level2 option:selected");
+	            var depart = options.text();
+	            var curIndex = that.arrayNodeId.indexOf(Number(nodeId));
+	            var p_nodeId = that.leftdownoption.series[0].data[params.dataIndex].nodeid;
+	            that.firstPieTreeSecondDataDown = [];
+	            that.firstPieTreeSecondLegendDown = [];
+	            that.setPieData(p_nodeId,that.firstPieTreeSecondDataDown,that.firstPieTreeSecondLegendDown);
 
-                //数据量不为0，可继续点击查看  否则返回第一个饼图
-                if (that.firstPieTreeSecondDataDown.length > 0) {
-                    that.leftdownoption.title.text = that.leftdownoption.series[0].data[params.dataIndex].name;
-                    that.leftdownoption.series[0].data = that.firstPieTreeSecondDataDown;
-                    that.leftdownoption.legend.data = that.firstPieTreeSecondLegendDown.slice(0, 5);
-                    // that.leftdownoption.series[0].data = that.secondPieTreeSecondData;
-                    // that.leftdownoption.legend.data = that.secondPieTreeSecondLegend.slice(0,5);
-                    myChartleftDown.setOption(that.leftdownoption);
-                } else {
-                    that.leftdownoption.title.text = depart + '目录资源分布图';
-                    that.leftdownoption.series[0].data = that.arrayData[curIndex];
-                    that.leftdownoption.legend.data = that.arrayLegend[curIndex].slice(0, 5);
-                    // that.leftdownoption.title.text = that.leftdownoption.series[0].data[params.dataIndex].name;
-                    // that.leftdownoption.series[0].data = that.secondPieTreeData;
-                    // that.leftdownoption.legend.data = that.secondPieTreeLegend.slice(0,5);
-                    myChartleftDown.setOption(that.leftdownoption);
-                }
-                myChartleftDown.hideLoading();
-                params.stopPropagation();
-            }
-        },
-        findusermessage() {
-            $(function () {
-                var data = "{}";
-                var content = {"dataJson": data};
-                $.ajax({
-                    type: "GET",
-                    url: '/showUserMessage',
-                    data: content,
-                    // dataType:'json',
-                    success: function (msg) {
-                        // toastr.warning(msg)
-                        $("#welcomeDocument").append(msg);
-                    },
-                    error: function (msg) {
-                        toastr.error("请求失败");
-                    }
-                });
-            });
-        },
+	            //数据量不为0，可继续点击查看  否则返回第一个饼图
+	            if (that.firstPieTreeSecondDataDown.length > 0) {
+	                that.leftdownoption.title.text = that.leftdownoption.series[0].data[params.dataIndex].name;
+	                that.leftdownoption.series[0].data = that.firstPieTreeSecondDataDown;
+	                that.leftdownoption.legend.data = that.firstPieTreeSecondLegendDown.slice(0,5);
+	                // that.leftdownoption.series[0].data = that.secondPieTreeSecondData;
+	                // that.leftdownoption.legend.data = that.secondPieTreeSecondLegend.slice(0,5);
+	                myChartleftDown.setOption(that.leftdownoption);
+	            } else {
+	                that.leftdownoption.title.text = depart + '目录资源分布图';
+	                that.leftdownoption.series[0].data = that.arrayData[curIndex];
+	                that.leftdownoption.legend.data = that.arrayLegend[curIndex].slice(0,5)   ;
+	                // that.leftdownoption.title.text = that.leftdownoption.series[0].data[params.dataIndex].name;
+	                // that.leftdownoption.series[0].data = that.secondPieTreeData;
+	                // that.leftdownoption.legend.data = that.secondPieTreeLegend.slice(0,5);
+	                myChartleftDown.setOption(that.leftdownoption);
+	            }
+	            myChartleftDown.hideLoading();
+	            params.stopPropagation();
+	        }
+	    },
+	    findusermessage() {
+	        $(function() {
+	            var data = "{}";
+	            var content = { "dataJson": data };
+	            $.ajax({
+	                type: "GET",
+	                url: '/showUserMessage',
+	                data: content,
+	                // dataType:'json',
+	                success: function(msg) {
+	                    // toastr.warning(msg)
+	                    $("#welcomeDocument").append(msg);
+	                },
+	                error: function(msg) {
+	                    toastr.error("请求失败");
+	                }
+	            });
+	        });
+	    },
 
 
         //筛选条件刷新按钮
-        refreshChart() {
-            that.showLoading(that.myChartAllData);
-            //   that.showLoading(that.myChartRightData);
-            //datacat
-            var arr = $("#filter-box div label input")
-            var datacat = "";
-            $.each(arr, function (i, item) {
-                if (item.checked) {
-                    datacat = datacat + item.value + ",";
-                }
-            })
-            var re1 = $("#re-sel-1").val(); //业务类型
-            var re2 = $("#re-sel-2").val(); //行政类型
-            var obj = $("#obj-sel-lev2").val(); //对象类
-            if ($("#obj-sel-lev1").val() == "*") obj = "*";
-            // var data = {
-            //     "datacat":datacat.slice(0,datacat.length-1),
-            //     "re1":re1,
-            //     "re2":re2,
-            //     "obj":obj,
-            // }
-            getDataByPost("/index_manager/queryFilterNum", {
-                "datacat": datacat.slice(0, datacat.length - 1),
-                "re1": re1,
-                "re2": re2,
-                "obj": obj,
-            }, res => {
-                var dataStr = res.data
-                var data0 = [];
-                var data1 = [];
-                var data2 = [];
-                var data3 = [];
-                //全国汇交情况图
-                for (var i = 0; i < that.arrayNodeId.length; i++) {
-                    data0.push(dataStr[0][that.arrayNodeId[i]]);
-                }
-                //水利部汇交情况图
-                for (var i = 0; i < that.arrayNodeId1.length; i++) {
-                    data1.push(dataStr[1][that.arrayNodeId1[i]]);
-                }
-                for (var i = 0; i < that.arrayNodeId.length; i++) {
-                    data2.push(dataStr[2][that.arrayNodeId[i]]);
-                }
-                //水利部汇交情况图
-                for (var i = 0; i < that.arrayNodeId1.length; i++) {
-                    data3.push(dataStr[3][that.arrayNodeId1[i]]);
-                }
-                that.AllDataoption.series[0].data = data0;
-                that.rightBaroption.series[0].data = data1;
-                that.AllDataoption.series[1].data = data2;
-                that.rightBaroption.series[1].data = data3;
-                that.myChartAllData.setOption(that.AllDataoption);
-                //          that.myChartRightData.setOption(that.rightBaroption);
-                that.myChartAllData.hideLoading();
-                //         that.myChartRightData.hideLoading();
-            })
-        },
+	    refreshChart(){
+	        that.showLoading(that.myChartAllData);
+	     //   that.showLoading(that.myChartRightData);
+	        //datacat
+	        var arr = $("#filter-box div label input")
+	        var datacat = "";
+	        $.each(arr,function(i,item){
+	            if(item.checked){
+	                datacat = datacat + item.value +",";
+	            }
+	        })
+	        var re1 = $("#re-sel-1").val(); //业务类型
+	        var re2 = $("#re-sel-2").val(); //行政类型
+	        var obj = $("#obj-sel-lev2").val(); //对象类
+	        if($("#obj-sel-lev1").val()=="*")obj="*";
+	        // var data = {
+	        //     "datacat":datacat.slice(0,datacat.length-1),
+	        //     "re1":re1,
+	        //     "re2":re2,
+	        //     "obj":obj,
+	        // }
+	        getDataByPost("/index_manager/queryFilterNum",{
+	            "datacat":datacat.slice(0,datacat.length-1),
+	            "re1":re1,
+	            "re2":re2,
+	            "obj":obj,
+	        },res =>{
+	        	var dataStr = res.data
+	            var data0 = [];
+	            var data1 = [];
+	            var data2 = [];
+	            var data3 = [];
+	            //全国汇交情况图
+	            for (var i = 0; i < that.arrayNodeId.length; i++) {
+	                data0.push(dataStr[0][that.arrayNodeId[i]]);
+	            }
+	            //水利部汇交情况图
+	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
+	                data1.push(dataStr[1][that.arrayNodeId1[i]]);
+	            }
+	            for (var i = 0; i < that.arrayNodeId.length; i++) {
+	                data2.push(dataStr[2][that.arrayNodeId[i]]);
+	            }
+	            //水利部汇交情况图
+	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
+	                data3.push(dataStr[3][that.arrayNodeId1[i]]);
+	            }
+	            that.AllDataoption.series[0].data = data0;
+	            that.rightBaroption.series[0].data = data1;
+	            that.AllDataoption.series[1].data = data2;
+	            that.rightBaroption.series[1].data = data3;
+	            that.myChartAllData.setOption(that.AllDataoption);
+	  //          that.myChartRightData.setOption(that.rightBaroption);
+	            that.myChartAllData.hideLoading();
+	   //         that.myChartRightData.hideLoading();
+	        })
+	    },
 
-        reSet() {
+	    reSet(){
             console.log("hhh")
-            that.myChartAllData.showLoading();
-            //      that.myChartRightData.showLoading();
-            that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40);
-            that.AllDataoption.series[1].data = that.allDataObj;
-            that.rightBaroption.series[0].data = that.arrayRightBar;
-            that.rightBaroption.series[1].data = that.rightBarObj;
+	        that.myChartAllData.showLoading();
+	  //      that.myChartRightData.showLoading();
+	        that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40);
+	        that.AllDataoption.series[1].data = that.allDataObj;
+	        that.rightBaroption.series[0].data = that.arrayRightBar;
+	        that.rightBaroption.series[1].data = that.rightBarObj;
             that.myChartAllData.clear();
-            //         that.myChartRightData.clear();
-            that.myChartAllData.setOption(that.AllDataoption);
-            //    that.myChartRightData.setOption(that.rightBaroption);
-            that.myChartAllData.hideLoading();
-            //       that.myChartRightData.hideLoading();
-        },
+   //         that.myChartRightData.clear();
+	        that.myChartAllData.setOption(that.AllDataoption);
+	    //    that.myChartRightData.setOption(that.rightBaroption);
+	        that.myChartAllData.hideLoading();
+	 //       that.myChartRightData.hideLoading();
+	    },
         hide0Nodes(zTree, zTreeNodeParent = null) {
             console.log("in hid0Nodes:")
             if (zTreeNodeParent == null) {
@@ -1879,19 +1875,6 @@ var index = new Vue({
             const st = nodeName.indexOf("(") + 1
             const len = nodeName.indexOf(")") - st
             return parseInt(nodeName.substr(st, len))
-        },
-        logOut() {
-            console.log('into logOut')
-            getDataByPost("/user/logout", {}, res => {
-                console.log(res);
-                sessionStorage.setItem("authCode", null);
-                sessionStorage.setItem("role", null);
-                sessionStorage.setItem("loginName", null);
-                sessionStorage.setItem("userName", null);
-                setTimeout(function () {
-                    window.location.href = "/YU/html/system/role/login.html"
-                }, 1500)
-            })
         }
 
     },
