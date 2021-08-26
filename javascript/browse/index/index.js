@@ -712,12 +712,12 @@ var index = new Vue({
            // console.log("ok",msg,"ok");
             index.updateData = msg.slice(0,10);
         })
-        
+
 
         window.onresize = function loadChart() {
             that.pictureShow();
         }
-       
+
         // $(document).ready(function() {
         //     window.history.replaceState({}, "", 'http://' + window.location.host + '/getPage/?content=');
         // });
@@ -899,7 +899,7 @@ var index = new Vue({
                     }
                 }
             }
-         
+
             //对象树的懒加载
             getDataByGet('/index_manager/getObjById?nodeId=1000',aJson, dataStr=>{
             	that.objectTreeData = dataStr;
@@ -913,7 +913,7 @@ var index = new Vue({
                     that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
                     that.hide0Nodes(that.objZtree);
             })
-            
+
 
             $('.str3-2').liMarquee();
             $('.str4').liMarquee();
@@ -1025,7 +1025,7 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-	        	
+
 	        })
 	    },
 	    getObjTreeNum(){
@@ -1303,7 +1303,7 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-	        	
+
 	        })
 	    },
         setRankData(){
@@ -1410,7 +1410,7 @@ var index = new Vue({
 	        } catch (cer) {
 	            console.log(cer);
 	        }
-	     
+
 	        //水利部/省级/流域资源目录分布图
 	      /*  try {
 	            that.myChartleftDown.on('click', function(params) {
@@ -1420,7 +1420,7 @@ var index = new Vue({
 	            console.log(cer);
 	        }
 	        */
-	     
+
 	    },
 	    showLoading(echartObj){
 	        echartObj.showLoading({
@@ -1852,22 +1852,22 @@ var index = new Vue({
 	        that.myChartAllData.hideLoading();
 	 //       that.myChartRightData.hideLoading();
 	    },
-        hide0Nodes(zTree, zTreeNodeParent = null) {
+        hide0Nodes(zTree, zTreeNodeParent = null, depth = 0) {
             console.log("in hid0Nodes:")
             if (zTreeNodeParent == null) {
                 zTreeNodeParent = zTree.getNodes()[0]
             }
-            that.hide0NodeByRecursion(zTree, zTreeNodeParent)
+            that.hide0NodeByRecursion(zTree, zTreeNodeParent, depth)
         },
-        hide0NodeByRecursion(zTree, zTreeNode) {
+        hide0NodeByRecursion(zTree, zTreeNode, depth) {
             const nodeNum = that.getNodeNum(zTreeNode.nodeName)
-            if (nodeNum === 0) {
+            if (nodeNum === 0 && depth > 1) {
                 zTree.hideNode(zTreeNode)
                 return;
             }
             if (zTreeNode.children !== undefined) {
                 zTreeNode.children.forEach(child => {
-                    that.hide0NodeByRecursion(zTree, child)
+                    that.hide0NodeByRecursion(zTree, child, depth+1)
                 })
             }
         },
@@ -1875,6 +1875,19 @@ var index = new Vue({
             const st = nodeName.indexOf("(") + 1
             const len = nodeName.indexOf(")") - st
             return parseInt(nodeName.substr(st, len))
+        },
+        logOut() {
+            console.log('into logOut')
+            getDataByPost("/user/logout", {}, res => {
+                console.log(res);
+                sessionStorage.setItem("authCode", null);
+                sessionStorage.setItem("role", null);
+                sessionStorage.setItem("loginName", null);
+                sessionStorage.setItem("userName", null);
+                setTimeout(function () {
+                    window.location.href = "/YU/html/system/role/login.html"
+                }, 1500)
+            })
         }
 
     },
