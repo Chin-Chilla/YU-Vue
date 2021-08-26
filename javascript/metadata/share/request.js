@@ -4,7 +4,7 @@ var app = new Vue({
 	data:{
 		pageSize:5,//分页数目
 		pageNum:1,
-		total:'',
+		totalNum:'',
 		status_show:""
 	},
 	mounted(){
@@ -13,7 +13,8 @@ var app = new Vue({
 			pageNum:this.pageNum,
 			pageSize:this.pageSize,
 		},res=>{
-			that.total = res.data.total;
+			console.log(res.data);
+			that.totalNum = res.data.total;
 			that.renderList(res.data.list);
 			that.renderPagination();
 		});
@@ -49,7 +50,11 @@ var app = new Vue({
 				pageNum:nowPage,
 				pageSize:size,
 			},res=>{
-				that.renderList()
+
+				that.totalNum = res.data.total;
+
+				that.renderList(res.data.list);
+				that.renderPagination();
 			});
 		},
 		//渲染分页
@@ -57,7 +62,7 @@ var app = new Vue({
 			$("#pagination").empty();
 			$("#pagination").Paging({
 				pagesize: that.pageSize,
-				count: that.total,
+				count: that.totalNum,
 				toolbar: true,
 				callback: function (page, size, count) {
 					that.changePage(page, size);
@@ -79,7 +84,14 @@ var app = new Vue({
 					if(res.code==200){
 						swal("取消订阅成功！", "", "success");
 						that.changePage(1,that.pageSize);
-						$("#tbody").empty();
+						getDataByPost('/user/getSubList',{
+							pageNum:this.pageNum,
+							pageSize:this.pageSize,
+						},res=>{
+							that.totalNum = res.data.total;
+							that.renderList(res.data.list);
+							that.renderPagination();
+						});
 					}
 				});
 			});
