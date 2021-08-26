@@ -27,11 +27,12 @@ var app = new Vue({
 			pageNum:this.pageNum,
 			pageSize:this.pageSize,
 		},res=>{
-			that.totalNum = res.data.total;
 
+			that.totalNum = res.data.total;
 			that.renderList(res.data.list);
 			that.renderPagination();
 		});
+		that.getStatusNum();
 	},
 	methods:{
 		renderList(list){
@@ -41,13 +42,10 @@ var app = new Vue({
 			for(var i=0;i<list.length;i++){
 
 				if (list[i].status == 0){
-					that.reqNum++;
 					that.status_show = "审核中";
 				}else if(list[i].status == 1){
-					that.refusedNum++;
 					that.status_show = "未通过";
 				}else{
-					that.passNum++;
 					that.status_show = "已通过";
 				}
 
@@ -66,13 +64,16 @@ var app = new Vue({
 			// console.log(reqNum);
 
 		},
-		//翻页
+		//
 		changePage(nowPage, size){
 			getDataByPost('/user/getSubList',{
 				pageNum:nowPage,
 				pageSize:size,
 			},res=>{
-				that.renderList()
+				that.totalNum = res.data.total;
+
+				that.renderList(res.data.list);
+				that.renderPagination();
 			});
 		},
 		//渲染分页
@@ -80,7 +81,7 @@ var app = new Vue({
 			$("#pagination").empty();
 			$("#pagination").Paging({
 				pagesize: that.pageSize,
-				count: that.total,
+				count: that.totalNum,
 				toolbar: true,
 				callback: function (page, size, count) {
 					that.changePage(page, size);
@@ -110,6 +111,18 @@ var app = new Vue({
 		//
 		// },
 
+		getStatusNum(){
+			getDataByPost('/user/getStatusNum',{
+				pageSize:that.totalNum,
+			},res=>{
+				console.log(res.data);
+				that.reqNum = res.data.zeroStatus;
+				that.passNum=res.data.oneStatus;
+				that.refusedNum=res.data.twoStatus;
+
+			});
+		},
+
 		pass(id,status){
 
 			if (status != 0){
@@ -132,8 +145,15 @@ var app = new Vue({
 							that.reqNum--;
 							that.passNum++;
 							that.status_show = "已通过";
-							$("#tbody").empty();
-							// self.window.location.reload();
+
+							getDataByPost('/user/getSubList',{
+								pageNum:this.pageNum,
+								pageSize:this.pageSize,
+							},res=>{
+								that.totalNum = res.data.total;
+								that.renderList(res.data.list);
+								that.renderPagination();
+							});
 						}else{
 							swal("通过数据失败！", "", "error");
 						}
@@ -166,7 +186,16 @@ var app = new Vue({
 							that.reqNum--;
 							that.refusedNum++;
 							that.status_show = "未通过";
-							$("#tbody").empty();
+
+							getDataByPost('/user/getSubList',{
+								pageNum:this.pageNum,
+								pageSize:this.pageSize,
+							},res=>{
+								that.totalNum = res.data.total;
+
+								that.renderList(res.data.list);
+								that.renderPagination();
+							});
 						} else {
 							swal("拒绝数据失败！", "", "error");
 						}
