@@ -2,8 +2,9 @@ var app = new Vue({
 	el:"#vue",
 	data:{
 		id:'',//结点编号
-		name:'',//结点名字
-		arci:'',//结点arci
+		name:'',//对象类名称
+		ename:'',//对象类英文名称
+		classCode:'',//对象类编码
 		listOrder:'',//结点显示顺序
 		dataList:[],//数据源列表
 	},
@@ -29,7 +30,8 @@ var app = new Vue({
 				onClick:function zTreeOnClickObjectModel(event, treeId, treeNode) {
 					app.name = treeNode.className
 					app.id = treeNode.classId
-					app.arci = treeNode.arci
+					app.ename = treeNode.arci
+					app.classCode = treeNode.classCode
 					app.listOrder = treeNode.listOrder
 					sessionStorage.setItem('metadataSelect',JSON.stringify(treeNode));
 				}
