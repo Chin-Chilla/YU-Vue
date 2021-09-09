@@ -678,6 +678,7 @@ var index = new Vue({
         rightBarObj: [],
         //用于测试
         test: [],
+        img_src:'/YU/statics/imgs/BJlogo.png',
 
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
@@ -705,10 +706,17 @@ var index = new Vue({
         }
         //更新榜
         getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
+            console.log("I want to say something 1");
         	var msg= res.data;
             index.updateData = msg.slice(0,10);
         })
-        
+
+        //替换LOGO
+        getDataByGet('/index_manager/getLogoName',{}, function (res){
+            console.log("I want to say something 2");
+            index.img_src = '/YU/statics/imgs/' + res.data;
+            console.log("The img src is: " + index.img_src);
+        })
 
         window.onresize = function loadChart() {
             that.pictureShow();
