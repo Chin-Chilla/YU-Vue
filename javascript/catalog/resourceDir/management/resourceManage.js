@@ -119,8 +119,9 @@ var settingEdit = {
         enable: true,
         type: "GET",
         dataType: 'json',
-        url: BASE_URL + "/index_manager/getResIncludeUncheckById",
-        autoParam: ["nodeId"]
+        url: BASE_URL + "/index_manager/getResTreeByCode",
+        autoParam: ["nodeCode"],
+        otherParam: {"addCount":"false", "withUncheck":"true"}
     },
     callback: {
         onClick: zTreeEditOnclick,
@@ -487,7 +488,7 @@ var res = new Vue({
             getDataByGet('/resource_manage/lockOrNot', aJson, res => {
                 if (res.data == "1") {
                     //可以编辑
-                    getDataByGet('/index_manager/getResIncludeUncheckById?nodeId=1000', aJson, res => {
+                    getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000&addCount=false&withUncheck=true', aJson, res => {
                         that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingEdit, res);
                     })
                     $("#passBtn").addClass("hidden")
