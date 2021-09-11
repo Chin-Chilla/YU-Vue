@@ -60,6 +60,79 @@ var setting = {
         onAsyncSuccess(event, treeId, treeNode, dataStr) { }
     }
 }
+
+var settingFast = { //利用Redis缓存和仅加载单级节点，来加速树的加载过程。
+    async: {
+        enable: true,
+        type: "GET",
+        dataType: 'json',
+        url: BASE_URL + "/index_manager/getResTreeByCode",
+        autoParam: ["nodeCode"]
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "nodeId",
+            pIdKey: "pnodeId",
+            rootPId: "0"
+        },
+        key: {
+            name: "nodeName"
+        }
+    },
+    callback: {
+        //点击树上的结点获取具体信息
+        onClick: zTreeOnclick,
+        onAsyncSuccess(event, treeId, treeNode, dataStr) { }
+    }
+}
+
+var settingEdit = {
+    view: {
+        fontCss: getFont,
+        nameIsHTML: true,
+        addHoverDom: addHoverDom,
+        removeHoverDom: removeHoverDom,
+        selectedMulti: false
+    },
+    edit: {
+        enable: true,
+        showRenameBtn: showRenameOrRemoveBtn,
+        showRemoveBtn: showRenameOrRemoveBtn,
+        editNameSelectAll: true
+    },
+    data: {
+        simpleData: {
+            enable: true,
+            idKey: "nodeId",
+            pIdKey: "pnodeId",
+            rootPId: "0"
+        },
+        key: {
+            name: "nodeName",
+            nodepath: "nodePath",
+            flag: "flag"
+        }
+    },
+    async: {
+        enable: true,
+        type: "GET",
+        dataType: 'json',
+        url: BASE_URL + "/index_manager/getResIncludeUncheckById",
+        autoParam: ["nodeId"]
+    },
+    callback: {
+        onClick: zTreeEditOnclick,
+        beforeRemove: beforeRemove,
+        beforeRename: beforeRename,
+        onRemove: zTreeOnRemove,
+        onRename: zTreeOnRename,
+        //禁止拖拽
+        beforeDrag() { return false },
+        beforeDrop() { return false },
+        onAsyncSuccess(event, treeId, treeNode, dataStr) { }
+    }
+};
 //settingEdit中使用到的对象
 var pnode_id_test;
 var pnode_id0;
@@ -356,52 +429,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
         }
     )
 };
-var settingEdit = {
-    view: {
-        fontCss: getFont,
-        nameIsHTML: true,
-        addHoverDom: addHoverDom,
-        removeHoverDom: removeHoverDom,
-        selectedMulti: false
-    },
-    edit: {
-        enable: true,
-        showRenameBtn: showRenameOrRemoveBtn,
-        showRemoveBtn: showRenameOrRemoveBtn,
-        editNameSelectAll: true
-    },
-    data: {
-        simpleData: {
-            enable: true,
-            idKey: "nodeId",
-            pIdKey: "pnodeId",
-            rootPId: "0"
-        },
-        key: {
-            name: "nodeName",
-            nodepath: "nodePath",
-            flag: "flag"
-        }
-    },
-    async: {
-        enable: true,
-        type: "GET",
-        dataType: 'json',
-        url: BASE_URL + "/index_manager/getResIncludeUncheckById",
-        autoParam: ["nodeId"]
-    },
-    callback: {
-        onClick: zTreeEditOnclick,
-        beforeRemove: beforeRemove,
-        beforeRename: beforeRename,
-        onRemove: zTreeOnRemove,
-        onRename: zTreeOnRename,
-        //禁止拖拽
-        beforeDrag() { return false },
-        beforeDrop() { return false },
-        onAsyncSuccess(event, treeId, treeNode, dataStr) { }
-    }
-};
+
 var res = new Vue({
     el: "#res",
     data: {
@@ -434,8 +462,8 @@ var res = new Vue({
         });
 
         //初始化资源目录树
-        getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
-            that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
+        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+            that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
         })
     },
     methods: {
@@ -484,8 +512,8 @@ var res = new Vue({
                     aJson,
                     res => {
                         toastr.success("保存编辑成功！");
-                        getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
-                            that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
+                        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+                            that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
                         })
                     },
                     err => {
@@ -494,8 +522,8 @@ var res = new Vue({
                 )
             } else {
                 toastr.warning("当前未做任何编辑");
-                getDataByGet('/index_manager/getResTreeById?nodeId=1000', aJson, res => {
-                    that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
+                getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+                    that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
                 })
             }
             $("#passBtn").addClass("hidden")
