@@ -67,7 +67,8 @@ var settingFast = { //利用Redis缓存和仅加载单级节点，来加速树�
         type: "GET",
         dataType: 'json',
         url: BASE_URL + "/index_manager/getResTreeByCode",
-        autoParam: ["nodeCode"]
+        autoParam: ["nodeCode"],
+        otherParam: {"addCount":"false"}
     },
     data: {
         simpleData: {
@@ -462,7 +463,7 @@ var res = new Vue({
         });
 
         //初始化资源目录树
-        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000&addCount=false', aJson, res => {
             that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
         })
     },
@@ -512,7 +513,7 @@ var res = new Vue({
                     aJson,
                     res => {
                         toastr.success("保存编辑成功！");
-                        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+                        getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000&addCount=false', aJson, res => {
                             that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
                         })
                     },
@@ -522,7 +523,7 @@ var res = new Vue({
                 )
             } else {
                 toastr.warning("当前未做任何编辑");
-                getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000', aJson, res => {
+                getDataByGet('/index_manager/getResTreeByCode?nodeCode=1000&addCount=false', aJson, res => {
                     that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingFast, res);
                 })
             }

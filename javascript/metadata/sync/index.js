@@ -60,6 +60,30 @@ var app = new Vue({
 				onClick:that.zTreeSolr
 			}
 		};
+		settingFast = {
+			async:  {
+				enable: true,
+				type: "GET",
+				dataType: 'json',
+				url: BASE_URL+"/index_manager/getResTreeByCode",
+				autoParam: ["nodeCode"],
+				otherParam: {"addCount":"true"}
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "nodeId",
+					pIdKey: "pnodeId",
+					rootPId: "0"
+				},
+				key: {
+					name: "nodeName"
+				}
+			},
+			callback:{
+				onClick:that.zTreeSolr
+			}
+		};
 	},
 	//成员方法
 	methods:{
@@ -70,7 +94,7 @@ var app = new Vue({
 			$("#pagination").empty();
 			//初始化目录树
 			getDataByGet(
-				'/index_manager/getResById?nodeId=1000',
+				'/index_manager/getResTreeByCode?nodeId=1000&addCount=true',
 				aJson,
 				res => {
 					$.fn.zTree.init($("#serviceTree"), setting, res);
