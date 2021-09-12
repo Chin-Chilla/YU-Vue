@@ -706,16 +706,13 @@ var index = new Vue({
         }
         //更新榜
         getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
-            console.log("I want to say something 1");
         	var msg= res.data;
             index.updateData = msg.slice(0,10);
         })
 
         //替换LOGO
         getDataByGet('/index_manager/getLogoName',{}, function (res){
-            console.log("I want to say something 2");
             index.img_src = '/YU/statics/imgs/' + res.data;
-            console.log("The img src is: " + index.img_src);
         })
 
         window.onresize = function loadChart() {
@@ -902,7 +899,7 @@ var index = new Vue({
             }
          
             //对象树的懒加载
-            getDataByGet('/index_manager/getObjById?nodeId=1000',aJson, dataStr=>{
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true',aJson, dataStr=>{
             	that.objectTreeData = dataStr;
                     for (var i = 0; i < dataStr.length; i++) {
                         if (dataStr[i].pnodeId == 1001) {
