@@ -40,8 +40,9 @@ var setting = {
         enable: true,
         type: "GET",
         dataType: 'json',
-        url: BASE_URL + "/index_manager/getObjIncludeUncheckById",
-        autoParam: ["nodeId"]
+        url: BASE_URL + "/object_manage/getObjTreeByCode",
+        autoParam: ["nodeCode"],
+        otherParam: {"addCount":"false", "withUncheck":"true"}
     },
     data: {
         simpleData: {
@@ -353,8 +354,9 @@ var settingEdit = {
         enable: true,
         type: "GET",
         dataType: 'json',
-        url: BASE_URL + "/index_manager/getObjIncludeUncheckById",
-        autoParam: ["nodeId"]
+        url: BASE_URL + "/object_manage/getObjTreeByCode",
+        autoParam: ["nodeCode"],
+        otherParam: {"addCount":"false", "withUncheck":"true"}
     },
     callback: {
         onClick: zTreeEditOnclick,
@@ -385,7 +387,7 @@ var obj = new Vue({
         $("#text1").empty();
         $("#pagination").empty();
         //初始化对象目录树
-        getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
+        getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', aJson, res => {
             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
         })
     },
@@ -409,7 +411,7 @@ var obj = new Vue({
             getDataByGet('/object_manage/lockOrNot', aJson, res => {
                 if (res.data == "1") {
                     //可以编辑
-                    getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
+                    getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', aJson, res => {
                         that.treeNodes = $.fn.zTree.init($("#serviceTree"), settingEdit, res);
                     })
                     $("#passBtn").addClass("hidden")
@@ -432,7 +434,7 @@ var obj = new Vue({
                     aJson,
                     res => {
                         toastr.success("保存编辑成功！");
-                        getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
+                        getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', aJson, res => {
                             that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
                         })
                     },
@@ -442,7 +444,7 @@ var obj = new Vue({
                 )
             } else {
                 toastr.warning("当前未做任何编辑");
-                getDataByGet('/index_manager/getObjIncludeUncheckById?nodeId=1000', aJson, res => {
+                getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', aJson, res => {
                     that.treeNodes = $.fn.zTree.init($("#serviceTree"), setting, res);
                 })
             }
