@@ -1,4 +1,3 @@
-
 var that;
 //快速排序
 function quickSort(nums,l,h){
@@ -708,16 +707,18 @@ var index = new Vue({
         //更新榜
         getDataByGet('/index_manager/getUpdateRankData', {}, function(res) {
         	var msg= res.data;
-            //index.updateData = msg.slice(0,16);
-           // console.log("ok",msg,"ok");
             index.updateData = msg.slice(0,10);
         })
 
+        //替换LOGO
+        getDataByGet('/index_manager/getLogoName',{}, function (res){
+            index.img_src = '/YU/statics/imgs/' + res.data;
+        })
 
         window.onresize = function loadChart() {
             that.pictureShow();
         }
-
+       
         // $(document).ready(function() {
         //     window.history.replaceState({}, "", 'http://' + window.location.host + '/getPage/?content=');
         // });
@@ -746,20 +747,17 @@ var index = new Vue({
             that.myChartmid = echarts.init(document.getElementById('mid'));
             that.myChartright = echarts.init(document.getElementById('right'));
             that.myChartAllData = echarts.init(document.getElementById('all_data_pic'));
-           // that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
-          //  that.myChartleftDown = echarts.init(document.getElementById('left_down'));
+            that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
+            that.myChartleftDown = echarts.init(document.getElementById('left_down'));
             that.myChartrightDown = echarts.init(document.getElementById('right_down'));
             //加载动画
             that.showLoading(that.myChartleft);
             that.showLoading(that.myChartmid);
             that.showLoading(that.myChartright);
             that.showLoading(that.myChartAllData);
-        //    that.showLoading(that.myChartRightData);
-      //     that.showLoading(that.myChartleftDown);
+            that.showLoading(that.myChartRightData);
+            that.showLoading(that.myChartleftDown);
             that.showLoading(that.myChartrightDown);
-
-            that.showPictrue();
-
 
             // that.findusermessage();
 
@@ -895,13 +893,13 @@ var index = new Vue({
                         keySearch.loadFromTree(nodeId,"ObjectTree");
                     },
                     onAsyncSuccess: function objectTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
-                        that.hide0Nodes(that.objZtree,treeNode)
+
                     }
                 }
             }
-
+         
             //对象树的懒加载
-            getDataByGet('/index_manager/getObjById?nodeId=1000',aJson, dataStr=>{
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true',aJson, dataStr=>{
             	that.objectTreeData = dataStr;
                     for (var i = 0; i < dataStr.length; i++) {
                         if (dataStr[i].pnodeId == 1001) {
@@ -913,7 +911,7 @@ var index = new Vue({
                     that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
                     that.hide0Nodes(that.objZtree);
             })
-
+            
 
             $('.str3-2').liMarquee();
             $('.str4').liMarquee();
@@ -934,7 +932,6 @@ var index = new Vue({
                 that.myChartrightDown.resize();
             }
             //tab栏绑定点击
-
             $('#myTab li a').on('shown.bs.tab', function(e) {
                 //that.myChartRightData.setOption(that.rightBaroption);
                 //that.myChartRightData.hideLoading();
@@ -1025,7 +1022,7 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-
+	        	
 	        })
 	    },
 	    getObjTreeNum(){
@@ -1303,7 +1300,7 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-
+	        	
 	        })
 	    },
         setRankData(){
@@ -1379,14 +1376,10 @@ var index = new Vue({
 	        var aJson = {};
 	        getDataByGet("/index_manager/queryObjNum",aJson,res=>{
 	        	var dataStr = res.data;
-                console.log("ok",dataStr,"ok");
-	            //全国汇交情况图""
+	            //全国汇交情况图
 	            for (var i = 0; i < that.arrayNodeId.length; i++) {
-	                //that.allDataObj.push(dataStr[0][10]);
 	                that.allDataObj.push(dataStr[0][that.arrayNodeId[i]]);
-                   // that.allDataObj.push(1000);
 	            }
-
 	            //水利部汇交情况图
                 /*
 	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
@@ -1410,7 +1403,7 @@ var index = new Vue({
 	        } catch (cer) {
 	            console.log(cer);
 	        }
-
+	     
 	        //水利部/省级/流域资源目录分布图
 	      /*  try {
 	            that.myChartleftDown.on('click', function(params) {
@@ -1591,7 +1584,7 @@ var index = new Vue({
 	        that.myChartright.setOption(that.rightoption);
 	        that.myChartright.hideLoading();
 	    },
-/*
+
 	    leftDownPictureShow() {
 	        // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
 	        var options = $("#level2 option:selected");
@@ -1615,15 +1608,12 @@ var index = new Vue({
 	        }
 	        that.myChartleftDown.hideLoading();
 	    },
-
- */
 	    rightDownPictureShow() {
 	       // var options = $("#level2 option:selected");
 	       // var depart = options.text();
             var depart="西藏水利厅";
 	        that.rightdownoption.title.text = depart + '对象分布图';
 	        var dataString = that.arrayDepObjTotal.join('');
-	       // console.log(dataString);
 	        if (dataString=='0'*4){
 	            $("#right_down").addClass("hidden");
 	            $("#right_downall").addClass("hidden");

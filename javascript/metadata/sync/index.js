@@ -27,80 +27,84 @@ var setting1 = {
     }
 };
 var app = new Vue({
-    //绑定html页面的id
-    el: "#vue",
-    //成员变量
-    data: {
-        nodeId: '',
-        isSyncYu: false,
-        syncYuNodes: [],
-        syncYuSourceNode: null,
-        syncYuNodeCode: null,
-    },
-    //初始化方法
-    mounted() {
-        that = this;
-        that.load();
-        setting = {
-            async: {
-                enable: true,
-                type: "GET",
-                dataType: 'json',
-                url: BASE_URL + "/index_manager/getResById",
-                autoParam: ["nodeId"]
-            },
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "nodeId",
-                    pIdKey: "pnodeId",
-                    rootPId: "0"
-                },
-                key: {
-                    name: "nodeName"
-                }
-            },
-            callback: {
-                onClick: that.zTreeSolr
-            }
-        };
-        setting2 = {
-            data: {
-                simpleData: {
-                    enable: true,
-                    idKey: "nodeId",
-                    pIdKey: "pnodeId",
-                    rootPId: "0"
-                },
-                key: {
-                    name: "nodeName"
-                },
-            },
-            callback: {
-                onClick: that.synczTreeSolr
-            }
-        };
-    },
-    //成员方法
-    methods: {
-        load() {
-            $(".sidebar-menu .treeview-menu li").removeClass("active");
-            $(".sidebar-menu .menuSync").addClass("active");
-            $("#count").empty();
-            $("#pagination").empty();
-            //初始化目录树
-            getDataByGet(
-                '/index_manager/getResById?nodeId=1000',
-                aJson,
-                res => {
-                    $.fn.zTree.init($("#serviceTree"), setting, res);
-                }
-            )
-            $('#tbody').on('click', 'tr', function () {
-                $("input:checked").prop("checked", false);
-                $(this).find("input[name='optionsRadios']").prop("checked", true);
-            });
-        },
+	//绑定html页面的id
+	el:"#vue",
+	//成员变量
+	data:{
+		nodeId:'',
+	},
+	//初始化方法
+	mounted() {
+		that = this;
+		that.load();
+		setting = {
+			async:  {
+				enable: true,
+				type: "GET",
+				dataType: 'json',
+				url: BASE_URL+"/index_manager/getResById",
+				autoParam: ["nodeId"]
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "nodeId",
+					pIdKey: "pnodeId",
+					rootPId: "0"
+				},
+				key: {
+					name: "nodeName"
+				}
+			},
+			callback:{
+				onClick:that.zTreeSolr
+			}
+		};
+		settingFast = {
+			async:  {
+				enable: true,
+				type: "GET",
+				dataType: 'json',
+				url: BASE_URL+"/index_manager/getResTreeByCode",
+				autoParam: ["nodeCode"],
+				otherParam: {"addCount":"true"}
+			},
+			data: {
+				simpleData: {
+					enable: true,
+					idKey: "nodeId",
+					pIdKey: "pnodeId",
+					rootPId: "0"
+				},
+				key: {
+					name: "nodeName"
+				}
+			},
+			callback:{
+				onClick:that.zTreeSolr
+			}
+		};
+	},
+	//成员方法
+	methods:{
+		load(){
+			$(".sidebar-menu .treeview-menu li").removeClass("active");
+			$(".sidebar-menu .menuSync").addClass("active");
+			$("#count").empty();
+			$("#pagination").empty();
+			//初始化目录树
+			getDataByGet(
+				'/index_manager/getResTreeByCode?nodeId=1000&addCount=true',
+				aJson,
+				res => {
+					$.fn.zTree.init($("#serviceTree"), setting, res);
+				}
+			)
+			$('#tbody').on('click','tr', function() {
+				$("input:checked").prop("checked",false);
+				$(this).find("input[name='optionsRadios']").prop("checked",true);
+			});
+		},
 
         zTreeSolr(event, treeId, treeNode) {
             nodeId = treeNode.nodeId;
