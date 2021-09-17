@@ -23,7 +23,8 @@ var app = new Vue({
         tempEditId: '',
         tempDBId: '',
         departmentId: '',
-        zTreeObj: '', //资源目录树
+        zTreeObj: '', //资源目录树（单位部门部分）
+        zTreeObj_Edit: '',
         dataSourceList: ''
     },
     mounted() {
@@ -33,11 +34,6 @@ var app = new Vue({
             todayHighlight: true,
             language: "zh-CN"
         });
-
-        //初始化资源目录树
-        getDataByGet('/resource_dir/initial_objdept_dirtree', '', res => {
-            that.zTreeObj = $.fn.zTree.init($("#addTree3"), setting, res.data);
-        })
 
         that.loadTable();
     },
@@ -86,6 +82,9 @@ var app = new Vue({
         //选择单位
         showSelectDpModel: function () {
             var aJson = {};
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', aJson, res => {
+                that.zTreeObj = $.fn.zTree.init($("#addTree3"), setting, res);
+            })
             $("#modelTree3").modal("show");
         },
 
@@ -292,8 +291,8 @@ var app = new Vue({
 
         //打开编辑的模态框
         edit: function () {
-            getDataByGet('/resource_dir/initial_objdept_dirtree', '', res => {
-                that.zTreeObj = $.fn.zTree.init($("#addTree4"), setting, res.data);
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', '', res => {
+                that.zTreeObj_Edit = $.fn.zTree.init($("#addTree4"), setting, res.data);
                 var ischeck = document.getElementsByName("isChecked2");
                 var ID = [];
                 for (i = 0; i < ischeck.length; i++) {
