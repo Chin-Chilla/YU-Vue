@@ -1,3 +1,11 @@
+/**
+ * @author: 柳菁铧、郭涛、陆佳民
+ * @Description: "对象抽取方案管理"
+ * @type {Vue}
+ *
+ * 根据 SL/T 213 - 2020 进行规范化管理
+ */
+
 var app = new Vue({
 	el:"#vue",
 	data:{
