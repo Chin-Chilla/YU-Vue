@@ -8,7 +8,6 @@ var aJson = {};
  *      - ifSync         是否筛选同步状态
  */
 var synInfo = {};
-var setting;
 var setting1 = {
 	data: {
 		simpleData:{
@@ -37,29 +36,6 @@ var app = new Vue({
 	mounted() {
 		that = this;
 		that.load();
-		setting = {
-			async:  {
-				enable: true,
-				type: "GET",
-				dataType: 'json',
-				url: BASE_URL+"/index_manager/getResById",
-				autoParam: ["nodeId"]
-			},
-			data: {
-				simpleData: {
-					enable: true,
-					idKey: "nodeId",
-					pIdKey: "pnodeId",
-					rootPId: "0"
-				},
-				key: {
-					name: "nodeName"
-				}
-			},
-			callback:{
-				onClick:that.zTreeSolr
-			}
-		};
 		settingFast = {
 			async:  {
 				enable: true,
@@ -94,10 +70,10 @@ var app = new Vue({
 			$("#pagination").empty();
 			//初始化目录树
 			getDataByGet(
-				'/index_manager/getResTreeByCode?nodeId=1000&addCount=true',
+				'/index_manager/getResTreeByCode?nodeCode=1000&addCount=true',
 				aJson,
 				res => {
-					$.fn.zTree.init($("#serviceTree"), setting, res);
+					$.fn.zTree.init($("#serviceTree"), settingFast, res);
 				}
 			)
 			$('#tbody').on('click','tr', function() {
@@ -339,7 +315,7 @@ var app = new Vue({
 				data,
 				res=>{
 					console.log(res)
-					$.fn.zTree.init($("#serviceTree2"), setting1, res);
+					$.fn.zTree.init($("#serviceTree_target"), setting1, res);
 				},
 				err=>{
 					toastr.error("加载目录树失败！");
@@ -348,7 +324,7 @@ var app = new Vue({
 		},
 
 		syncFunc(){
-			var treeObj = $.fn.zTree.getZTreeObj("serviceTree2");
+			var treeObj = $.fn.zTree.getZTreeObj("serviceTree_target");
 			//目标树被点击的节点
 			var nodes = treeObj.getCheckedNodes(true);
 			var array = new Array();
