@@ -540,7 +540,10 @@ var keySearch = new Vue({
                             var index4 = str1.indexOf('>');
                             var content3 = str1.substring(index4+1,str1.length);
                             var name = content1 + content2 + content3;
+                            name=name.replace(/<font color="red">/g,"");
+                            name=name.replace(/<\/font>/g,"")
                             buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+name+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+
                             for (j = 2; j < msg.result[i].length; j++) {
                                 if (msg.result[i][j].name == 'classId') {
                                     keySearch.classID = msg.result[i][j].value;
@@ -571,6 +574,7 @@ var keySearch = new Vue({
                                     "<div class=\"row\" >" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
                                     msg.result[i][1].value +"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
+
                             }
 
                             keySearch.classID='';
@@ -612,7 +616,6 @@ var keySearch = new Vue({
                         var msg = res.data;
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
-                            console.log(msg.result)
                             buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
                             
                             for (j = 2; j < msg.result[i].length; j++) {
@@ -695,7 +698,6 @@ var keySearch = new Vue({
             var contact = $("#contact").val();
 
 
-          //  console.log("调用了sub功能");
 
 
             var description = $("#description").val();
@@ -710,10 +712,7 @@ var keySearch = new Vue({
                 status:0
 
             },res=>{
-                console.log(res);
                 if(res.code==200){
-
-                    console.log("status的值是：" + status);
 
                     toastr.success("订阅成功！");
 
