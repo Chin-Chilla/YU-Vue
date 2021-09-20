@@ -529,20 +529,9 @@ var keySearch = new Vue({
                     }else {
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
+
                             //根据关键字从solr检索数据，返回的数据会给检索文字标红，此处要去掉<font color="red"></font>标签。
-                            var str = msg.result[i][1].value
-                            var index1 = str.indexOf('<');
-                            var content1 = str.substring(0,index1);
-                            var index2 = str.indexOf('>');
-                            var str1 = str.substring(index2+1,str.length);
-                            var index3 = str1.indexOf('<');
-                            var content2 = str1.substring(0,index3);
-                            var index4 = str1.indexOf('>');
-                            var content3 = str1.substring(index4+1,str1.length);
-                            var name = content1 + content2 + content3;
-                            name=name.replace(/<font color="red">/g,"");
-                            name=name.replace(/<\/font>/g,"")
-                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+name+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+                            buttonhtml = keySearch.getButtonhtml(msg,i);
 
                             for (j = 2; j < msg.result[i].length; j++) {
                                 if (msg.result[i][j].name == 'classId') {
@@ -552,8 +541,7 @@ var keySearch = new Vue({
                             }
                             /* var objid=msg.result[i][0].id;
                              var datasource=keySearch.getSrcmdfileid(objid);*/
-                            if(keySearch.classID!='')
-                            {
+                            if(keySearch.classID!=''){
                                 var ahtml = "<div style=\"border: 1px silver solid;position: relative; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\">" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].
@@ -567,9 +555,7 @@ var keySearch = new Vue({
                                 // "')>详情信息</a><a class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\" " +
                                 // "onclick=onclick=keySearch.detail('"+$.trim(msg.result[i][4].value)+"','"+$.trim(msg.result[i][3].value)+"','" +keySearch.getSrcmdfileid(msg.result[i][0].id)+ "','" +
                                 // msg.result[i][0].source + "')>数据源</a>&nbsp;&nbsp;&nbsp;</div><div class=\"row\" ><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
-                            }
-                            else
-                            {
+                            }else{
                                 var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\" >" +
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
@@ -616,8 +602,9 @@ var keySearch = new Vue({
                         var msg = res.data;
                         for (var i = 0; i < msg.result.length; i++) {
                             var j;
-                            buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+msg.result[i][1].value+"')>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
-                            
+
+                            buttonhtml = keySearch.getButtonhtml(msg,i);
+
                             for (j = 2; j < msg.result[i].length; j++) {
 
                                 if (msg.result[i][j].name == 'classId') {
@@ -853,8 +840,24 @@ var keySearch = new Vue({
 
             })
             return rs;
-        }
-    },
+        },
+        getButtonhtml(msg,i){
+            var str = msg.result[i][1].value;
+            var index1 = str.indexOf('<');
+            var content1 = str.substring(0,index1);
+            var index2 = str.indexOf('>');
+            var str1 = str.substring(index2+1,str.length);
+            var index3 = str1.indexOf('<');
+            var content2 = str1.substring(0,index3);
+            var index4 = str1.indexOf('>');
+            var content3 = str1.substring(index4+1,str1.length);
+            var name = content1 + content2 + content3;
+            name=name.replace(/<font color="red">/g,"");
+            name=name.replace(/<\/font>/g,"");
+            var buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+name+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+            return buttonhtml;
+        },
 
+    },
 });
 
