@@ -135,7 +135,7 @@ var app = new Vue({
 	        	databaseId:databaseId,
 	        	type:type
 	        },res=>{
-	        	var attTree=$.fn.zTree.init($("#tree"), settingss, res.data); //初始化树
+	        	var attTree=$.fn.zTree.init($("#att_tree"), settingss, res.data); //初始化树
 	        	  attTree.expandAll(true);
 	        },err=>{
 	        	toastr.error("初始化树失败")
@@ -144,7 +144,7 @@ var app = new Vue({
 		//点击对象树事件
 		zTreeOnClickObjectModel(event, treeId, treeNode) {
 			//判断是否为父节点
-			var treeObj = $.fn.zTree.getZTreeObj("tree");
+			var treeObj = $.fn.zTree.getZTreeObj("att_tree");
 			var nodes = treeObj.getSelectedNodes();
 			var flag = nodes[0].isParent;
 
@@ -161,8 +161,19 @@ var app = new Vue({
 	            that.relationTableName = "("+atttableenname+")";
 	            var selectedFieldChName = null;
 
+				//根据当前所选的属性来选择其来源表ID，而非固定选择 that.subTableList[0]
+				var selectedTabId;
+				for(var i=0; i< that.subTableList.length; i++){
+					if (atttableenname == that.subTableList[i].tabEName){
+						selectedTabId = that.subTableList[i].tabId;
+						break;
+					}
+				}
+
+
+				// 罗列所有当前的可用的“关联字段”
 	            getDataByPost("/matadata_extract_management/modal_table_dynamic",{
-		        	datatableId:that.subTableList[0].tabId
+		        	datatableId:selectedTabId
 		        },res=>{
 		        	$("#loading").css('display','none');
 		        	that.relationFieldList = res.data
@@ -205,7 +216,6 @@ var app = new Vue({
 	            },res=>{
 	            	var msg = res.data
 					that.relationList = msg.tablerelation;
-
 					that.statisticList = msg.countList;
 	            },err=>{
 	            	toastr.error("获取关联表失败")
@@ -385,7 +395,7 @@ var app = new Vue({
 	            toastr.warning("请选择一个属性");
 	        }else{
 	            //取消树中已经选定的节点
-	            var treeObj = $.fn.zTree.getZTreeObj("tree");
+	            var treeObj = $.fn.zTree.getZTreeObj("att_tree");
 	            treeObj.cancelSelectedNode();
 
 	            $("#enumerationInput").val("");
@@ -397,7 +407,7 @@ var app = new Vue({
 		},
 		//删除属性
 		deleteProperty(){
-            var treeObj = $.fn.zTree.getZTreeObj("tree");//
+            var treeObj = $.fn.zTree.getZTreeObj("att_tree");//
             var node = treeObj.getNodesByFilter(function (node) { return node.level == 0 }, true);
             var root=node.nodename;//根节点
             if (treeObj==null){
@@ -424,9 +434,7 @@ var app = new Vue({
                 closeOnConfirm: false
             }, function () {
 
-                console.log(nodes[0])
                 var metaId = nodes[0].metaid
-
 
                 getDataByPost('/matadata_extract_management/delete_property',{
                 	metaId:metaId
@@ -676,7 +684,7 @@ var app = new Vue({
 	    },
 	    //保存属性顺序
 	    saveAttributeSequence() {
-            var treeObj = $.fn.zTree.getZTreeObj("tree");
+            var treeObj = $.fn.zTree.getZTreeObj("att_tree");
             var root = treeObj.getNodesByFilter(function (node) { return node.level == 0 }, true);
             var rootname=root.nodename;
             var selValue = new Array();
@@ -857,7 +865,7 @@ var app = new Vue({
 		},
 		//保存属性
 		save(){
-			var treeObj = $.fn.zTree.getZTreeObj("tree");
+			var treeObj = $.fn.zTree.getZTreeObj("att_tree");
 	        var nodes = treeObj.getSelectedNodes();//
 	        if(nodes.length==0){
 	            that.addProperty();
