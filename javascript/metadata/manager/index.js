@@ -57,8 +57,8 @@ var app = new Vue({
 		    }
 		};
 
-		getDataByGet('/resource_dir/initial_objdept_dirtree','',res=>{
-			that.zTreeObj = $.fn.zTree.init($("#tree"), setting, res.data);
+		getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', '', res => {
+			that.zTreeObj = $.fn.zTree.init($("#class_org_tree"), setting, res);
 		})
 	},
 	methods:{

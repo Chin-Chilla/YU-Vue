@@ -42,7 +42,7 @@ var setting = {
         dataType: 'json',
         url: BASE_URL + "/object_manage/getObjTreeByCode",
         autoParam: ["nodeCode"],
-        otherParam: {"addCount":"false", "withUncheck":"true"}
+        otherParam: {"addCount":"false", "withUncheck":"false"}
     },
     data: {
         simpleData: {

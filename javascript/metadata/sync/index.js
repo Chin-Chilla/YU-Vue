@@ -37,29 +37,6 @@ var app = new Vue({
 	mounted() {
 		that = this;
 		that.load();
-		setting = {
-			async:  {
-				enable: true,
-				type: "GET",
-				dataType: 'json',
-				url: BASE_URL+"/index_manager/getResById",
-				autoParam: ["nodeId"]
-			},
-			data: {
-				simpleData: {
-					enable: true,
-					idKey: "nodeId",
-					pIdKey: "pnodeId",
-					rootPId: "0"
-				},
-				key: {
-					name: "nodeName"
-				}
-			},
-			callback:{
-				onClick:that.zTreeSolr
-			}
-		};
 		settingFast = {
 			async:  {
 				enable: true,
@@ -94,10 +71,10 @@ var app = new Vue({
 			$("#pagination").empty();
 			//初始化目录树
 			getDataByGet(
-				'/index_manager/getResTreeByCode?nodeId=1000&addCount=true',
+				'/index_manager/getResTreeByCode?nodeCode=1000&addCount=true',
 				aJson,
 				res => {
-					$.fn.zTree.init($("#serviceTree"), setting, res);
+					$.fn.zTree.init($("#serviceTree"), settingFast, res);
 				}
 			)
 			$('#tbody').on('click','tr', function() {
@@ -349,6 +326,23 @@ var app = new Vue({
             }
         },
 
+		treeShow(){
+			var targetName = $("#syncTo").val();
+			var data = {
+				nodeName:targetName
+			};
+			getDataByGet(
+				'/index_sync/showRevokeTree',
+				data,
+				res=>{
+					console.log(res)
+					$.fn.zTree.init($("#serviceTree_target"), setting1, res);
+				},
+				err=>{
+					toastr.error("加载目录树失败！");
+				}
+			)
+		},
         treeShow() {
             var targetName = $("#syncTo").val();
             var data = {
@@ -361,11 +355,11 @@ var app = new Vue({
                 res => {
                     //NEAN
                     if (res[0].id === "1000") {
-                        $.fn.zTree.init($("#serviceTree2"), setting1, res);
+                        $.fn.zTree.init($("#serviceTree_target"), setting1, res);
                     }
                     //YU
                     else {
-                        $.fn.zTree.init($("#serviceTree2"), setting2, res);
+                        $.fn.zTree.init($("#serviceTree_target"), setting2, res);
                     }
                 },
                 err => {

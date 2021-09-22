@@ -175,18 +175,23 @@ var app = new Vue({
         		databaseId:that.databaseId
         	},res=>{
         		if(res.msg=='SUCCESS'){
+                    // 导入样例实体
         			getDataByPost('/matadata_extract_management/pre_import_entity',{
 		        		className:that.object.className,
+                        classId:that.object.classId,
 		        		databaseId:that.databaseId
 		        	},res2=>{
 		        		if(res2.msg=='SUCCESS'){
+                            // 导入样例摘要
 		        			getDataByPost('/matadata_extract_management/pre_extract_entity',{
 				        		className:that.object.className,
+                                classId:that.object.classId,
 		        				databaseId:that.databaseId
 				        	},res3=>{
 				        		if(res3.msg=="SUCCESS"){
 				        			toastr.success("配置刷新成功！")
 				        			that.sampleAbstractList=[]
+                                    //获取样例实体列表
 				        			getDataByPost('/matadata_extract_management/get_extract_objext_list', {
 							            className: that.object.className
 							        }, res => {
