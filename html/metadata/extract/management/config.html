@@ -117,7 +117,7 @@
                                     <label style="margin-bottom: 10px">属性统计配置（仅针对测验属性）</label>
                                     <div id="cover" style="border-style: solid;border-color: #CCCCCC;border-width:1px;">
                                         <div class="row">
-                                            <div class="col-md-10">
+                                            <div class="col-md-11">
                                                 <div style="overflow:auto;height:200px;margin-left: 10px;margin-top:10px;">
                                                     <table class="table table-striped" border="1" id="attributeCount">
                                                         <tr>
@@ -128,18 +128,18 @@
                                                         <tbody id="attributeCountBody" v-for="(item,index) in statisticList">
                                                             <tr>
                                                                 <td>{{index+1}}</td>
-                                                                <td><select v-if="item.stsType==undefined" style='width:200px' :id="'attributeCountItme'+(index+1)" @change="">
+                                                                <td><select v-if="item.stsType==undefined" style='width:150px' :id="'attributeCountItme'+(index+1)" @change="">
                                                                         <option v-for="optType in typeList" >{{optType}}</option>
                                                                     </select><template v-else>{{item.stsType}}</template></td>
-                                                                <td><select v-if="item.stsBase==undefined" :id="'attributeCountItme'+(index+1)" style='width:400px'>
-                                                                    <option v-for="opt in fieldList">{{opt.fdName}}</option>
+                                                                <td><select v-if="item.stsBase==undefined" :id="'attributeCountItme'+(index+1)" style='width:410px'>
+                                                                    <option v-for="opt in fieldList">{{opt}}</option>
                                                                 </select><template v-else>{{item.stsBase}}</template></td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div class="col-md-1">
                                                 <br>
                                                 <input type="button" data-toggle="modal" data-target="" class="btn btn-default" id="" @click="addCount" value="+">
                                                 <br>
