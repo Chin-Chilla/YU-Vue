@@ -4,6 +4,7 @@ var app = new Vue({
 		id:'',//结点编号
 		name:'',//对象类名称
 		ename:'',//对象类英文名称
+		arci:'',
 		classCode:'',//对象类编码
 		listOrder:'',//结点显示顺序
 		dataList:[],//数据源列表
@@ -30,7 +31,7 @@ var app = new Vue({
 				onClick:function zTreeOnClickObjectModel(event, treeId, treeNode) {
 					app.name = treeNode.className
 					app.id = treeNode.classId
-					app.ename = treeNode.arci
+					// app.ename = treeNode.arci
 					app.classCode = treeNode.classCode
 					app.listOrder = treeNode.listOrder
 					sessionStorage.setItem('metadataSelect',JSON.stringify(treeNode));
@@ -42,6 +43,7 @@ var app = new Vue({
         	var jsonFlag,jsonLack,jsonExtra;
 
 			res.data.splice(0,1); //删除对象分类树的顶层节点
+
 			$.fn.zTree.init($("#treeDemo"), settingss, res.data);
         },err=>{
         	toastr.error("初始化树失败")
