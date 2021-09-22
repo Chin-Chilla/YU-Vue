@@ -519,12 +519,7 @@ var index = new Vue({
                 bottom: 130
             },
             xAxis: {
-                data: ["流域", "河流", "湖泊", "其他",
-                    "水库", "水库大坝", "水电站", "灌区", "渠道", "取水井", "水闸", "渡槽", "倒虹吸", "泵站", "涵洞",
-                    "引调水工程", "农村供水工程", "窖池", "塘坝", "蓄滞洪区", "堤防", "圩垸", "治河工程", "淤地坝", "橡胶坝", "其他",
-                    "水文测站", "水土保持监测站", "水工程安全监测点", "供取水量监测点", "水事影像监视点", "其他",
-                    "服务", "数据", "其他"
-                ],
+                data: [],
                 axisLabel: {
                     inside: false,
                     formatter: function(value) {
@@ -723,7 +718,7 @@ var index = new Vue({
         window.onresize = function loadChart() {
             that.pictureShow();
         }
-
+       
         // $(document).ready(function() {
         //     window.history.replaceState({}, "", 'http://' + window.location.host + '/getPage/?content=');
         // });
@@ -905,7 +900,7 @@ var index = new Vue({
                     }
                 }
             }
-
+         
             //对象树的懒加载
             getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true',aJson, dataStr=>{
             	that.objectTreeData = dataStr;
@@ -919,7 +914,7 @@ var index = new Vue({
                     that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
                     that.hide0Nodes(that.objZtree);
             })
-
+            
 
             $('.str3-2').liMarquee();
             $('.str4').liMarquee();
@@ -1031,7 +1026,7 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-
+	        	
 	        })
 	    },
 	    getObjTreeNum(){
@@ -1309,18 +1304,32 @@ var index = new Vue({
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
-
+	        	
 	        })
 	    },
         setRankData(){
-            var nameArr = ['水利部业务网', '长江水利委员会', '黄河水利委员会', '淮河水利委员会', '海河水利委员会', '珠江水利委员会', '松辽水利委员会', '太湖流域管理局', '北京市水务局', '天津市水务局', '河北省水利厅局', '山西省水利厅', '内蒙古自治区水利厅', '辽宁省水利厅', '吉林省水利厅', '黑龙江省水利厅', '上海市水务局', '江苏省水利厅', '浙江省水利厅', '安徽省水利厅', '福建省水利厅', '江西省水利厅', '山东省水利厅', '河南省水利厅', '湖北省水利厅', '湖南省水利厅', '广东省水利厅', '广西壮族自治区水利厅', '海南省水利厅', '重庆市水务局', '四川省水利厅', '贵州省水利厅', '云南省水利厅', '西藏自治区水利厅', '陕西省水利厅', '甘肃省水利厅', '青海省水利厅', '宁夏回族自治区水利厅', '新疆维吾尔族自治区水利厅', '新疆生产建设兵团水利局', '大连', '青岛', '宁波', '厦门', '深圳']
+            var nameArr = ['办公室','后勤服务中心','规划计划处','财务处','水文水资源管理处','建设与管理处','河湖管理处',
+                '农村水利水电水保处','水旱灾害防御处','政工人事处','机关党委','强基惠民办公室','农村水电管理局','质安中心',
+                '改革扶贫办','水利信息中心','水利电力规划勘测设计研究院','水土保持局','水文水资源勘测局','满拉水利枢纽管理局',
+                '重点水利建设项且管理中心','防汛机动抢险队','旁多水利枢纽管理局','拉洛水利枢纽及罐区管理局']
             var totalArr = [];
-            for (var i = 0; i < that.arrayAllData.length; i++) {
+            for (var i = 0; i < that.arrayObjData.length; i++) {
                 var tmp = { 'name': '', value: '' }
                 tmp.name = nameArr[i];
-                tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
+                // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
+                for (var j = 0; j < that.arrayObjData[i].length; j++) {
+                    tmp.value = Number(that.arrayObjData[i][j].value);
+                    console.log("objdata的数据是："+Number(that.arrayObjData[i][j].value));
+                    console.log("data的数据是："+Number(that.arrayData[i][j]));
+                }
+
+
                 totalArr.push(tmp)
             }
+            console.log("alldata的数据是："+that.arrayAllData);
+            console.log("data的数据是："+that.arrayData);
+            console.log("Objdata的数据是："+that.arrayObjData);
+
             totalArr.sort(function(a, b) {
                 return b.value - a.value
             })
@@ -1416,7 +1425,7 @@ var index = new Vue({
 	        } catch (cer) {
 	            console.log(cer);
 	        }
-
+	     
 	        //水利部/省级/流域资源目录分布图
 	      /*  try {
 	            that.myChartleftDown.on('click', function(params) {
@@ -1426,7 +1435,7 @@ var index = new Vue({
 	            console.log(cer);
 	        }
 	        */
-
+	     
 	    },
 	    showLoading(echartObj){
 	        echartObj.showLoading({
@@ -1656,7 +1665,22 @@ var index = new Vue({
 	            $("#right_downall").addClass("hidden");
 	            $("#no_objdata").removeClass("hidden");
 	        }else{
-	            that.rightdownoptionall.series[0].data = that.arrayDepObj;
+	            var deptObjOption = ["流域", "河流", "湖泊", "其他",
+                    "水库", "水库大坝", "水电站", "灌区", "渠道", "取水井", "水闸", "渡槽", "倒虹吸", "泵站", "涵洞",
+                    "引调水工程", "农村供水工程", "窖池", "塘坝", "蓄滞洪区", "堤防", "圩垸", "治河工程", "淤地坝", "橡胶坝", "其他",
+                    "水文测站", "水土保持监测站", "水工程安全监测点", "供取水量监测点", "水事影像监视点", "其他",
+                    "服务", "数据", "其他"
+                ];                                     //柱状图x轴单位
+                var newDeptObjOption = [];
+                var deptObjNum = [];              //柱状图对应x轴单位数值
+                $.each($(that.arrayDepObj),function(index,element){
+                    if(element){
+                        deptObjNum.push(element);
+                        newDeptObjOption.push(deptObjOption[index]);
+                    }
+                })
+	            that.rightdownoptionall.series[0].data = deptObjNum;
+                that.rightdownoptionall.xAxis.data = newDeptObjOption;
 	            // that.rightdownoption.legend.data = that.arrayObjLegend.slice(0,5);
 	            that.myChartrightDown.clear();
 	            that.myChartrightDown.setOption(that.rightdownoptionall);
@@ -1858,22 +1882,22 @@ var index = new Vue({
 	        that.myChartAllData.hideLoading();
 	 //       that.myChartRightData.hideLoading();
 	    },
-        hide0Nodes(zTree, zTreeNodeParent = null, depth = 0) {
+        hide0Nodes(zTree, zTreeNodeParent = null,depth=0) {
             console.log("in hid0Nodes:")
             if (zTreeNodeParent == null) {
                 zTreeNodeParent = zTree.getNodes()[0]
             }
-            that.hide0NodeByRecursion(zTree, zTreeNodeParent, depth)
+            that.hide0NodeByRecursion(zTree, zTreeNodeParent,depth)
         },
-        hide0NodeByRecursion(zTree, zTreeNode, depth) {
+        hide0NodeByRecursion(zTree, zTreeNode,depth) {
             const nodeNum = that.getNodeNum(zTreeNode.nodeName)
-            if (nodeNum === 0 && depth > 1) {
+            if (nodeNum === 0 && depth>1) {
                 zTree.hideNode(zTreeNode)
                 return;
             }
             if (zTreeNode.children !== undefined) {
                 zTreeNode.children.forEach(child => {
-                    that.hide0NodeByRecursion(zTree, child, depth+1)
+                    that.hide0NodeByRecursion(zTree, child,depth+1)
                 })
             }
         },
@@ -1881,19 +1905,6 @@ var index = new Vue({
             const st = nodeName.indexOf("(") + 1
             const len = nodeName.indexOf(")") - st
             return parseInt(nodeName.substr(st, len))
-        },
-        logOut() {
-            console.log('into logOut')
-            getDataByPost("/user/logout", {}, res => {
-                console.log(res);
-                sessionStorage.setItem("authCode", null);
-                sessionStorage.setItem("role", null);
-                sessionStorage.setItem("loginName", null);
-                sessionStorage.setItem("userName", null);
-                setTimeout(function () {
-                    window.location.href = "/YU/html/system/role/login.html"
-                }, 1500)
-            })
         }
 
     },

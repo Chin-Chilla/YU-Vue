@@ -62,12 +62,15 @@
                 <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
                     <thead>
                     <tr>
-                        <th style="min-width: 150px">元数据ID</th>
+                        <th style="min-width: 150px"><input type="checkbox" name="allChecked"  onclick="app.allChecked()">全选&nbsp&nbsp&nbsp元数据ID</th>
                         <th style="min-width: 150px">元数据名称</th>
                         <th style="min-width: 150px">订阅时间</th>
                         <th style="min-width: 150px">状态</th>
                         <th></th>
-                        <th style="min-width: 150px">操作</th>
+                        <th style="min-width: 150px">操作
+                            <input type="button" class="'btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px" value="通过选中" onclick="app.passChecked()">
+                            <input type="button" class="'btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px" value="拒绝选中" onclick="app.refuseChecked()">
+                        </th>
                     </tr>
                     </thead>
                     <tbody id="tbody">

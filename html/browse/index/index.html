@@ -33,415 +33,443 @@
     <!-- sweetalert -->
     <link rel="stylesheet" type="text/css" href="/YU/stylesheet/plugins/sweetalert/sweetalert.css" />
     <style type="text/css">
-        .facet_item {
-            padding: 15px 15px 0px 20px;
-            cursor: pointer
-        }
+    .facet_item {
+        padding: 15px 15px 0px 20px;
+        cursor: pointer
+    }
 
-        .checkbox {
-            margin-top: 5px !important;
-            width: 90px;
-            margin-right: 10px;
-            text-align: left;
-        }
+    .checkbox {
+        margin-top: 5px !important;
+        width: 90px;
+        margin-right: 10px;
+        text-align: left;
+    }
 
-        .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1000;
-        }
+    .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 1000;
+    }
 
-        .overlay .fa {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            margin-left: -15px;
-            margin-top: -15px;
-            color: #000;
-            font-size: 30px;
-        }
+    .overlay .fa {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-left: -15px;
+        margin-top: -15px;
+        color: #000;
+        font-size: 30px;
+    }
     </style>
 </head>
 
 <body class="skin-blue layout-boxed sidebar-mini">
-<div class="wrapper" id="wrapper" style="background: white;max-width: 100%;">
-    <div class="col-lg-12" id="vue">
-        <div class="box" style="border: 0px solid white; margin-bottom: 0px;">
-            <div class="box-body" style="padding-bottom: 5px;padding-top: 5px;border-bottom: 1px solid #00a7d0">
-                <div class="row">
-                    <div class="col-xs-3">
-                        <!--<div class="pull-left"
-                style="font-size: 16px;  font-family: Times New Roman;  padding-left: 20px;  color: #017ebc;" id="welcomeDocument"></div>-->
-                    </div>
-                    <div class="col-xs-6">
-                        <div style="text-align: center;">
+    <div class="wrapper" id="wrapper" style="background: white;max-width: 100%;">
+        <div class="col-lg-12" id="vue">
+            <div class="box" style="border: 0px solid white; margin-bottom: 0px;">
+                <div class="box-body" style="padding-bottom: 5px;padding-top: 5px;border-bottom: 1px solid #00a7d0">
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <!--<div class="pull-left"
+                    style="font-size: 16px;  font-family: Times New Roman;  padding-left: 20px;  color: #017ebc;" id="welcomeDocument"></div>-->
                         </div>
-                    </div>
-                    <div class="col-xs-3">
-                        <div class="pull-right">
-                            <a href="/YU/html/backgroundFrame.html" style="font-size: 16px;
+                        <div class="col-xs-6">
+                            <div style="text-align: center;">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="pull-right">
+                                <a href="/YU/html/backgroundFrame.html" style="font-size: 16px;
                                     padding-right: 10px ">后台管理</a>
-                            <!-- <a href="/logout" style="font-size: 16px;
-                            padding-right: 10px;color:red;">注销</a> -->
+                                <!-- <a href="/logout" style="font-size: 16px;
+                                padding-right: 10px;color:red;">注销</a> -->
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row" style="padding: 5px 0px 5px 0px">
-                    <div class="col-xs-3">
-                        <div>
-                            <a href="http://localhost:8089/YU/html/browse/index/index.html">
-<!--                                <img src="/YU/statics/imgs/BJlogo.png" style="width: 240px; height: 60px;">-->
-                                <img v-bind:src="img_src" style="width: 240px; height: 60px;">
-
-                            </a>
+                    <div class="row" style="padding: 5px 0px 5px 0px">
+                        <div class="col-xs-3">
+                            <div>
+                                <a href="http://localhost:8089/YU/html/browse/index/index.html"><img src="/YU/statics/imgs/BJlogo.png" style="width: 240px;
+                                height: 60px;">
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-xs-6" style="padding: 8px 20px 8px 20px">
-                        <input class="form-control" type="输入要搜索的关键词" style="border-radius: 3px" id="keyWord">
-                    </div>
-                    <div class="col-xs-3" style="padding: 8px 0px 8px 0px">
-                        <div style="float: left">
-                            <a class="btn btn-primary" style="width: 100px;
+                        <div class="col-xs-6" style="padding: 8px 20px 8px 20px">
+                            <input class="form-control" type="输入要搜索的关键词" style="border-radius: 3px" id="keyWord">
+                        </div>
+                        <div class="col-xs-3" style="padding: 8px 0px 8px 0px">
+                            <div style="float: left">
+                                <a class="btn btn-primary" style="width: 100px;
                                         border-radius: 3px" onclick="keySearch.load(1)">
-                                <i class="fa fa-search"></i> 全局搜索
-                            </a>
-                        </div>
-                        <div style="float: left;
+                                    <i class="fa fa-search"></i> 全局搜索
+                                </a>
+                            </div>
+                            <div style="float: left;
                                     margin-left: 10px">
-                            <a class="btn btn-primary" style="width: 100px;
+                                <a class="btn btn-primary" style="width: 100px;
                                         border-radius: 3px" onclick="keySearch.load(2)">
-                                <i class="fa fa-search"></i> 当前目录
-                            </a>
+                                    <i class="fa fa-search"></i> 当前目录
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="box-footer">
-                <div class="col-md-9 left_down right_down">
-                    <div class="row" style="margin: 0px 0px 10px 30px;">
-                        <h4 align="center"><b>水利信息目录资源分布情况</b></h4>
-                        <div class="row" style="margin-top: 10px;">
-                            <div class="col-md-4">
-                                <div id="left" style="height:400px;
+                <div class="box-footer">
+                    <div class="col-md-9 left_down right_down">
+                        <div class="row" style="margin: 0px 0px 10px 30px;">
+                            <h4 align="center"><b>水利信息目录资源分布情况</b></h4>
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-4">
+                                    <div id="left" style="height:400px;
                                             border: 1px solid #9d9d9d"></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div id="mid" style="height: 400px;
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="mid" style="height: 400px;
                                             border: 1px solid #9d9d9d;
                                             margin-left: 10px;"></div>
-                            </div>
-                            <div class="col-md-4">
-                                <div id="right" style="height: 400px;
+                                </div>
+                                <div class="col-md-4">
+                                    <div id="right" style="height: 400px;
                                             border: 1px solid #9d9d9d;
                                             margin-left: 10px;"></div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0px 0px 10px 30px;">
-                        <div class="row" style="margin-top: 10px;">
-                            <div class="col-md-12">
-                                <div class="col-md-3" style="z-index: 999; float: right; margin: 10px;margin-right: -30px;position: absolute;right:0px;">
-                                    <button class="btn-primary" type="button" id="objbtn1" height="38px" @click="rightDownBtnClick(true)">对象分类</button>
-                                    <button class="btn-primary" type="button" id="objbtn2" height="38px" @click="rightDownBtnClick(false)">全部对象</button>
-                                </div>
-                                <div id="right_down" style="height: 438px;
+                        <div class="row" style="margin: 0px 0px 10px 30px;">
+                            <div class="row" style="margin-top: 10px;">
+                                <div class="col-md-12">
+                                    <div class="col-md-3" style="z-index: 999; float: right; margin: 10px;margin-right: -30px;position: absolute;right:0px;">
+                                        <button class="btn-primary" type="button" id="objbtn1" height="38px" @click="rightDownBtnClick(true)">抽象对象</button>
+                                        <button class="btn-primary" type="button" id="objbtn2" height="38px" @click="rightDownBtnClick(false)">实体对象</button>
+                                    </div>
+                                    <div id="right_down" style="height: 438px;
                                               border: 1px solid #9d9d9d;
                                               margin-left: 10px;">
-                                </div>
-                                <div id="no_objdata" class="hidden" style="height: 438px; border: 1px solid rgb(157, 157, 157); margin-left: 10px; text-align: center; position: relative;">
-                                    <div style="margin-top: 120px;">
-                                        <div><span class="iconfont icon-zanwushuju" style="
+                                    </div>
+                                    <div id="no_objdata" class="hidden" style="height: 438px; border: 1px solid rgb(157, 157, 157); margin-left: 10px; text-align: center; position: relative;">
+                                        <div style="margin-top: 120px;">
+                                            <div><span class="iconfont icon-zanwushuju" style="
                                                       font-size: 100px;
                                                       color: gray;"></span>
+                                            </div>
+                                            <font size="6" style="font-size: 20px; color: gray;"> 暂无对象数据</font>
                                         </div>
-                                        <font size="6" style="font-size: 20px; color: gray;"> 暂无对象数据</font>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="row" style="margin: 0px 0px 10px 30px;">
-                        <div class="row">
-                            <div class="col-md-6">
+                        <div class="row" style="margin: 0px 0px 10px 30px;">
+                            <div class="row">
 
-                                <div  style="border: 1px solid #9d9d9d">
-                                    <div class="row" style="font-size: 16px;
+                                    <div class="col-md-4">
+                                        <div  style="border: 1px solid #9d9d9d">
+                                            <div class="row" style="font-size: 16px;
                                                 padding: 10px 10px 5px 10px;
                                                 border-bottom: 1px dashed #9d9d9d;">
                                                 <span style="font-size: 18px;">
                                                 更新榜
                                                 </span>
+                                            </div>
+                                            <div style="height:430px;padding: 10px;">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th class="text-center">序号</th>
+                                                            <th class="text-center">单位</th>
+                                                            <th class="text-center">最新更新时间</th>
+<!--                                                            <th class="text-center">总更新数</th>-->
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="item,index in updateData">
+                                                            <td class="text-center">{{index+1}}</td>
+                                                            <td class="text-center">{{item.name}}</td>
+                                                            <td class="text-center">{{item.uptime}}</td>
+<!--                                                            <td class="text-center">{{item.objSum}}</td>-->
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div style="height:430px;padding: 10px;">
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                            <tr class="text-center">
-                                                <th class="text-center">序号</th>
-                                                <th class="text-center">单位</th>
-                                                <th class="text-center">最新更新时间</th>
-                                                <th class="text-center">总更新数</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for="item,index in updateData">
-                                                <td class="text-center">{{index+1}}</td>
-                                                <td class="text-center">{{item.name}}</td>
-                                                <td class="text-center">{{item.uptime}}</td>
-                                                <td class="text-center">{{item.objSum}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
 
-                            </div>
-                            <div class="col-md-6" >
-                                <div style="margin-left: 10px;border: 1px solid #9d9d9d">
-                                    <div class="row" style="font-size: 16px;
+                                    <div class="col-md-4" >
+                                        <div style="margin-left: 10px;border: 1px solid #9d9d9d">
+                                            <div class="row" style="font-size: 16px;
                                                 padding: 10px 10px 5px 10px;
                                                 border-bottom: 1px dashed #9d9d9d;">
                                                 <span style="font-size: 18px;">
-                                            贡献榜
+                                                    贡献榜
                                                 </span>
+                                            </div>
+                                            <div style="height:430px;padding: 10px;">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                        <tr class="text-center">
+                                                            <th class="text-center">序号</th>
+                                                            <th class="text-center">单位</th>
+                                                            <th class="text-center">总贡献数</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr v-for="item,index in totalData">
+                                                            <td class="text-center">{{index+1}}</td>
+                                                            <td class="text-center">{{item.name}}</td>
+                                                            <td class="text-center">{{item.value}}</td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div style="height:430px;padding: 10px;">
-                                        <table class="table table-bordered table-striped">
-                                            <thead>
-                                            <tr class="text-center">
-                                                <th class="text-center">序号</th>
-                                                <th class="text-center">单位</th>
-                                                <th class="text-center">总更新数</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr v-for="item,index in totalData">
-                                                <td class="text-center">{{index+1}}</td>
-                                                <td class="text-center">{{item.name}}</td>
-                                                <td class="text-center">{{item.value}}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+
+                                    <div class="col-md-4" >
+                                        <div style="margin-left: 10px;border: 1px solid #9d9d9d">
+                                            <div class="row" style="font-size: 16px;
+                                                    padding: 10px 10px 5px 10px;
+                                                    border-bottom: 1px dashed #9d9d9d;">
+                                                    <span style="font-size: 18px;">
+                                                        申请榜
+                                                    </span>
+                                            </div>
+                                            <div style="height:430px;padding: 10px;">
+                                                <table class="table table-bordered table-striped">
+                                                    <thead>
+                                                    <tr class="text-center">
+                                                        <th class="text-center">序号</th>
+                                                        <th class="text-center">单位</th>
+                                                        <th class="text-center">总申请数</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr v-for="item,index in totalData">
+                                                        <td class="text-center">{{index+1}}</td>
+                                                        <td class="text-center">{{item.name}}</td>
+                                                        <td class="text-center">{{item.value}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
-                    </div>
 
-                    <div class="row" style="margin: 0px 0px 10px 30px;">
-                        <div class="row" style="margin-top: 10px;">
+                        <div class="row" style="margin: 0px 0px 10px 30px;">
+                            <div class="row" style="margin-top: 10px;">
 
-                            <ul class="nav nav-tabs" id="myTab" style="text-align: center">
-                                <li class="active" style="width: 100%"><a href="#tab_all" data-toggle="tab" aria-expanded="true" style="font-size: 20px">资源汇交情况</a></li>
+                                <ul class="nav nav-tabs" id="myTab" style="text-align: center">
+                                    <li class="active" style="width: 100%"><a href="#tab_all" data-toggle="tab" aria-expanded="true" style="font-size: 20px">资源汇交情况</a></li>
+                                    <!--
+                                   <li class="" style="width:50%"><a href="#tab_dep" data-toggle="tab" aria-expanded="false" style="font-size: 20px">水利部汇交情况</a></li>
+                                   -->
+                                </ul>
+
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab_all">
+
+                                        <div class="col-md-12">
+                                            <div id="all_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!-- /.tab-pane -->
                                 <!--
-                               <li class="" style="width:50%"><a href="#tab_dep" data-toggle="tab" aria-expanded="false" style="font-size: 20px">水利部汇交情况</a></li>
-                               -->
-                            </ul>
+                                    <div class="tab-pane" id="tab_dep">
+                                        <div class="col-md-12">
+                                            <div id="right_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                        </div>
+                                    </div>
+                                 -->
 
+                                <aside class="control-sidebar" style="top:509px;height:438px;border: solid 3px skyblue;z-index:auto;background-color: #FFFFFF;">
 
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab_all">
-
-                                    <div class="col-md-12">
-                                        <div id="all_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
+                                    <div>
+                                        <a href="#" style="position:absolute;left:-27px;width:25px;border: 1px solid skyblue;text-align:center;cursor:pointer;color:black;font-weight:bold" data-toggle="control-sidebar">筛选条件</a>
+                                    </div>
+                                    <div style="padding:10px;margin-top: -10px;border-bottom:1px solid skyblue" id="filter-box">
+                                        <div class="row"><label>数据类型筛选：</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20071" type="checkbox">
+                                            数据库</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20072" type="checkbox">
+                                            数据表</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20073" type="checkbox">
+                                            矢量</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20074" type="checkbox">
+                                            栅格</label></div>
+                                        <div class="btn btn-default checkbox"><label>
+                                            <input value="20075" type="checkbox">
+                                            其他</label></div>
+                                    </div>
+                                    <div style="padding:10px;margin: 0 auto;height: 120px;border-bottom:1px solid skyblue" id="ReSource-filter-box">
+                                        <div class="row"><label style="margin-top: 8px;float:left">资源目录筛选：</label></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label style="margin: 8px 15px;">业务类型：</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="re-sel-1" style="height: 30px;" onchange="">
+                                                    <option value="01">全选</option>
+                                                    <option value="NULL">全不选</option>
+                                                    <option value="0101">水文</option>
+                                                    <option value="0102">水资源</option>
+                                                    <option value="0103">水环境</option>
+                                                    <option value="0104">水利工程</option>
+                                                    <option value="0105">农村水利</option>
+                                                    <option value="0106">水旱灾害防御</option>
+                                                    <option value="0107">水土保持</option>
+                                                    <option value="0108">移民</option>
+                                                    <option value="0199">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <label style="margin: 8px 15px;">行政类型：</label>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="re-sel-2" style="height: 30px;" onchange="">
+                                                    <option value="02">全选</option>
+                                                    <option value="NULL">全不选</option>
+                                                    <option value="0201">综合办公</option>
+                                                    <option value="0202">政策与法规</option>
+                                                    <option value="0203">财务与审计</option>
+                                                    <option value="0204">人事与教育</option>
+                                                    <option value="0205">国际合作</option>
+                                                    <option value="0206">科技管理</option>
+                                                    <option value="0207">监督</option>
+                                                    <option value="0208">纪检与监察</option>
+                                                    <option value="0209">机关管理</option>
+                                                    <option value="0299">其他</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style="padding:10px;margin: 0 auto;height: 55px;" id="Object-filter-box">
+                                        <div class="row"><label style="margin-top: 8px;float:left">基础对象筛选：</label></div>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <select class="form-control select2" id="obj-sel-lev1" style="height: 30px;" @click="showObjLev2">
+                                                    <option value="*">全选</option>
+                                                    <option value="RL">江河湖泊</option>
+                                                    <option value="HP">水利工程</option>
+                                                    <option value="MS">监测站（点）</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <select class="form-control select2" id="obj-sel-lev2" style="height: 30px;"></select>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                </div>
+                                    <div class="btn btn-default" style="right:10px;bottom: 10px;position:absolute" @click="refreshChart">确认</div>
+                                    <div class="btn btn-default" style="right:80px;bottom: 10px;position:absolute" @click="reSet">重置</div>
+                                </aside>
+
+
                             </div>
-                            <!-- /.tab-pane -->
-                            <!--
-                                <div class="tab-pane" id="tab_dep">
-                                    <div class="col-md-12">
-                                        <div id="right_data_pic" style="height: 438px;  border: 1px solid #9d9d9d"></div>
-                                    </div>
-                                </div>
-                             -->
-
-                            <aside class="control-sidebar" style="top:509px;height:438px;border: solid 3px skyblue;z-index:auto;background-color: #FFFFFF;">
-
-                                <div>
-                                    <a href="#" style="position:absolute;left:-27px;width:25px;border: 1px solid skyblue;text-align:center;cursor:pointer;color:black;font-weight:bold" data-toggle="control-sidebar">筛选条件</a>
-                                </div>
-                                <div style="padding:10px;margin-top: -10px;border-bottom:1px solid skyblue" id="filter-box">
-                                    <div class="row"><label>数据类型筛选：</label></div>
-                                    <div class="btn btn-default checkbox"><label>
-                                        <input value="20071" type="checkbox">
-                                        数据库</label></div>
-                                    <div class="btn btn-default checkbox"><label>
-                                        <input value="20072" type="checkbox">
-                                        数据表</label></div>
-                                    <div class="btn btn-default checkbox"><label>
-                                        <input value="20073" type="checkbox">
-                                        矢量</label></div>
-                                    <div class="btn btn-default checkbox"><label>
-                                        <input value="20074" type="checkbox">
-                                        栅格</label></div>
-                                    <div class="btn btn-default checkbox"><label>
-                                        <input value="20075" type="checkbox">
-                                        其他</label></div>
-                                </div>
-                                <div style="padding:10px;margin: 0 auto;height: 120px;border-bottom:1px solid skyblue" id="ReSource-filter-box">
-                                    <div class="row"><label style="margin-top: 8px;float:left">资源目录筛选：</label></div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label style="margin: 8px 15px;">业务类型：</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select class="form-control select2" id="re-sel-1" style="height: 30px;" onchange="">
-                                                <option value="01">全选</option>
-                                                <option value="NULL">全不选</option>
-                                                <option value="0101">水文</option>
-                                                <option value="0102">水资源</option>
-                                                <option value="0103">水环境</option>
-                                                <option value="0104">水利工程</option>
-                                                <option value="0105">农村水利</option>
-                                                <option value="0106">水旱灾害防御</option>
-                                                <option value="0107">水土保持</option>
-                                                <option value="0108">移民</option>
-                                                <option value="0199">其他</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <label style="margin: 8px 15px;">行政类型：</label>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select class="form-control select2" id="re-sel-2" style="height: 30px;" onchange="">
-                                                <option value="02">全选</option>
-                                                <option value="NULL">全不选</option>
-                                                <option value="0201">综合办公</option>
-                                                <option value="0202">政策与法规</option>
-                                                <option value="0203">财务与审计</option>
-                                                <option value="0204">人事与教育</option>
-                                                <option value="0205">国际合作</option>
-                                                <option value="0206">科技管理</option>
-                                                <option value="0207">监督</option>
-                                                <option value="0208">纪检与监察</option>
-                                                <option value="0209">机关管理</option>
-                                                <option value="0299">其他</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="padding:10px;margin: 0 auto;height: 55px;" id="Object-filter-box">
-                                    <div class="row"><label style="margin-top: 8px;float:left">基础对象筛选：</label></div>
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <select class="form-control select2" id="obj-sel-lev1" style="height: 30px;" @click="showObjLev2">
-                                                <option value="*">全选</option>
-                                                <option value="RL">江河湖泊</option>
-                                                <option value="HP">水利工程</option>
-                                                <option value="MS">监测站（点）</option>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <select class="form-control select2" id="obj-sel-lev2" style="height: 30px;"></select>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="btn btn-default" style="right:10px;bottom: 10px;position:absolute" @click="refreshChart">确认</div>
-                                <div class="btn btn-default" style="right:80px;bottom: 10px;position:absolute" @click="reSet">重置</div>
-                            </aside>
-
-
                         </div>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="box box-primary" style="overflow: auto;
+                      </div>
+                      <div class="col-md-3">
+                          <div class="box box-primary" style="overflow: auto;
                                   margin: 10px 20px 0px 0px;
                                   border: 2px solid #3c8dbc;">
-                        <div class="nav-tabs-custom">
-                            <ul class="nav nav-tabs" style="text-align: center">
-                                <li class="active" style="width: 50%"><a id="tab_catalog_title" href="#tab_catalog" data-toggle="tab" aria-expanded="true" style="font-size: 16px">资源目录树</a></li>
-                                <li class="" style="width:50%"><a id="tab_obj_title" href="#tab_obj" data-toggle="tab" aria-expanded="false" style="font-size: 16px">对象分类树</a></li>
-                            </ul>
-                            <div class="tab-content">
-                                <div class="tab-pane active" id="tab_catalog">
-                                    <div class="ztree">
-                                        <ul id="resTree" style="height: 100%;
+                              <div class="nav-tabs-custom">
+                                  <ul class="nav nav-tabs" style="text-align: center">
+                                      <li class="" style="width: 50%"><a id="tab_catalog_title" href="#tab_catalog" data-toggle="tab" aria-expanded="true" style="font-size: 16px">资源目录树</a></li>
+                                      <li class="active" style="width:50%"><a id="tab_obj_title" href="#tab_obj" data-toggle="tab" aria-expanded="false" style="font-size: 16px">对象分类树</a></li>
+                                  </ul>
+                                  <div class="tab-content">
+                                      <div class="tab-pane " id="tab_catalog">
+                                          <div class="ztree">
+                                              <ul id="resTree" style="height: 100%;
                                                   min-height: 900px;
                                                   overflow: auto;
                                                   -moz-user-select: none;"></ul>
-                                    </div>
-                                </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="tab_obj">
-                                    <div class="ztree">
-                                        <ul id="objTree" style="height: 100%;
+                                          </div>
+                                      </div>
+                                      <!-- /.tab-pane -->
+                                    <div class="tab-pane active" id="tab_obj">
+                                        <div class="ztree">
+                                            <ul id="objTree" style="height: 100%;
                                                 min-height: 900px;
                                                 overflow: auto;
                                                 -moz-user-select: none;"></ul>
+                                        </div>
                                     </div>
-                                </div>
-                                <!-- /.tab-pane -->
-                                <div class="tab-pane" id="tab_department">
-                                    <div class="ztree">
-                                        <ul id="departTree" style="height: 100%;
+                                    <!-- /.tab-pane -->
+                                    <div class="tab-pane" id="tab_department">
+                                        <div class="ztree">
+                                            <ul id="departTree" style="height: 100%;
                                                 min-height: 900px;
                                                 overflow: auto;
                                                 -moz-user-select: none;"></ul>
+                                        </div>
+                                    </div>
+                                    <div id="loading" class="overlay" style="display:none;">
+                                        <i class="fa fa-refresh fa-spin"></i>
                                     </div>
                                 </div>
-                                <div id="loading" class="overlay" style="display:none;">
-                                    <i class="fa fa-refresh fa-spin"></i>
-                                </div>
+                                <!-- /.tab-content -->
                             </div>
-                            <!-- /.tab-content -->
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="modal modal-default" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-            <div class="modal-dialog" role="document" style="width:800px;height: 500px;">
-                <div class="modal-content" style="width: 100%;height: 100%;">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title">申请信息</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <div class="proposer" style="width: 750px;height: 40px;margin-top: 20px">
-                                <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">联系人</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="proposer">
+            <div class="modal modal-default" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document" style="width:800px;height: 500px;">
+                    <div class="modal-content" style="width: 100%;height: 100%;">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">申请信息</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="proposer" style="width: 750px;height: 40px;margin-top: 20px">
+                                    <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">联系人</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="proposer">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="org" style="width: 750px;height: 40px;margin-top: 20px">
-                                <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">单位</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="org">
+                                <div class="org" style="width: 750px;height: 40px;margin-top: 20px">
+                                    <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">单位</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="org">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="contact" style="width: 750px;height: 40px;margin-top: 20px">
-                                <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">联系方式</label>
-                                <div class="col-sm-8">
-                                    <input class="form-control" id="contact">
+                                <div class="contact" style="width: 750px;height: 40px;margin-top: 20px">
+                                    <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">联系方式</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" id="contact">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="description" style="width: 750px;height: 100px;margin-top: 20px">
-                                <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">审核拒绝理由：</label>
-                                <div class="col-sm-8">
-                                    <textarea class="form-control" id="description" rows="4" placeholder="请输入详细描述，如申请目的、数据范围等"></textarea>
+                                <div class="description" style="width: 750px;height: 100px;margin-top: 20px">
+                                    <label class="col-sm-3 control-label" style="text-align: right;padding-right: 30px;">审核拒绝理由：</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" id="description" rows="4" placeholder="请输入详细描述，如申请目的、数据范围等"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal-footer" >
-                        <input type="button" value="确认" class="btn btn-primary" data-dismiss="modal" @click="keySearch.subscribe()">
-                        <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                        <div class="modal-footer" >
+                            <input type="button" value="确认" class="btn btn-primary" data-dismiss="modal" @click="keySearch.subscribe()">
+                            <input type="button" value="取消" class="btn btn-default" data-dismiss="modal">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<footer class="main-footer" style="height: 40px;
+    <footer class="main-footer" style="height: 40px;
         margin: 0 auto">
     <div class="text-center" style="height: 40px;
         position: fixed;
@@ -451,71 +479,71 @@
         border-top: 2px solid #d2d6de;
         margin: 0 auto;">
         <ul id="pagination" class="pagination-sm pagination">
-        </ul>
+             </ul>
     </div>
 
-</footer>
-<!--引入js-->
-<!--公用js-->
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-ui.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/bootstrap.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/app.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/commons/demo.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.core.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.excheck.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exedit.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exhide.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/schemas/jquery.dataTables.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/schemas/dataTables.bootstrap.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/jquery.slimscroll.min.js"></script>
-<!--引入插件的js-->
-<!--日期选择器-->
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/select2.full.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
-<script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
-<!--公共js类-->
-<script type="text/javascript" src="/YU/javascript/common/commons.js"></script>
-<!--你自己的js使用注释分开!-->
-<script type="text/javascript" src="/YU/javascript/system/pages/mainPage.js"></script>
-<!--kgms/objectImport-->
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfig.lazy.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfigOperate.lazy.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/jstree.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/kgms/objectImport/ObjRelExtract.js"></script>
+    </footer>
+    <!--引入js-->
+    <!--公用js-->
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/app.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/commons/demo.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.core.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.excheck.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exedit.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/zTree/jquery.ztree.exhide.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/dataTables.bootstrap.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/jquery.slimscroll.min.js"></script>
+    <!--引入插件的js-->
+    <!--日期选择器-->
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/select2.full.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="/YU/javascript/adminLTE/plugins/datepicker/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+    <!--公共js类-->
+    <script type="text/javascript" src="/YU/javascript/common/commons.js"></script>
+    <!--你自己的js使用注释分开!-->
+    <script type="text/javascript" src="/YU/javascript/system/pages/mainPage.js"></script>
+    <!--kgms/objectImport-->
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfig.lazy.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/kgconfigOperate.lazy.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/jstree.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/kgms/objectImport/ObjRelExtract.js"></script>
 
-<!--目录管理-->
-<script type="text/javascript" src="/YU/javascript/metadata/release/menuReviewPage.js"></script>
-<script type="text/javascript" src="/YU/javascript/system/schemas/jquery.form.js"></script>
-<!--菜单树管理-->
-<!--<script type="text/javascript" src="/YU/javascripts/sysMenu/sysMenu.js"></script>-->
-<!--元数据手动填报-->
-<script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/manualImport.js"></script>
-<script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/objectMetadata.js"></script>
-<!--分页-->
-<script type="text/javascript" src="/YU/javascript/common/query.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/paging.js"></script>
-<script type="text/javascript" src="/YU/javascript/common/jquery.liMarquee.js"></script>
-<!-- vue -->
-<script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
-<!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
-<!-- toastr提示框 -->
-<script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
-<!-- sweetalert -->
-<script type="text/javascript" src="/YU/javascript/plugins/sweetalert/sweetalert.min.js"></script>
-<!-- echarts -->
-<script type="text/javascript" src="/YU/javascript/common/echarts/echarts.min.js"></script>
-<!-- datav可视化 -->
-<script type="text/javascript" src="/YU/javascript/browse/index/datav.min.js"></script>
-<script type="text/javascript" src="/YU/javascript/browse/index/index.js"></script>
+    <!--目录管理-->
+    <script type="text/javascript" src="/YU/javascript/metadata/release/menuReviewPage.js"></script>
+    <script type="text/javascript" src="/YU/javascript/system/schemas/jquery.form.js"></script>
+    <!--菜单树管理-->
+    <!--<script type="text/javascript" src="/YU/javascripts/sysMenu/sysMenu.js"></script>-->
+    <!--元数据手动填报-->
+    <script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/manualImport.js"></script>
+    <script type="text/javascript" src="/YU/javascript/metadata/extract/semiAutoFunc/manualInput/objectMetadata.js"></script>
+    <!--分页-->
+    <script type="text/javascript" src="/YU/javascript/common/query.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/paging.js"></script>
+    <script type="text/javascript" src="/YU/javascript/common/jquery.liMarquee.js"></script>
+    <!-- vue -->
+    <script type="text/javascript" src="/YU/javascript/vue.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script> -->
+    <!-- toastr提示框 -->
+    <script type="text/javascript" src="/YU/javascript/plugins/toastr/toastr.min.js"></script>
+    <!-- sweetalert -->
+    <script type="text/javascript" src="/YU/javascript/plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- echarts -->
+    <script type="text/javascript" src="/YU/javascript/common/echarts/echarts.min.js"></script>
+    <!-- datav可视化 -->
+    <script type="text/javascript" src="/YU/javascript/browse/index/datav.min.js"></script>
+    <script type="text/javascript" src="/YU/javascript/browse/index/index.js"></script>
 
-<script src="/YU/javascript/common/baiduTpls.js" type="text/javascript"></script>
+    <script src="/YU/javascript/common/baiduTpls.js" type="text/javascript"></script>
 
-<script src="/YU/javascript/browse/detail/detailPage.js" type="text/javascript"></script>
+    <script src="/YU/javascript/browse/detail/detailPage.js" type="text/javascript"></script>
 
-<script type="text/javascript" src="/YU/javascript/browse/search/keySearch.js"></script>
+    <script type="text/javascript" src="/YU/javascript/browse/search/keySearch.js"></script>
 
 </body>
 
