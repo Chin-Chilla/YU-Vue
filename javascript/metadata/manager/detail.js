@@ -354,7 +354,7 @@ var app = new Vue({
 				hasCataLog:'0'
         	}
 			var nodes = that.zTreeObj.getCheckedNodes(true);
-			var nodeCode = nodes[1].nodeCode+"_"+sessionStorage.getItem("objClassCode");
+			var nodeCode = nodes[(nodes.length-1)].nodeCode+"_"+sessionStorage.getItem("objClassCode");
 	        var data = {
             	nodeCode:nodeCode,
 	            classId: that.classId,
@@ -388,6 +388,7 @@ var app = new Vue({
     				clearInterval(timer);
     			}
     		},interval)
+			
             getDataByPost('/metadata_register/catalog_by_class',data,res=> {
                 if (res.msg == "SUCCESS") {
                 	that.progress=100;
