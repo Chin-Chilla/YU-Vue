@@ -329,7 +329,7 @@ var app = new Vue({
             var nodeList = []
             if(flag==0||flag==2){
             	var nodes = that.zTreeObj.getCheckedNodes(true);
-            	if (nodes.length !=2) {
+            	if (nodes.length < 2) {
 			        toastr.warning("二级结点必须选择一个！");
 			        return;
 			    }else{

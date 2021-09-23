@@ -251,7 +251,7 @@ var app = new Vue({
 			var classCode = $("input[name='optionsRadios']:checked").parent().parent().find("td")[2].innerHTML;
 			var nodes = that.zTreeObj.getCheckedNodes(true);
 			var nodeCode = nodes[1].nodeCode+"_"+classCode;
-		    if (nodes.length !=2) {
+		    if (nodes.length < 2) {
 		        toastr.warning("二级结点必须选择一个！");
 		    } else {
 		        var nodeIdList = [];
