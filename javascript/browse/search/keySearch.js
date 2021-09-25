@@ -28,8 +28,10 @@ var keySearch = new Vue({
             var data = {};
             $("#pagination").empty();
             $("#text1").empty();
-            keySearch.keyWord2 = $("#keyWord2").val();//二次搜索输入的关键词
-        
+            keySearch.keyWord2 = $("#keyWord2").val();
+            //二次搜索输入的关键词
+
+
             $.ajax({
                 type:'GET',
                 url:'/YU/html/browse/search/keySearch.html',
@@ -40,6 +42,7 @@ var keySearch = new Vue({
                     keySearch.secondName = "";
                     keySearch.keyWord = $("#keyWord").val();
                     keySearch.keySearch(sign,keySearch.treeType);
+
                 }
             });
         },
@@ -154,6 +157,9 @@ var keySearch = new Vue({
                     keyword = sessionStorage.getItem("Word");
                     keyword2 = keySearch.keyWord2;
                     nodeId = "";
+                    //将搜索结果回显到二次搜索的搜索框
+                    $('#keyWord2').val(keyword2);
+
                 }
                 var data = {
                     nodeId: nodeId,
