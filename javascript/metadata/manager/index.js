@@ -250,7 +250,7 @@ var app = new Vue({
 			var classId = $("input[name='optionsRadios']:checked").val();
 			var classCode = $("input[name='optionsRadios']:checked").parent().parent().find("td")[2].innerHTML;
 			var nodes = that.zTreeObj.getCheckedNodes(true);
-			var nodeCode = nodes[1].nodeCode+"_"+classCode;
+			var nodeCode = nodes[(nodes.length-1)].nodeCode+"_"+sessionStorage.getItem("objClassCode");
 		    if (nodes.length < 2) {
 		        toastr.warning("二级结点必须选择一个！");
 		    } else {
@@ -290,6 +290,7 @@ var app = new Vue({
         				clearInterval(timer);
         			}
         		},interval)
+				console.log("The nodeCode in 2 is: " + data.nodeCode);
 	            getDataByPost('/metadata_register/catalog_by_class',data,res=> {
 	                if (res.msg == "SUCCESS") {
 	                	that.progress=100;
