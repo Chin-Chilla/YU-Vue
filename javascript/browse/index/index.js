@@ -676,6 +676,9 @@ var index = new Vue({
         //用于测试
         test: [],
         img_src:'/YU/statics/imgs/BJlogo.png',
+        //存储西藏对象树和资源树的部门以及元数据数量
+        xizangObjDep:[],
+        xizangResDep:[],
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
@@ -708,9 +711,11 @@ var index = new Vue({
             index.updateData = msg.slice(0,10);
         })
 
+        that.xizangObjDep=that.getXizangDep('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true');
+        that.xizangResDep=that.getXizangDep('/index_manager/getResById?nodeId=1034');
         //替换LOGO
         getDataByGet('/index_manager/getLogoName',{}, function (res){
-            console.log("I want to say something 2");
+            // console.log("I want to say something 2");
             index.img_src = '/YU/statics/imgs/' + res.data;
             console.log("The img src is: " + index.img_src);
         })
@@ -804,6 +809,7 @@ var index = new Vue({
                                     }
                                     that.arrayData[cur].push(data);
                                     that.arrayLegend[cur].push(name);
+
                                 }
                             }
                         }
@@ -843,7 +849,6 @@ var index = new Vue({
                         }
                     }
                     that.rightBaroption.series[0].data = that.arrayRightBar
-
                     that.leftPictureShow();
                     // that.midPictureShow();
 
@@ -865,7 +870,6 @@ var index = new Vue({
                             }
                         }
                     }
-
                     that.getChartNum();
             })
 
@@ -1044,6 +1048,7 @@ var index = new Vue({
 		            for (var i = 0; i < 45; i++) {
 		                var temp = arr1.slice(i * 34, i * 34 + 34);
 		                arr2.push(temp);
+
 		            }
 		            for (var i = 0; i < arr2.length; i++) {
 		                var name;
@@ -1308,28 +1313,16 @@ var index = new Vue({
 	        })
 	    },
         setRankData(){
-            var nameArr = ['办公室','后勤服务中心','规划计划处','财务处','水文水资源管理处','建设与管理处','河湖管理处',
-                '农村水利水电水保处','水旱灾害防御处','政工人事处','机关党委','强基惠民办公室','农村水电管理局','质安中心',
-                '改革扶贫办','水利信息中心','水利电力规划勘测设计研究院','水土保持局','水文水资源勘测局','满拉水利枢纽管理局',
-                '重点水利建设项且管理中心','防汛机动抢险队','旁多水利枢纽管理局','拉洛水利枢纽及罐区管理局']
-            var totalArr = [];
-            for (var i = 0; i < that.arrayObjData.length; i++) {
+            var totalArr = [];  //排序使用
+            //动态获取部门名称以及数量放到申请榜等上面
+            // console.log("xiznagresDep的长度是：",that.xizangResDep.length)
+            for (var i = 0; i < that.xizangResDep.length; i++) {
                 var tmp = { 'name': '', value: '' }
-                tmp.name = nameArr[i];
+                tmp.name = that.xizangResDep[i].name;
                 // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
-                for (var j = 0; j < that.arrayObjData[i].length; j++) {
-                    tmp.value = Number(that.arrayObjData[i][j].value);
-                    console.log("objdata的数据是："+Number(that.arrayObjData[i][j].value));
-                    console.log("data的数据是："+Number(that.arrayData[i][j]));
-                }
-
-
+                tmp.value = that.xizangResDep[i].value+that.xizangObjDep[i].value;
                 totalArr.push(tmp)
             }
-            console.log("alldata的数据是："+that.arrayAllData);
-            console.log("data的数据是："+that.arrayData);
-            console.log("Objdata的数据是："+that.arrayObjData);
-
             totalArr.sort(function(a, b) {
                 return b.value - a.value
             })
@@ -1868,7 +1861,6 @@ var index = new Vue({
 	    },
 
 	    reSet(){
-            console.log("hhh")
 	        that.myChartAllData.showLoading();
 	  //      that.myChartRightData.showLoading();
 	        that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40);
@@ -1905,8 +1897,27 @@ var index = new Vue({
             const st = nodeName.indexOf("(") + 1
             const len = nodeName.indexOf(")") - st
             return parseInt(nodeName.substr(st, len))
-        }
+        },
+        //获取西藏的部门以及数量，后面如果需要复用类似的函数，只要将这个请求的节点设置为变量即可
+        getXizangDep(requestStr){
+            var xizangObjOrResDep=[];
+            getDataByGet(requestStr, {}, dataStr=>{
+                that.objectTreeData = dataStr;
+                for (var i = 0; i < dataStr.length; i++) {
+                    if (dataStr[i].pnodeId == 1034) {
+                        var str = dataStr[i].nodeName + "";
+                        var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                        var name = str.substr(0, str.indexOf("("));
+                        var data = {
+                            value: num,
+                            name: name,
+                        }
+                        xizangObjOrResDep.push(data);
+                    }
+                }
+            })
+            return xizangObjOrResDep;
+        },
 
     },
-
 })
