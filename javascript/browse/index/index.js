@@ -711,8 +711,25 @@ var index = new Vue({
             index.updateData = msg.slice(0,10);
         })
 
-        that.xizangObjDep=that.getXizangDep('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true');
-        that.xizangResDep=that.getXizangDep('/index_manager/getResById?nodeId=1034');
+        // var aJson;
+        // aJson={"nodeId":'1034'};
+        // getDataByGet('/index_manager/getObjById', aJson, dataStr=>{
+        //     that.objectTreeData = dataStr;
+        //     console.log("getObjById的值是",dataStr)
+        //     for (var i = 0; i < dataStr.length; i++) {
+        //         if (dataStr[i].pnodeId == 1034) {
+        //             var str = dataStr[i].nodeName + "";
+        //             var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+        //             var name = str.substr(0, str.indexOf("("));
+        //             var data = {
+        //                 value: num,
+        //                 name: name,
+        //             }
+        //             // xizangObjOrResDep.push(data);
+        //         }
+        //     }
+        // })
+
         //替换LOGO
         getDataByGet('/index_manager/getLogoName',{}, function (res){
             // console.log("I want to say something 2");
@@ -1316,17 +1333,26 @@ var index = new Vue({
             var totalArr = [];  //排序使用
             //动态获取部门名称以及数量放到申请榜等上面
             // console.log("xiznagresDep的长度是：",that.xizangResDep.length)
-            for (var i = 0; i < that.xizangResDep.length; i++) {
-                var tmp = { 'name': '', value: '' }
-                tmp.name = that.xizangResDep[i].name;
-                // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
-                tmp.value = that.xizangResDep[i].value+that.xizangObjDep[i].value;
-                totalArr.push(tmp)
-            }
-            totalArr.sort(function(a, b) {
-                return b.value - a.value
-            })
-            index.totalData = totalArr.slice(0,10);
+                getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
+                    that.xizangObjDep=that.getXizangDep(dataStr);
+                    console.log("西藏的obj是：",that.xizangObjDep)
+                    getDataByGet('/index_manager/getResById?nodeId=1034', {}, dataStr=>{
+                        that.xizangResDep=that.getXizangDep(dataStr);
+                        console.log("西藏的res是：",that.xizangResDep)
+                        for (var i = 0; i < that.xizangResDep.length; i++) {
+                            var tmp = { 'name': '', value: '' }
+                            tmp.name = that.xizangResDep[i].name;
+                            // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
+                            tmp.value = that.xizangResDep[i].value+that.xizangObjDep[i].value;
+                            totalArr.push(tmp)
+                        }
+                        totalArr.sort(function(a, b) {
+                            return b.value - a.value
+                        })
+                        index.totalData = totalArr.slice(0,10);
+                    })
+                })
+
         },
 	    getObjTree(objdep_id){
 	        // var data = {
@@ -1899,23 +1925,20 @@ var index = new Vue({
             return parseInt(nodeName.substr(st, len))
         },
         //获取西藏的部门以及数量，后面如果需要复用类似的函数，只要将这个请求的节点设置为变量即可
-        getXizangDep(requestStr){
-            var xizangObjOrResDep=[];
-            getDataByGet(requestStr, {}, dataStr=>{
-                that.objectTreeData = dataStr;
-                for (var i = 0; i < dataStr.length; i++) {
-                    if (dataStr[i].pnodeId == 1034) {
-                        var str = dataStr[i].nodeName + "";
-                        var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
-                        var name = str.substr(0, str.indexOf("("));
-                        var data = {
-                            value: num,
-                            name: name,
-                        }
-                        xizangObjOrResDep.push(data);
+        getXizangDep(dataStr){
+	        var xizangObjOrResDep=[];
+            for (var i = 0; i < dataStr.length; i++) {
+                if (dataStr[i].pnodeId == 1034) {
+                    var str = dataStr[i].nodeName + "";
+                    var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
+                    var name = str.substr(0, str.indexOf("("));
+                    var data = {
+                        value: num,
+                        name: name,
                     }
+                    xizangObjOrResDep.push(data);
                 }
-            })
+            }
             return xizangObjOrResDep;
         },
 
