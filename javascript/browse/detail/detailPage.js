@@ -8,10 +8,12 @@ var detailPage = new Vue({
         detailContent: {
             configData: {},  //记录当前类型的配置文件 showDetail
             dataContent: {}, //记录当前待显示的元数据内容
-            type: '2'//1代表本地 2代表非本地打开
+            type: '2',//1代表本地 2代表非本地打开
         },
         ahtml: "",
-        keySearch_html: ""
+        keySearch_html: "",
+        userId:"",
+        userContent:{}//代表获得的联系人的信息
     },
     mounted(){
 
@@ -48,6 +50,7 @@ var detailPage = new Vue({
             }, res=>{
                 //取最后一个结点用于展开树、高亮最后一个结点
                 var msg = res.data;
+
                 var flag = msg[msg.length-1];
                 var lastNode = msg[msg.length-2];
                 var index;
@@ -89,7 +92,9 @@ var detailPage = new Vue({
                     },1500);
                 }
 
-            });
+            }
+
+            );
         },
 
         getDataSequence:function (metadataId,curClassid) {
@@ -98,6 +103,7 @@ var detailPage = new Vue({
             };
             getDataByPost('/show_detail/getDetailContents',data,res=>{
                 detailPage.Sequence=res.data;
+                //console.log(res.data);
             })
         },
         //获得配置文件
@@ -118,8 +124,8 @@ var detailPage = new Vue({
                         "content", "id", "tableid");
                     // console.log("msg after parsing: " +
                     //     detailPage.detailContent.configData.toString());
-                    // console.log(detailPage.detailContent.configData);
                     detailPage.getData(metadataId);
+
 
                 } catch (cer) {
                     console.log(cer);
@@ -132,24 +138,45 @@ var detailPage = new Vue({
         //获得元数据
         getData: function (metadataId) {
             var data = {
-                metadataId: metadataId
+                metadataId: metadataId,
+                userflag:0
             };
             getDataByPost('/show_detail/getDetailContent', data, function (res) {//content的xml
                 var msg = res.data;
-                detailPage.detailContent.dataContent = toJson(parseXML(msg));
-                if (typeof(detailPage.detailContent.dataContent.Metadata.Ident)!="undefined") {
+                detailPage.detailContent.dataContent= toJson(parseXML(msg));
+                if (typeof( detailPage.detailContent.dataContent.Metadata.Ident)!="undefined") {
                     var curClassid="";
-                    curClassid=detailPage.detailContent.dataContent.Metadata.Ident.classId;//对象类型 如450为水库
+                    curClassid= detailPage.detailContent.dataContent.Metadata.Ident.classId;//对象类型 如450为水库
                     if(curClassid !=null ){
+                        //获取对象对应的摘要数据
                         detailPage.getDataSequence(metadataId,curClassid);
                     }
                 }
-                // console.log(detailPage.detailContent.dataContent);
+                if((detailPage.detailContent.dataContent.Metadata.mdContact.rpIndID)!="undefined"){
+                    userId= detailPage.detailContent.dataContent.Metadata.mdContact.rpIndID;
+                    detailPage.getUserData(userId);
+                }
                 detailPage.refresh();
-
                 detailPage.readConfigFile(metadataId);
             });
         },
+        //获得联系人元数据
+        getUserData: function (userId) {
+            var data = {
+                userId: userId,
+                userflag:1
+            };
+            getDataByPost('/show_detail/getDetailContent', data, function (res) {//content的xml
+                var msg = res.data;
+                detailPage.userContent= toJson(parseXML(msg));
+               /* if(typeof(detailPage.userContent.Metadata.mdExtInfo.obj_att.PERS_NAME.value)!="undefined"){
+                    console.log(detailPage.userContent.Metadata.mdExtInfo.obj_att.PERS_NAME.value);
+                    console.log(detailPage.userContent.Metadata.mdExtInfo.obj_att.TELNUMBER.value);
+                }*/
+
+            });
+        },
+
         //页面刷新
         refresh: function () {
             try {
@@ -264,6 +291,7 @@ var detailPage = new Vue({
             };
             getDataByPost('/show_detail/GetDetail',data,function(msg){
                 detailPage.datailTable = msg.data;
+                //console.log(msg.data);
                 detailPage.parseConfigFile();
             });
         },
@@ -343,6 +371,7 @@ var detailPage = new Vue({
                                     + detailValue
                                     + "</td></tr>");
                             }
+
                         } else if (detailConfigs[j].type == 1) {
                             // 属性名和属性值均从元数据内容读取
                             var detailProperty = eval("detailPage.detailContent.dataContent." +
@@ -367,7 +396,16 @@ var detailPage = new Vue({
                                     + "</td></tr>");
                             }
                         }
-
+                        else if (detailConfigs[j].type == 2){
+                            //属性名从showDetail配置文件读取，属性值从联系人元数据内容读取
+                            var detailValue=eval("detailPage.userContent."+detailConfigs[j].path);
+                            if (detailValue != null) {
+                                dom.append("<tr><td>"
+                                    + detailConfigs[j].name + "</td><td>"
+                                    + detailValue
+                                    + "</td></tr>");
+                            }
+                        }
 
                     }
                 }
