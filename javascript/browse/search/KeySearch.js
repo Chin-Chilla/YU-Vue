@@ -599,7 +599,7 @@ var keySearch = new Vue({
                                         }
 
                                         ahtml += "<tr><td class=\"title\" style=\"width:100px;\" valign=\"center\">" + msg.result[i][j].name + "</td><td></td><td>" +
-                                            msg.result[i][j].value.replace("\n","<br><br>") + "</td></tr>";
+                                            "<br>" + msg.result[i][j].value.replaceAll("\n","<br><br>") + "</td></tr>";
                                     }
 
                                 }
@@ -674,7 +674,7 @@ var keySearch = new Vue({
                                             continue;
                                         }
                                         ahtml += "<tr><td class=\"title\" style=\"width:100px;\" valign=\"center\">" + msg.result[i][j].name + "</td><td></td><td>" +
-                                            msg.result[i][j].value + "</td></tr>";
+                                            "<br>" + msg.result[i][j].value.replaceAll("\n","<br><br>") + "</td></tr>";
                                     }
                                 }
                             }
