@@ -219,6 +219,8 @@ var keySearch = new Vue({
             });
             keySearch.getOnePage(flag,true);
         },
+
+        //获取检索结果
         getOnePage: function (flag,is_first,node) {
             $("#cardPage").empty();
             var keyword="";
@@ -525,7 +527,8 @@ var keySearch = new Vue({
                         }
                     })
                 }
-            }else /*if(readConf.value=="nanjing_test")*/{ 
+            }else /*if(readConf.value=="nanjing_test")*/{
+                //默认获取检索结果并渲染至前台
                 var buttonhtml;
                 if(is_first){
                     var msg=keySearch.msg;
@@ -592,7 +595,7 @@ var keySearch = new Vue({
                                         }
 
                                         ahtml += "<tr><td class=\"title\" style=\"width:100px;\" valign=\"center\">" + msg.result[i][j].name + "</td><td></td><td>" +
-                                            msg.result[i][j].value + "</td></tr>";
+                                            "<br>" + msg.result[i][j].value.replaceAll("\n","<br><br>") + "</td></tr>";
                                     }
 
                                 }
@@ -667,7 +670,7 @@ var keySearch = new Vue({
                                             continue;
                                         }
                                         ahtml += "<tr><td class=\"title\" style=\"width:100px;\" valign=\"center\">" + msg.result[i][j].name + "</td><td></td><td>" +
-                                            msg.result[i][j].value + "</td></tr>";
+                                            "<br>" + msg.result[i][j].value.replaceAll("\n","<br><br>") + "</td></tr>";
                                     }
                                 }
                             }

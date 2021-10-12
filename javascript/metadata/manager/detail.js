@@ -329,7 +329,7 @@ var app = new Vue({
             var nodeList = []
             if(flag==0||flag==2){
             	var nodes = that.zTreeObj.getCheckedNodes(true);
-            	if (nodes.length !=2) {
+            	if (nodes.length < 2) {
 			        toastr.warning("二级结点必须选择一个！");
 			        return;
 			    }else{
@@ -354,7 +354,7 @@ var app = new Vue({
 				hasCataLog:'0'
         	}
 			var nodes = that.zTreeObj.getCheckedNodes(true);
-			var nodeCode = nodes[1].nodeCode+"_"+sessionStorage.getItem("objClassCode");
+			var nodeCode = nodes[(nodes.length-1)].nodeCode+"_"+sessionStorage.getItem("objClassCode");
 	        var data = {
             	nodeCode:nodeCode,
 	            classId: that.classId,
@@ -388,6 +388,7 @@ var app = new Vue({
     				clearInterval(timer);
     			}
     		},interval)
+			
             getDataByPost('/metadata_register/catalog_by_class',data,res=> {
                 if (res.msg == "SUCCESS") {
                 	that.progress=100;

@@ -792,8 +792,9 @@ var index = new Vue({
                     enable: true,
                     type: "GET",
                     dataType: 'json',
-                    url: BASE_URL+"/index_manager/getResById",
-                    autoParam: ["nodeId"]
+                    url: BASE_URL+"/index_manager/getResTreeByCode",
+                    autoParam: ["nodeCode"],
+                    otherParam: {"addCount":"true"}
                 },
                 data: {
                     simpleData: {
@@ -895,8 +896,9 @@ var index = new Vue({
                     enable: true,
                     type: "GET",
                     dataType: 'json',
-                    url: BASE_URL+"/index_manager/getObjById",
-                    autoParam: ["nodeId"]
+                    url: BASE_URL+"/object_manage/getObjTreeByCode",
+                    autoParam: ["nodeCode"],
+                    otherParam: {"addCount":"true", "withUncheck":"false"}
                 },
                 data: {
                     simpleData: {
