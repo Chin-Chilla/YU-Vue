@@ -733,9 +733,7 @@ var index = new Vue({
 
         //替换LOGO
         getDataByGet('/index_manager/getLogoName',{}, function (res){
-            // console.log("I want to say something 2");
             index.img_src = '/YU/statics/imgs/' + res.data;
-            console.log("The img src is: " + index.img_src);
         })
 
         window.onresize = function loadChart() {
@@ -1336,13 +1334,10 @@ var index = new Vue({
         setRankData(){
             var totalArr = [];  //排序使用
             //动态获取部门名称以及数量放到申请榜等上面
-            // console.log("xiznagresDep的长度是：",that.xizangResDep.length)
                 getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
                     that.xizangObjDep=that.getXizangDep(dataStr);
-                    console.log("西藏的obj是：",that.xizangObjDep)
                     getDataByGet('/index_manager/getResById?nodeId=1034', {}, dataStr=>{
                         that.xizangResDep=that.getXizangDep(dataStr);
-                        console.log("西藏的res是：",that.xizangResDep)
                         for (var i = 0; i < that.xizangResDep.length; i++) {
                             var tmp = { 'name': '', value: '' }
                             tmp.name = that.xizangResDep[i].name;
@@ -1363,19 +1358,15 @@ var index = new Vue({
 	            "dep": objdep_id,
 	        }, res=> {
 	        	var dataStr = res.data;
-                console.log(dataStr);
 	            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
 	            var arr1 = new Array();
                 var objCountMap = new Map();
 	            for (var i = 0; i < arr.length; i++) {
 	                var tmp = arr[i].trim();
-	                // arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
-
                     var objCode = tmp.substring(tmp.lastIndexOf("_") + 1, tmp.indexOf("="));
                     var objCount = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
                     objCountMap.set(objCode, objCount);
 	            }
-                // console.log(objCountMap);
 
                 that.arrayDepObjName = [];
                 that.arrayDepObj = [];
@@ -1389,8 +1380,6 @@ var index = new Vue({
                             that.arrayDepObj.push(count);
                         }
                     })
-                    console.log(that.arrayDepObjName);
-                    console.log(that.arrayDepObj);
                 })
 
                 //一级对象分类：江河湖泊、水利工程、监测站点、其他管理对象
@@ -1429,7 +1418,7 @@ var index = new Vue({
 	        var aJson = {};
 	        getDataByGet("/index_manager/queryObjNum",aJson,res=>{
 	        	var dataStr = res.data;
-                console.log("ok",dataStr,"ok");
+
 	            //全国汇交情况图""
 	            for (var i = 0; i < that.arrayNodeId.length; i++) {
 	                //that.allDataObj.push(dataStr[0][10]);
@@ -1673,7 +1662,7 @@ var index = new Vue({
 	       // var depart = options.text();
 	        that.rightdownoption.title.text = DEPTNAME + ' - 一级对象类分布图';
 	        var dataString = that.arrayDepObjTotal.join('');
-	       console.log(dataString);
+
 	        if (dataString=='0'*4){
                 //如果各类的元数据统计项均为0，即没有发布对象数据，则隐藏相关统计数据
 	            $("#right_down").addClass("hidden");
@@ -1904,7 +1893,6 @@ var index = new Vue({
 	 //       that.myChartRightData.hideLoading();
 	    },
         hide0Nodes(zTree, zTreeNodeParent = null,depth=0) {
-            console.log("in hid0Nodes:")
             if (zTreeNodeParent == null) {
                 zTreeNodeParent = zTree.getNodes()[0]
             }
