@@ -4,12 +4,14 @@
  *主要用编写前台通用的js方法
  */
 
-const BASE_URL = "http://localhost:8080",LOCATION = "hohai";
+const BASE_URL = "http://localhost:8080", LOCATION = "hohai";
 const RES_CODE = {
 "UNAUTHENTICATED": 4002,//未登录
 
 "UNAUTHORIZED": 4003//没有权限
 };
+var DEPTNAME= "数据资源目录";
+
 //根据名称获取url中的参数值
 function getUrlParam(name) {
 	var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); // 构造一个含有目标参数的正则表达式对象
@@ -506,6 +508,44 @@ function getUrlKey(name) {
 		(new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.href) || [, ""])[1].replace(/\+/g, '%20')) || null;
 }
 
+// 根据SL 799-2020, 返回当前 location 的头两位编码
+function  getLocationId(){
+	switch (LOCATION) {
+		case "beijing" + LOCATION.slice("beijing".length):
+			//水利部, beijing*
+			DEPTNAME = "水利部" + DEPTNAME;
+			return "00";
+		case "hohai" + LOCATION.slice("hohai".length):
+			//河海测试，同样用水利部的代码
+			DEPTNAME = "河海测试" + DEPTNAME;
+			return "00";
+		case "hhu" + LOCATION.slice("hhu".length):
+			//河海测试，同样用水利部的代码
+			DEPTNAME = "河海测试" + DEPTNAME;
+			return "00";
+		case "cjw" + LOCATION.slice("cjw".length):
+			//长江委
+			DEPTNAME = "长江水利委员会" + DEPTNAME;
+			return "01";
+		case "huaiwei":
+			DEPTNAME = "淮河水利委员会" + DEPTNAME;
+			return "03";
+		case "songliao":
+			DEPTNAME = "松辽水利委员会" + DEPTNAME;
+			return "06";
+		case "hubei":
+			DEPTNAME = "湖北省水利厅" + DEPTNAME;
+			return "42";
+		case "xizang" + LOCATION.slice("xizang".length):
+			DEPTNAME = "西藏自治区水利厅" + DEPTNAME;
+			return "54";
+		case "xinjiang" + LOCATION.slice("xinjiang".length):
+			DEPTNAME = "新疆生产建设兵团水利局" + DEPTNAME;
+			return "66";
+		default:
+			return "00";
+	}
+}
 
 
 
