@@ -666,8 +666,9 @@ var index = new Vue({
         arrayObjTotal: [],
         arrayObjlegendAll: [],
         //存储对象分类数据
-        arrayDepObj: [],
-        arrayDepObjTotal: [],
+        arrayDepObjName: [],        //每个对象类的名称
+        arrayDepObj: [],            //每个对象类的统计数
+        arrayDepObjTotal: [],       //每个抽象类的统计数
         //对象树结点名称和class_code
         Obj_Code_Name: [],
         //用于存放两张柱状图的对象类数据量
@@ -732,9 +733,7 @@ var index = new Vue({
 
         //替换LOGO
         getDataByGet('/index_manager/getLogoName',{}, function (res){
-            // console.log("I want to say something 2");
             index.img_src = '/YU/statics/imgs/' + res.data;
-            console.log("The img src is: " + index.img_src);
         })
 
         window.onresize = function loadChart() {
@@ -988,6 +987,7 @@ var index = new Vue({
         search(flag){
             alert("hhh")
         },
+
         getChartNum(){
 	        new Promise(function(resolve){
 	            that.getReSourceNum(resolve);
@@ -1334,13 +1334,10 @@ var index = new Vue({
         setRankData(){
             var totalArr = [];  //排序使用
             //动态获取部门名称以及数量放到申请榜等上面
-            // console.log("xiznagresDep的长度是：",that.xizangResDep.length)
                 getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
                     that.xizangObjDep=that.getXizangDep(dataStr);
-                    console.log("西藏的obj是：",that.xizangObjDep)
                     getDataByGet('/index_manager/getResById?nodeId=1034', {}, dataStr=>{
                         that.xizangResDep=that.getXizangDep(dataStr);
-                        console.log("西藏的res是：",that.xizangResDep)
                         for (var i = 0; i < that.xizangResDep.length; i++) {
                             var tmp = { 'name': '', value: '' }
                             tmp.name = that.xizangResDep[i].name;
@@ -1357,57 +1354,63 @@ var index = new Vue({
 
         },
 	    getObjTree(objdep_id){
-	        // var data = {
-	        //     dep: objdep_id,
-	        // };
-	        //var dataString = JSON.stringify(data);
 	        getDataByPost("/index_manager/queryObjTree", {
 	            "dep": objdep_id,
 	        }, res=> {
 	        	var dataStr = res.data;
 	            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
 	            var arr1 = new Array();
+                var objCountMap = new Map();
 	            for (var i = 0; i < arr.length; i++) {
 	                var tmp = arr[i].trim();
-	                arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
+                    var objCode = tmp.substring(tmp.lastIndexOf("_") + 1, tmp.indexOf("="));
+                    var objCount = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
+                    objCountMap.set(objCode, objCount);
 	            }
-                //EX_DATA存放其他管理对象的数据
-                var EX_DATA = arr1.slice(33,37);
-                var sum = 0;
-                for(var i=0;i<EX_DATA.length;i++){
-                    sum+=Number(EX_DATA[i]);
-                }
-	            that.arrayDepObj = [];
-	            for (i = 0; i < 33; i++){
-	                that.arrayDepObj.push(Number(arr1[i]));
-	            }
-	            that.arrayDepObj.push(Number(sum));
-	            that.arrayDepObj.push(Number(arr1[arr1.length-1]));
-	            //对象分类：江河湖泊、水利工程、监测站点、其他管理对象
-	            var RL = that.arrayDepObj.slice(0,4);
-	            var EX = that.arrayDepObj.slice(4,26);
-	            var MS = that.arrayDepObj.slice(26,32);
-	            var HP = that.arrayDepObj.slice(32,36);
-	            var sum1 = sum2 = sum3 = sum4 =0;
-	            that.arrayDepObjTotal = [],
-	            RL.forEach(item =>{
-	                sum1 = sum1 + item
-	            });
-	            that.arrayDepObjTotal.push(sum1);
-	            EX.forEach(item =>{
-	                sum2 = sum2 + item
-	            });
-	            that.arrayDepObjTotal.push(sum2);
-	            MS.forEach(item =>{
-	                sum3 = sum3 + item
-	            });
-	            that.arrayDepObjTotal.push(sum3);
-	            HP.forEach(item =>{
-	                sum4 = sum4 + item
-	            });
-	            that.arrayDepObjTotal.push(sum4);
 
-	        	that.rightDownPictureShowAll();
+                that.arrayDepObjName = [];
+                that.arrayDepObj = [];
+                getDataByGet1("/index_manager/queryLeafClasses", {}, dataStr=>{
+                    var nameMap = dataStr.data[0];
+                    objCountMap.forEach((value, key)=>{
+                        var name = nameMap[key];
+                        var count = Number(value);
+                        if (count > 0){
+                            that.arrayDepObjName.push(name);
+                            that.arrayDepObj.push(count);
+                        }
+                    })
+                })
+
+                //一级对象分类：江河湖泊、水利工程、监测站点、其他管理对象
+                that.arrayDepObjTotal = [];
+                var sum1 = sum2 = sum3 = sum4 =0;
+                objCountMap.forEach( (value, key)=>{
+                        switch (key){
+                            case "RL" + key.substring(2,key.length):
+                                sum1 = Number(sum1) + Number(value);
+                                break;
+                            case "HP" + key.substring(2,key.length):
+                                sum2 = Number(sum2) + Number(value);
+                                break;
+                            case "MS" + key.substring(2,key.length):
+                                sum3 = Number(sum3) + Number(value);
+                                break;
+                            case "EX" + key.substring(2,key.length):
+                                sum4 = Number(sum4) + Number(value);
+                                break;
+                            default: //非标准对象编码也统计入其他管理对象类中
+                                sum4 = Number(sum4) + Number(value);
+                                break;
+                        }
+                    }
+                )
+                that.arrayDepObjTotal.push(sum1);
+                that.arrayDepObjTotal.push(sum2);
+                that.arrayDepObjTotal.push(sum3);
+                that.arrayDepObjTotal.push(sum4);
+
+	        	that.rightDownPictureShowAll();  //初始化时，展示每个实体类的统计数量
 	        });
 	    },
 	    getObjNum(){
@@ -1415,7 +1418,7 @@ var index = new Vue({
 	        var aJson = {};
 	        getDataByGet("/index_manager/queryObjNum",aJson,res=>{
 	        	var dataStr = res.data;
-                console.log("ok",dataStr,"ok");
+
 	            //全国汇交情况图""
 	            for (var i = 0; i < that.arrayNodeId.length; i++) {
 	                //that.allDataObj.push(dataStr[0][10]);
@@ -1567,19 +1570,20 @@ var index = new Vue({
 	        that.showLoading(that.myChartrightDown);
 	   //    that.leftDownPictureShow();
 
-            var depobjId = "54";
+            // 根据当前的 LOCATION 来获取默认机构节点下的对象元数据统计情况
+            var depobjId = getLocationId();
+            // 根据筛选框中的选择项来获取特定对象类的统计情况
 	        // var depobjId = $("#level2").find("option:selected").attr("objdep_id");
-	        //请求数据
-          //  console.log("ok",depobjId,"ok");
 
 	        that.getObjTree(depobjId);
 	    },
+
 	    rightDownBtnClick(flag){
 	        if(flag){
-	            console.log("我是对象")
+	            // 显示抽象对象的柱状图统计
 	            that.rightDownPictureShow();
 	        }else{
-	            console.log("我是全部")
+	            // 显示所有对象类的柱状图统计
 	            that.rightDownPictureShowAll();
 	        }
 	    },
@@ -1656,52 +1660,38 @@ var index = new Vue({
 	    rightDownPictureShow() {
 	       // var options = $("#level2 option:selected");
 	       // var depart = options.text();
-            var depart="西藏水利厅";
-	        that.rightdownoption.title.text = depart + '对象分布图';
+	        that.rightdownoption.title.text = DEPTNAME + ' - 一级对象类分布图';
 	        var dataString = that.arrayDepObjTotal.join('');
-	       // console.log(dataString);
+
 	        if (dataString=='0'*4){
+                //如果各类的元数据统计项均为0，即没有发布对象数据，则隐藏相关统计数据
 	            $("#right_down").addClass("hidden");
 	            $("#right_downall").addClass("hidden");
 	            $("#no_objdata").removeClass("hidden");
 	        }else{
+                //只要有统计项，则设置相关控件为可视
 	            $("#right_down").removeClass("hidden");
 	            $("#right_downall").addClass("hidden");
 	            $("#no_objdata").addClass("hidden");
 	            that.rightdownoption.series[0].data = that.arrayDepObjTotal;
-	            //that.rightdownoption.legend.data = that.arrayObjLegend[curIndex].slice(0,5);
 	            that.myChartrightDown.clear();
 	            that.myChartrightDown.setOption(that.rightdownoption);
 	        }
 	        that.myChartrightDown.hideLoading();
 	    },
+
 	    rightDownPictureShowAll() {
 	        //var options = $("#level2 option:selected");
 	        //var depart = options.text();
-            var depart="西藏水利厅";
-	        that.rightdownoptionall.title.text = depart + '对象分布图';
+	        that.rightdownoptionall.title.text = DEPTNAME + ' - 二级对象类分布图';
 	        var dataString = that.arrayDepObj.join('');
 	        if (dataString=='0'*35){
 	            $("#right_down").addClass("hidden");
 	            $("#right_downall").addClass("hidden");
 	            $("#no_objdata").removeClass("hidden");
 	        }else{
-	            var deptObjOption = ["流域", "河流", "湖泊", "其他",
-                    "水库", "水库大坝", "水电站", "灌区", "渠道", "取水井", "水闸", "渡槽", "倒虹吸", "泵站", "涵洞",
-                    "引调水工程", "农村供水工程", "窖池", "塘坝", "蓄滞洪区", "堤防", "圩垸", "治河工程", "淤地坝", "橡胶坝", "其他",
-                    "水文测站", "水土保持监测站", "水工程安全监测点", "供取水量监测点", "水事影像监视点", "其他",
-                    "服务", "数据", "其他"
-                ];                                     //柱状图x轴单位
-                var newDeptObjOption = [];
-                var deptObjNum = [];              //柱状图对应x轴单位数值
-                $.each($(that.arrayDepObj),function(index,element){
-                    if(element){
-                        deptObjNum.push(element);
-                        newDeptObjOption.push(deptObjOption[index]);
-                    }
-                })
-	            that.rightdownoptionall.series[0].data = deptObjNum;
-                that.rightdownoptionall.xAxis.data = newDeptObjOption;
+                that.rightdownoptionall.series[0].data = that.arrayDepObj;
+                that.rightdownoptionall.xAxis.data = that.arrayDepObjName;
 	            // that.rightdownoption.legend.data = that.arrayObjLegend.slice(0,5);
 	            that.myChartrightDown.clear();
 	            that.myChartrightDown.setOption(that.rightdownoptionall);
@@ -1903,7 +1893,6 @@ var index = new Vue({
 	 //       that.myChartRightData.hideLoading();
 	    },
         hide0Nodes(zTree, zTreeNodeParent = null,depth=0) {
-            console.log("in hid0Nodes:")
             if (zTreeNodeParent == null) {
                 zTreeNodeParent = zTree.getNodes()[0]
             }
