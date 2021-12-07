@@ -368,10 +368,9 @@ var detailPage = new Vue({
                             if (detailValue != null) {
                                 dom.append("<tr><td>"
                                     + detailConfigs[j].name + "</td><td>"
-                                    + detailValue
+                                    + detailValue.replaceAll("#CR#","<br><br>")
                                     + "</td></tr>");
                             }
-
                         } else if (detailConfigs[j].type == 1) {
                             // 属性名和属性值均从元数据内容读取
                             var detailProperty = eval("detailPage.detailContent.dataContent." +
