@@ -174,7 +174,7 @@ var keySearch = new Vue({
                 };
 
                 getDataByPost('/key_search/queryforindex', data, function (res) {
-                    var msg = res.data
+                    var msg = res.data;
                     keySearch.msg = msg;
                     keySearch.count = msg.num;
                     if (typeof(msg.facet) != 'undefined') {
@@ -750,8 +750,24 @@ var keySearch = new Vue({
                     var usrabs = msg.usr_abs||msg.contact||' ';
                     var url = source+'/key_search/showDetail?metadataId=' + metadataId+"&source="+2;
                     var loc = "<tr><td>源系统</td><td><a target='_blank' href='"+url+"'>访问源系统</a></td></tr>";
-                    if(source=='http://10.1.7.92:8090'){
+                    //根据nodeCode判断数据表类型
+                    var nodeCode=msg.nodeCode;
+                    var shareway=msg.shareway;
+                    //获取shareway的方式，如果是网址，就写作链接，不是链接当作为普通文本
+                    if (shareway!=null || ""){
+                        if(shareway.startsWith("http")){
+                            var share_way="<tr><td>共享方式</td><td><a target='_blank' href='"+shareway+"'>共享方式链接</a></td></tr>";
+                        }
+                        else{
+                            var share_way="<tr><td>共享方式</td><td>"+shareway+"</td></tr>";
+                        }
+                    }
+
+                    if(source=='http://http://10.2.76.94:9000/'){
                         loc="";
+                    }
+                    if(nodeCode!='TABLE'){
+                        share_way="";
                     }
                     $(".right_down").html("<style type=\"text/css\">body,html{width:100%;height:100%;margin:0;font-family:\"Microsoft YaHei\"}#mapDiv{width:50%}input,b,p{margin-left:5px;font-size:14px}</style><div class=\"row\">    <div class=\"col-md-2\"></div>    <div class=\"col-md-8\" style=\"border-bottom: 1px solid #9d9d9d;        text-align: center;        margin: 20px 0 20px 0\">        " +
                         "<h3 id=\"title\">" +name+
@@ -777,6 +793,7 @@ var keySearch = new Vue({
                         "<tr><td>发布日期</td><td>" +msg.uptime+
                         "</td></tr>" +
                         loc +
+                        share_way+
                         "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.showModal('" + msg.id + "','"+name+"')\">   </div></div></div>")
                     
                 });
