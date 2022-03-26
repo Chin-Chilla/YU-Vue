@@ -39,7 +39,7 @@ for(var j=0;j<arrs.length;j++){
         str[j]+='  <li class="ele"id='+arr.id[i]+'_'+arr.code+' draggable="true">\n' +
             '    <span class="text">'+arr.data[i]+'</span>\n' +
             '    <div class="tools">\n' +
-            '      <button id="button_'+arr.code+'" type="button" class="btn btn-tool dpt_btn" data-card-widget="collapse"><i class="fa fa-angle-left"></i>\n' +
+            '      <button id="button_'+arr.code+'" type="button" class="btn btn-tool dpt_btn" data-card-widget="collapse"><i class="fa fa-angle-left unfold"></i>\n' +
             '      </button>\n' +
             '    </div>\n' +
             '  </li>'
@@ -60,21 +60,20 @@ $(".dpt_btn").click(
     function(){
         var currentButtonID = $(this).attr("id").substr(-1);
         var nextTableID = Number(currentButtonID) + 1;
-        if ($(this).children('i').hasClass('fa-angle-left')) {
-            $(this).children('i').removeClass('fa-angle-left')
-            $(this).children('i').addClass('fa-angle-right')
+        if ($(this).children('i').filter(".unfold").hasClass('fa-angle-left')) {
+            $(this).children('i').filter(".unfold").removeClass('fa-angle-left')
+            $(this).children('i').filter(".unfold").addClass('fa-angle-right')
             $.each($("div"),function (index,element){
                 if(element.id.substr(-1)==nextTableID){
                     $(element).css('display', 'block')
                 }
             });
-        } else {
-            $(this).children('i').removeClass('fa-angle-right')
-            $(this).children('i').addClass('fa-angle-left')
+        } else{
+            $(this).children('i').filter(".unfold").addClass('fa-angle-left')
             $.each($(".dpt_div"),function (index,element){
                 if(element.id.substr(-1)>currentButtonID){
-                    $(element).find('i').removeClass('fa-angle-right')
-                    $(element).find('i').addClass('fa-angle-left')
+                    $(element).find('i').filter(".unfold").removeClass('fa-angle-right')
+                    $(element).find('i').filter(".unfold").addClass('fa-angle-left')
                     $(element).css('display', 'none')
                 }
             });
