@@ -1,3 +1,4 @@
+//# sourceURL=departmentTree.js
 /***
  * @author: 茆元慧
  * @Description: “部门对象目录管理”菜单栏
@@ -36,13 +37,17 @@ for(var j=0;j<arrs.length;j++){
     str[j]='';
     arr=arrs[j]
     for(var i=0;i<arr.data.length;i++){
-        str[j]+='  <li class="ele"id='+arr.id[i]+'_'+arr.code+' draggable="true">\n' +
-            '    <span class="text">'+arr.data[i]+'</span>\n' +
-            '    <div class="tools">\n' +
-            '      <button id="button_'+arr.code+'" type="button" class="btn btn-tool dpt_btn" data-card-widget="collapse"><i class="fa fa-angle-left unfold"></i>\n' +
-            '      </button>\n' +
-            '    </div>\n' +
-            '  </li>'
+        str[j]+='  <li class="ele li_'+arr.code+'" id='+arr.id[i]+'_'+arr.code+' draggable="true">\n'
+            +'<div class="icheck-primary d-inline">\n'
+            +'<input type="checkbox" id="checkboxPrimary1">\n'
+            +'<label for="checkboxPrimary1">\n'+arr.data[i]
+            +'</label>\n'
+            +'<div class="tools">\n'
+            +'<button id="button_'+arr.code+'" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse"><i class="fa fa-angle-left unfold"></i>\n'
+            +'</button>\n'
+            +'</div>'
+            +'</div>\n'
+            +'</li>'
     }
     document.getElementById('container'+j).innerHTML=(str[j])
 }
@@ -56,30 +61,58 @@ $.each($('.dpt_div'),(index,element) => {
 
 
 //点击展开
-$(".dpt_btn").click(
+$(function(){
+    $(".dpt_unfold_btn").click(
     function(){
-        var currentButtonID = $(this).attr("id").substr(-1);
-        var nextTableID = Number(currentButtonID) + 1;
+        $(this).attr("id").substr(-1);
         if ($(this).children('i').filter(".unfold").hasClass('fa-angle-left')) {
-            $(this).children('i').filter(".unfold").removeClass('fa-angle-left')
-            $(this).children('i').filter(".unfold").addClass('fa-angle-right')
-            $.each($("div"),function (index,element){
-                if(element.id.substr(-1)==nextTableID){
-                    $(element).css('display', 'block')
-                }
-            });
-        } else{
-            $(this).children('i').filter(".unfold").addClass('fa-angle-left')
-            $.each($(".dpt_div"),function (index,element){
-                if(element.id.substr(-1)>currentButtonID){
-                    $(element).find('i').filter(".unfold").removeClass('fa-angle-right')
-                    $(element).find('i').filter(".unfold").addClass('fa-angle-left')
-                    $(element).css('display', 'none')
-                }
-            });
+            openSubNode(this);
+        } else {
+             closeSubNode(this);
         }
     }
 )
+    function openSubNode(currentNode){
+        currentButtonID=$(currentNode).attr("id").substr(-1);
+        closeSubNode(currentNode);
+        $(currentNode).parents('.ele').css('background','white')
+        $(currentNode).children('i').filter(".unfold").removeClass('fa-angle-left')
+        $(currentNode).children('i').filter(".unfold").addClass('fa-angle-right')
+        $.each($(".dpt_div"),function (index,element){
+
+            if(Number(element.id.substr(-1))===Number(currentButtonID)+1){
+                $(element).css('display', 'block')
+            }
+        });
+    }
+    function closeSubNode(currentNode){
+        currentButtonID=$(currentNode).attr("id").substr(-1);
+        //循环每一个ele,如果当前的ele不等于当前currentNode的父亲ele，且ele不是当前的currentNode的子节点就把颜色变了
+        $.each($(".ele"),function(index,element){
+            if($(currentNode).parents('.ele').attr("id")!=element.id &&Number(element.id.substr(-1)>=Number(currentButtonID))){
+                $(element).css('background','#f4f4f4');
+                //排查一下有没有同级节点或者子节点存在没关闭的情况，给这个关了
+                if($(element).find('i').filter(".unfold").hasClass('fa-angle-right')){
+                    $(element).find('i').filter(".unfold").removeClass('fa-angle-right')
+                    $(element).find('i').filter(".unfold").addClass('fa-angle-left')
+                }
+            }
+
+        });
+        $(currentNode).parents('.ele').css('background','#f4f4f4')
+        $(currentNode).children('i').filter(".unfold").removeClass('fa-angle-right')
+        $(currentNode).children('i').filter(".unfold").addClass('fa-angle-left')
+        //这里是对是否显示子节点的处理
+        $.each($(".dpt_div"),function (index,element){
+            if(Number(element.id.substr(-1))>Number(currentButtonID)){
+                $(element).css('display', 'none')
+            }
+        });
+    }
+
+
+})
+//拖拽功能
 $.each($('.dpt_div'), (index, element) => {
     const node = element
     let draging = null
