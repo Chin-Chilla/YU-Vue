@@ -1,77 +1,49 @@
-//# sourceURL=departmentTree.js
-/***
- * @author: 茆元慧
- * @Description: “部门对象目录管理”菜单栏
- * @date: 2021/3/21
- ***/
-var arrs=new Array();
-var arr1={
-    //循环名
-    data:['水利部','松辽水利委员会','西藏水利委员会'],
-    //节点属于第几个展开的项
-    code:0,
-    id:['1000','1006','1054']
-};
-var arr2={
-    //循环名
-    data:['财务处','办公室','河湖建设处'],
-    //节点属于第几个展开的项
-    code:1,
-    id:['caiwu','bangong','hehu']
-};
+$(function () {
 
-var arr3={
-    //循环名
-    data:['综合科','预算管理科','收费管理科'],
-    //节点属于第几个展开的项
-    code:2,
-    id:['zonghe','yusuan','shoufei']
-};
-arrs.push(arr1);
-arrs.push(arr2);
-arrs.push(arr3);
-//-----------------------------------------
-var str='';
-for(var j=0;j<arrs.length;j++){
-    var str=new Array(arrs.length);
-    str[j]='';
-    arr=arrs[j]
-    for(var i=0;i<arr.data.length;i++){
-        str[j]+='  <li class="ele li_'+arr.code+'" id='+arr.id[i]+'_'+arr.code+' draggable="true">\n'
-            +'<div class="icheck-primary d-inline">\n'
-            +'<input type="checkbox" id="checkboxPrimary1">\n'
-            +'<label for="checkboxPrimary1">\n'+arr.data[i]
-            +'</label>\n'
-            +'<div class="tools">\n'
-            +'<button id="button_'+arr.code+'" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse"><i class="fa fa-angle-left unfold"></i>\n'
-            +'</button>\n'
-            +'</div>'
-            +'</div>\n'
-            +'</li>'
-    }
-    document.getElementById('container'+j).innerHTML=(str[j])
-}
-
-//将除了第一列的元素都变为空
-$.each($('.dpt_div'),(index,element) => {
-    if(element.id.substr(-1)!=0){
-        $(element).css('display', 'none')
-    }
-})
+    //加载一级部门节点
+    $.ajax({
+        type: 'post',
+        url: BASE_URL + "/department_manager/departmentTree?PNODE_ID=0",
+        dataType: 'json',
+        success: function (msgJson) {
+            var str = '';
 
 
-//点击展开
-$(function(){
-    $(".dpt_unfold_btn").click(
-    function(){
-        $(this).attr("id").substr(-1);
-        if ($(this).children('i').filter(".unfold").hasClass('fa-angle-left')) {
-            openSubNode(this);
-        } else {
-             closeSubNode(this);
+            for(var i=0; i < msgJson.data.length; i++){
+                var JsonNode = msgJson.data[i];
+                console.log("JSonNODe" ,JsonNode);
+                console.log("######"+JsonNode["nODE_NAME"]);
+
+                var code = JsonNode["nODE_CODE"];
+                var id = JsonNode["nODE_ID"];
+                var dep_name = JsonNode["nODE_NAME"];
+
+                str += '  <li class="ele li_'+code+'" id='+id+'_'+code+' draggable="true">\n'
+                    +'<div class="icheck-primary d-inline">\n'
+                    +'<input type="checkbox" id="checkboxPrimary1">\n'
+                    +'<label for="checkboxPrimary1">\n'+dep_name
+                    +'</label>\n'
+                    +'<div class="tools">\n'
+                    +'<button id="button_'+code+'" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse"><i class="fa fa-angle-left unfold"></i>\n'
+                    +'</button>\n'
+                    +'</div>'
+                    +'</div>\n'
+                    +'</li>'
+
+            }
+            document.getElementById('container0').innerHTML=(str);
         }
-    }
-)
+    });
+    $(".dpt_unfold_btn").click(
+        function(){
+            $(this).attr("id").substr(-1);
+            if ($(this).children('i').filter(".unfold").hasClass('fa-angle-left')) {
+                openSubNode(this);
+            } else {
+                closeSubNode(this);
+            }
+        }
+    )
     function openSubNode(currentNode){
         currentButtonID=$(currentNode).attr("id").substr(-1);
         closeSubNode(currentNode);
@@ -109,8 +81,11 @@ $(function(){
             }
         });
     }
-
-
+});
+$.each($('.dpt_div'),(index,element) => {
+    if(element.id.substr(-1)!=0){
+        $(element).css('display', 'none')
+    }
 })
 //拖拽功能
 $.each($('.dpt_div'), (index, element) => {
