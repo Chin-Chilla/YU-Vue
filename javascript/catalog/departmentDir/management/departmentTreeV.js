@@ -10,10 +10,10 @@ var dptTree = new Vue({
     },
     mounted() {
         that = this;
-        that.draggable();
+        that.draggable(0);
 
 
-        getDataByPost('/departmentTree/loadDepartmentTree?PNODE_CODE=00000000', {}, function (res) {
+        getDataByPost('/departmentTree/loadDepartmentTree?pnode_code=00000000', {}, function (res) {
             var temp = [];
             for (var i = 0; i < res.data.length; i++) {
                 temp = res.data[i];
@@ -76,15 +76,15 @@ var dptTree = new Vue({
                     $(element).css('display', 'block');
                 }
             });
+
         },
         loadChildNode(currentNode){
             var btnID = $(currentNode.currentTarget).attr("id");
             var tempCode = btnID.split("_");
             var pCode = tempCode[2];
-            console.log("pCode3322" + pCode);
             var ulContainer = parseInt(tempCode[1])+1;
 
-            getDataByPost("/departmentTree/loadDepartmentTree?PNODE_CODE="+pCode, {}, function (res) {
+            getDataByPost("/departmentTree/loadDepartmentTree?pnode_code="+pCode, {}, function (res) {
                 for (var i = 0; i < res.data.length; i++) {
                     temp = res.data[i];
                     if (ulContainer == 1) {
@@ -95,8 +95,10 @@ var dptTree = new Vue({
                 }
 
             })
+            that.draggable(parseInt(ulContainer));
             if($(currentNode.currentTarget).children('i').hasClass('fa-angle-left')){
                 that.openSubNode(currentNode);
+
             }else{
                 that.closeSubNode(currentNode);
             }
@@ -132,11 +134,13 @@ var dptTree = new Vue({
 
 
         },
-        draggable(){
+        draggable(containerId){
     // $('').sortable();
     var old_index="";
     var new_index="";
-    var el= $('.ui-sortable').get(0);
+    var el= $('.ui-sortable').get(containerId);
+            console.log("containerId "  + containerId);
+            console.log("------ " + el.id);
     var ops={
         group:"drag_example",
         sort:true,

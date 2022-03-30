@@ -24,14 +24,14 @@
             </div>
 
             <ul id="container0" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson0" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+              <li v-for="item in msgJson0" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
               <div class="icheck-primary d-inline">
              <input type="checkbox" id="checkboxPrimary0">
               <label for="checkboxPrimary0" >
-                {{item.nODE_NAME}}
+                {{item.node_name}}
               </label>
               <div class="tools">
-                <button :id="'button_0_' + item.nODE_CODE" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)" ><i class="fa fa-angle-left unfold"></i>
+                <button :id="'button_0_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)" ><i class="fa fa-angle-left unfold"></i>
                 </button>
                 </div>
               </div>
@@ -52,14 +52,14 @@
             </div>
           </div>
           <ul id="container1" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson1" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+              <li v-for="item in msgJson1" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
                   <div class="icheck-primary d-inline">
                       <input type="checkbox" id="checkboxPrimary1">
                       <label for="checkboxPrimary1" >
-                          {{item.nODE_NAME}}
+                          {{item.node_name}}
                       </label>
                       <div class="tools">
-                          <button :id="'button_1_' + item.nODE_CODE " type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
+                          <button :id="'button_1_' + item.node_code " type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
                           </button>
                       </div>
                   </div>
@@ -79,14 +79,14 @@
             </div>
           </div>
           <ul id="container2" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson2" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+              <li v-for="item in msgJson2" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
                   <div class="icheck-primary d-inline">
                       <input type="checkbox" id="checkboxPrimary2">
                       <label for="checkboxPrimary2" >
-                          {{item.nODE_NAME}}
+                          {{item.node_name}}
                       </label>
                       <div class="tools">
-                          <button :id="'button_2_' + item.nODE_CODE" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
+                          <button :id="'button_2_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
                           </button>
                       </div>
                   </div>
