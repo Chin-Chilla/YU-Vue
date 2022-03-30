@@ -1,5 +1,5 @@
 <section class="content" id="obj">
-  <div class="row" style="position:relative;">
+  <div id="dptTree" class="row" style="position:relative;">
     <div class="col-md-12" style="position:absolute;float:left">
       <div class="box box-solid box-primary">
         <div class="box-header">
@@ -8,9 +8,9 @@
 
       </div>
       <div class="row align-items-start">
-        <div class="col-md-2 dpt_div" id="block0">
+        <div class="col-md-2 dpt_div" id="block0" style="background: #FFFFBF;height: 900px;margin-left: 5px">
           <div style="margin-top: 12px;margin-bottom: 12px">
-            <button id="batch_del00" class="btn btn-primary" style="margin-left:5px;width: 80px;height: 25px;line-height: 15px;">批量删除</button>
+            <button id="batch_del_0" class="btn btn-primary" style="margin-left:5px;width: 80px;height: 25px;line-height: 15px;"  @click="delBatches($event)" >批量删除</button>
             <button id="batch_import" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量导入</button>
             <button id="coord_set" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">贯标设置</button>
           </div>
@@ -23,15 +23,27 @@
               </div>
             </div>
 
-            <ul id="container0" class="todo-list ui-sortable">
+            <ul id="container0" class="todo-list ui-sortable" >
+              <li v-for="item in msgJson0" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+              <div class="icheck-primary d-inline">
+             <input type="checkbox" id="checkboxPrimary0">
+              <label for="checkboxPrimary0" >
+                {{item.nODE_NAME}}
+              </label>
+              <div class="tools">
+                <button :id="'button_0_' + item.nODE_CODE" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)" ><i class="fa fa-angle-left unfold"></i>
+                </button>
+                </div>
+              </div>
+              </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block1">
+        <div class="col-md-2 dpt_div" id="block1" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
-            <button id="batch_del01" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量删除</button>
+            <button id="batch_del_1" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatches($event)">批量删除</button>
           </div>
 
-          <div class="box-header with-border">
+          <div class="box-header with-border" >
             <h3 class="box-title" id="title1">二级部门</h3>
             <div class="box-tools pull-right">
               <button class="btn btn-box-tool all_add">
@@ -40,11 +52,23 @@
             </div>
           </div>
           <ul id="container1" class="todo-list ui-sortable" >
+              <li v-for="item in msgJson1" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+                  <div class="icheck-primary d-inline">
+                      <input type="checkbox" id="checkboxPrimary1">
+                      <label for="checkboxPrimary1" >
+                          {{item.nODE_NAME}}
+                      </label>
+                      <div class="tools">
+                          <button :id="'button_1_' + item.nODE_CODE " type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
+                          </button>
+                      </div>
+                  </div>
+              </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block2">
+        <div class="col-md-2 dpt_div" id="block2" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
-            <button id="batch_del02" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量删除</button>
+            <button id="batch_del_2" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatches($event)">批量删除</button>
           </div>
           <div class="box-header with-border">
             <h3 class="box-title" id="title2" style="text-align: center">三级部门</h3>
@@ -55,6 +79,18 @@
             </div>
           </div>
           <ul id="container2" class="todo-list ui-sortable" >
+              <li v-for="item in msgJson2" :class="'ele li_' + item.nODE_CODE"  :id="item.nODE_ID + '_' + item.nODE_CODE" draggable="true" >
+                  <div class="icheck-primary d-inline">
+                      <input type="checkbox" id="checkboxPrimary2">
+                      <label for="checkboxPrimary2" >
+                          {{item.nODE_NAME}}
+                      </label>
+                      <div class="tools">
+                          <button :id="'button_2_' + item.nODE_CODE" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNode($event)"><i class="fa fa-angle-left unfold"></i>
+                          </button>
+                      </div>
+                  </div>
+              </li>
           </ul>
         </div>
       </div>
@@ -63,7 +99,7 @@
     </div>
 </section>
 <!--自己的js-->
-<script src="/YU/javascript/catalog/departmentDir/management/departmentTree.js"></script>
+<script src="/YU/javascript/catalog/departmentDir/management/departmentTreeV.js"></script>
 
 <!--有两个问题:-->
 <!--1.点击同级节点时，二级节点的替换
