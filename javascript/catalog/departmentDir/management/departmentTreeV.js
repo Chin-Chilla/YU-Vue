@@ -1,4 +1,4 @@
-//# sourceURL=departmentTree.js
+//# sourceURL=departmentTreeV.js
 var that;
 var dptTree = new Vue({
     el: '#dptTree',
@@ -6,22 +6,20 @@ var dptTree = new Vue({
         msgJson0: [],
         msgJson1: [],
         msgJson2: [],
-        checkedArr:[]
+        checkedArr:[],
+        pnode_code:[]
     },
     mounted() {
         that = this;
-        that.draggable(0);
-
-
-        getDataByPost('/departmentTree/loadDepartmentTree?pnode_code=00000000', {}, function (res) {
+        getDataByPost('/departmentTree/loadDepartmentTree?pnode_code=000000000', {}, function (res) {
             var temp = [];
             for (var i = 0; i < res.data.length; i++) {
                 temp = res.data[i];
                 that.msgJson0.push(temp);
             }
-
         })
-
+        var pnode_code="000000000";
+        that.draggable(0,pnode_code);
 
     },
     methods: {
@@ -41,7 +39,6 @@ var dptTree = new Vue({
                         $(element).find('i').filter(".unfold").addClass('fa-angle-left');
                     }
                 }
-
             });
             $(currentNode.currentTarget).parents('.ele').css('background','#f4f4f4')
             $(currentNode.currentTarget).children('i').filter(".unfold").removeClass('fa-angle-right')
@@ -51,9 +48,7 @@ var dptTree = new Vue({
                 console.log("currentButtonID " + currentButtonID);
                 if(Number(element.id.substr(-1))>Number(currentButtonID)){
                     $(element).css('display', 'none');
-
                 }
-
             });
             if(Number(currentButtonID)==0){
                 that.msgJson1=[];
@@ -76,7 +71,6 @@ var dptTree = new Vue({
                     $(element).css('display', 'block');
                 }
             });
-
         },
         loadChildNode(currentNode){
             var btnID = $(currentNode.currentTarget).attr("id");
@@ -95,10 +89,9 @@ var dptTree = new Vue({
                 }
 
             })
-            that.draggable(parseInt(ulContainer));
+            that.draggable(parseInt(ulContainer),pCode)
             if($(currentNode.currentTarget).children('i').hasClass('fa-angle-left')){
                 that.openSubNode(currentNode);
-
             }else{
                 that.closeSubNode(currentNode);
             }
@@ -125,61 +118,60 @@ var dptTree = new Vue({
                     }
                     getDataByPost('/departmentTree/delDepartmentNode?checkedArr='+ that.checkedArr, {},function (res) {
                         alert("删除成功！");
-
-
                     })
 
                 })
             }
+        },
+        draggable(containerId,pnode_code){
+             // $('').sortable();
+            var el= $('.ui-sortable').get(containerId);
+            var ops={
+                group:"drag_example",
+                sort:true,
+                delay:0,
+                animation:150,
+                chosenClass: "sortable-chosen",
+                dragClass: "sortable-drag",
+                dataIdAttr: "data_order",
+                //设置拖拽的数据是每个Li的id
+                setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
+                    dataTransfer.setData('Text', dragEl.textContent); // ' dataTransfer '对象的HTML5 DragEvent
+                },
+                onEnd: function(evt) {
+                    //向后拖拽new>old，一切index小于拖拽后new_Index的减一，拖拽的li根据id更换index
+                    //向前拖拽new<old，一切Index大于拖拽后new_Index的加一，拖拽的li根据Id更换Index
+                    let dragNewIndex=evt.newIndex+1;
+                    let dragOldIndex=evt.oldIndex+1;
+                    let arr=evt.item.id.split("_");
+                    let dragCode=arr[1];
+                    let flag=0;
+                    //代表是向后拖拽-1
+                    if(dragNewIndex>dragOldIndex){
+                        flag=-1;
+                        //在oldIndex和newIndex之间的数据顺序-1
+                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},function (res) {
+                            //oldindex更换顺序
+                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
+                            })
+                           })
+                    }
+                    else if (dragNewIndex<dragOldIndex){
+                        flag=1;
+                        //在oldIndex和newIndex之间的数据顺序+1
+                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},function (res) {
+                            //oldindex更换顺序
+                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
+                            })
+                        })
 
+                    }
+                },
 
-        },
-        draggable(containerId){
-    // $('').sortable();
-    var old_index="";
-    var new_index="";
-    var el= $('.ui-sortable').get(containerId);
-            console.log("containerId "  + containerId);
-            console.log("------ " + el.id);
-    var ops={
-        group:"drag_example",
-        sort:true,
-        delay:0,
-        animation:150,
-        chosenClass: "sortable-chosen",
-        dragClass: "sortable-drag",
-        dataIdAttr: "data_order",
-        //设置拖拽的数据是每个Li的id
-        setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
-            dataTransfer.setData('Text', dragEl.textContent); // ' dataTransfer '对象的HTML5 DragEvent
-        },
-        onStart:function(evt){
-            old_index=sortable.toArray();
-        },
-        onEnd:function (target) {
-            var itemEl = target.item;
-            console.log(itemEl.getAttribute("id"));// dragged HTMLElement
-            target.to;    // target list
-            target.from;  // previous list
-        },
-        onUpdate: function(evt) {
-            new_index=sortable.toArray();
-            console.log("old_index:"+JSON.stringify(old_index));
-            console.log("new_index:"+JSON.stringify(new_index));
-            let old_index_str=JSON.stringify(old_index);
-            let new_index_str=JSON.stringify(new_index);
-            let length=JSON.stringify(new_index).length
-            for(let i=0;i<length;i++){
-                if(old_index_str[i]!=new_index_str[i])
-                {
-                    console.log(old_index_str[i]+"顺序变为"+new_index_str[i]);
-                }
             }
-        },
-    }
-    var sortable=Sortable.create(el,ops);
+            var sortable=Sortable.create(el,ops);
 
-}
+        }
 
     }
 })
