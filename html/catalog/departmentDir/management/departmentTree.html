@@ -24,7 +24,7 @@
             </div>
 
             <ul id="container0" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson0" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
+              <li v-for="item in msgJson0" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" :data_order="item.list_order" draggable="true" >
               <div class="icheck-primary d-inline">
              <input type="checkbox" id="checkboxPrimary0">
               <label for="checkboxPrimary0" >
@@ -52,7 +52,7 @@
             </div>
           </div>
           <ul id="container1" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson1" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
+              <li v-for="item in msgJson1" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" :data_order="item.list_order" draggable="true" >
                   <div class="icheck-primary d-inline">
                       <input type="checkbox" id="checkboxPrimary1">
                       <label for="checkboxPrimary1" >
@@ -79,7 +79,7 @@
             </div>
           </div>
           <ul id="container2" class="todo-list ui-sortable" >
-              <li v-for="item in msgJson2" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code" draggable="true" >
+              <li v-for="item in msgJson2" :class="'ele li_' + item.node_code"  :id="item.node_id + '_' + item.node_code " :data_order="item.list_order" draggable="true" >
                   <div class="icheck-primary d-inline">
                       <input type="checkbox" id="checkboxPrimary2">
                       <label for="checkboxPrimary2" >

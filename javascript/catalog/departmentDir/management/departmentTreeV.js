@@ -32,6 +32,8 @@ var dptTree = new Vue({
 
 
 
+        checkedArr:[],
+        pnode_code:[]
     },
     mounted() {
         that = this;
@@ -45,11 +47,11 @@ var dptTree = new Vue({
             }
 
         })
-
+        var pnode_code="999999999";
+        that.draggable(0,pnode_code);
 
     },
     methods: {
-
         closeSubNode(currentNode){
             var dptId = $(currentNode.currentTarget).attr("id").split("_")
             var currentButtonID=dptId[1];
@@ -63,19 +65,16 @@ var dptTree = new Vue({
                         $(element).find('i').filter(".unfold").addClass('fa-angle-left');
                     }
                 }
-
             });
             $(currentNode.currentTarget).parents('.ele').css('background','#f4f4f4')
             $(currentNode.currentTarget).children('i').filter(".unfold").removeClass('fa-angle-right')
             $(currentNode.currentTarget).children('i').filter(".unfold").addClass('fa-angle-left')
             //这里是对是否显示子节点的处理
             $.each($(".dpt_div"),function (index,element){
-                /*console.log("currentButtonID " + currentButtonID);*/
+                console.log("currentButtonID " + currentButtonID);
                 if(Number(element.id.substr(-1))>Number(currentButtonID)){
                     $(element).css('display', 'none');
-
                 }
-
             });
 
             //循环次数count
@@ -86,6 +85,7 @@ var dptTree = new Vue({
                     }
                     count++;
             }
+
         },
         openSubNode(currentNode){
             var dptId = $(currentNode.currentTarget).attr("id").split("_")
@@ -272,48 +272,53 @@ var dptTree = new Vue({
             $("#addModal").modal('hide');
 
         },
-        draggable(containerId){
-    // $('').sortable();
-    var old_index="";
-    var new_index="";
-    var el= $('.ui-sortable').get(containerId);
-    var ops={
-        group:"drag_example",
-        sort:true,
-        delay:0,
-        animation:150,
-        chosenClass: "sortable-chosen",
-        dragClass: "sortable-drag",
-        dataIdAttr: "data_order",
-        //设置拖拽的数据是每个Li的id
-        setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
-            dataTransfer.setData('Text', dragEl.textContent); // ' dataTransfer '对象的HTML5 DragEvent
-        },
-        onStart:function(evt){
-            old_index=sortable.toArray();
-        },
-        onEnd:function (target) {
-            var itemEl = target.item;
-            /*console.log(itemEl.getAttribute("id"));*/// dragged HTMLElement
-            target.to;    // target list
-            target.from;  // previous list
-        },
-        onUpdate: function(evt) {
-            new_index=sortable.toArray();
-            /*console.log("old_index:"+JSON.stringify(old_index));
-            console.log("new_index:"+JSON.stringify(new_index));*/
-            let old_index_str=JSON.stringify(old_index);
-            let new_index_str=JSON.stringify(new_index);
-            let length=JSON.stringify(new_index).length
-            /*for(let i=0;i<length;i++){
-                if(old_index_str[i]!=new_index_str[i])
-                {
-                    console.log(old_index_str[i]+"顺序变为"+new_index_str[i]);
-                }
-            }*/
-        },
-    }
-    var sortable=Sortable.create(el,ops);
+        draggable(containerId,pnode_code){
+             // $('').sortable();
+            var el= $('.ui-sortable').get(containerId);
+            var ops={
+                group:"drag_example",
+                sort:true,
+                delay:0,
+                animation:150,
+                chosenClass: "sortable-chosen",
+                dragClass: "sortable-drag",
+                dataIdAttr: "data_order",
+                //设置拖拽的数据是每个Li的id
+                setData: function (/** DataTransfer */dataTransfer, /** HTMLElement*/dragEl) {
+                    dataTransfer.setData('Text', dragEl.textContent); // ' dataTransfer '对象的HTML5 DragEvent
+                },
+                onEnd: function(evt) {
+                    //向后拖拽new>old，一切index小于拖拽后new_Index的减一，拖拽的li根据id更换index
+                    //向前拖拽new<old，一切Index大于拖拽后new_Index的加一，拖拽的li根据Id更换Index
+                    let dragNewIndex=evt.newIndex+1;
+                    let dragOldIndex=evt.oldIndex+1;
+                    let arr=evt.item.id.split("_");
+                    let dragCode=arr[1];
+                    let flag=0;
+                    //代表是向后拖拽-1
+                    if(dragNewIndex>dragOldIndex){
+                        flag=-1;
+                        //在oldIndex和newIndex之间的数据顺序-1
+                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},function (res) {
+                            //oldindex更换顺序
+                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
+                            })
+                           })
+                    }
+                    else if (dragNewIndex<dragOldIndex){
+                        flag=1;
+                        //在oldIndex和newIndex之间的数据顺序+1
+                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},function (res) {
+                            //oldindex更换顺序
+                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
+                            })
+                        })
+
+                    }
+                },
+
+            }
+            var sortable=Sortable.create(el,ops);
 
 }
 
