@@ -1,12 +1,8 @@
-//# sourceURL=departmentTree.js
+//# sourceURL=departmentTreeV.js
 var that;
 var dptTree = new Vue({
     el: '#dptTree',
     data: {
-        msgJson0: [],
-        msgJson1: [],
-        msgJson2: [],
-
         deptNodes: {
             level0: [],
             level1: [],
@@ -28,16 +24,16 @@ var dptTree = new Vue({
                 {id:1,name:'xixi'}
             ],
             demo2:[]
-        }
+        },
 
 
 
         checkedArr:[],
-        pnode_code:[]
+        pnode_code:[],
+        ifChangeNodeName_flag:0
     },
     mounted() {
         that = this;
-        that.draggable(0);
         var pCode = "999999999";
         getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+pCode, {}, function (res) {
             var temp = [];
@@ -48,31 +44,54 @@ var dptTree = new Vue({
 
         })
         var pnode_code="999999999";
-        that.draggable(0,pnode_code);
+        that.dragNodelist(0,pnode_code);
 
     },
     methods: {
-        closeSubNode(currentNode){
+        changeNodeColor(currentNode,flag){
+            if(flag=='fold'){
+                $(currentNode).parents('.ele').css('background','#f4f4f4')
+            }
+            if(flag=='unfold'){
+                $(currentNode).parents('.ele').css('background','white');
+            }
+        },
+        changeNodeIcon(currentNode,flag){
+            //折叠
+            if(flag=='fold'){
+                $(currentNode).find('i').removeClass('fa-angle-left');
+                $(currentNode).find('i').addClass('fa-angle-right');
+            }
+            //打开
+            else if (flag=='unfold'){
+                $(currentNode).find('i').removeClass('fa-angle-right');
+                $(currentNode).find('i').addClass('fa-angle-left');
+            }
+        },
+        foldSubNode(currentNode){
+            var flag='fold';
+            //currentNode指的是当前点击的节点
             var dptId = $(currentNode.currentTarget).attr("id").split("_")
+            //dtpId将curentNode的Id划分为 button 0 020000000,按钮名，属于的级别和node_code
             var currentButtonID=dptId[1];
-            //循环每一个ele,如果当前的ele不等于当前currentNode的父亲ele，且ele不是当前的currentNode的子节点就把颜色变了
+            //循环每一个ele,把除了他自己的所有兄弟节点以及所有子节点都改变符号
             $.each($(".ele"),function(index,element){
-                if($(currentNode.currentTarget).parents('.ele').attr("id")!=element.id &&Number(element.id.substr(-1)>=Number(currentButtonID))){
+                if($(currentNode.currentTarget).parents('.ele').attr("id") != element.id &&
+                    parseInt(($(element).parents('.todo-list').attr("id")).toString().slice(-1)) >= parseInt(currentButtonID)){
                     $(element).css('background','#f4f4f4');
                     //排查一下有没有同级节点或者子节点存在没关闭的情况，给这个关了
-                    if($(element).find('i').filter(".unfold").hasClass('fa-angle-right')){
-                        $(element).find('i').filter(".unfold").removeClass('fa-angle-right');
-                        $(element).find('i').filter(".unfold").addClass('fa-angle-left');
+                    if($(element).find('i').hasClass('fa-angle-left')){
+                        that.changeNodeIcon(element,flag);
                     }
                 }
             });
-            $(currentNode.currentTarget).parents('.ele').css('background','#f4f4f4')
-            $(currentNode.currentTarget).children('i').filter(".unfold").removeClass('fa-angle-right')
-            $(currentNode.currentTarget).children('i').filter(".unfold").addClass('fa-angle-left')
+            //改变当前节点的颜色
+            that.changeNodeColor(currentNode.currentTarget,flag)
+            //改变本节点的左右符号
+            that.changeNodeIcon(currentNode.currentTarget,'fold');
             //这里是对是否显示子节点的处理
             $.each($(".dpt_div"),function (index,element){
-                console.log("currentButtonID " + currentButtonID);
-                if(Number(element.id.substr(-1))>Number(currentButtonID)){
+                if(Number(element.id.substr(-1)) > Number(currentButtonID)){
                     $(element).css('display', 'none');
                 }
             });
@@ -87,32 +106,38 @@ var dptTree = new Vue({
             }
 
         },
-        openSubNode(currentNode){
+        //打开节点
+        unfoldSubNode(currentNode){
             var dptId = $(currentNode.currentTarget).attr("id").split("_")
             var currentButtonID=dptId[1];
-            that.closeSubNode(currentNode);
-            $(currentNode.currentTarget).parents('.ele').css('background','white')
-            $(currentNode.currentTarget).children('i').filter(".unfold").removeClass('fa-angle-left')
-            $(currentNode.currentTarget).children('i').filter(".unfold").addClass('fa-angle-right')
+            that.foldSubNode(currentNode);
+            var flag='unfold';
+            that.changeNodeColor(currentNode.currentTarget,flag);
+            that.changeNodeIcon(currentNode.currentTarget,flag);
             $.each($(".dpt_div"),function (index,element){
-
                 if(Number(element.id.substr(-1))===Number(currentButtonID)+1){
                     $(element).css('display', 'block');
                 }
             });
+        },
+        loadChildNode(currentNode){
+            var btnID = $(currentNode.currentTarget).attr("id");
+            var tempCode = btnID.split("_");
+            var pCode = tempCode[2];
+            var ulContainer = parseInt(tempCode[1])+1;
 
         },
         //判断此时树的状态（展开/隐藏）
         judegeTreeState(currentNode){
-            if($(currentNode.currentTarget).children('i').hasClass('fa-angle-left')){
-                that.openSubNode(currentNode);
+            if($(currentNode.currentTarget).children('i').hasClass('fa-angle-right')){
+                that.unfoldSubNode(currentNode);
                 that.getChildeNodes(currentNode);
             }else{
-                that.closeSubNode(currentNode);
+                that.foldSubNode(currentNode);
             }
 
         },
-        //通过父节点id查找所有子节点
+        //通过父节点code查找所有子节点
         getChildeNodes(currentNode){
             //通过点击按钮的id获取节点code，作为pCode
             var btnID = $(currentNode.currentTarget).attr("id");
@@ -144,7 +169,7 @@ var dptTree = new Vue({
             console.log("ulContainer " + ulContainer);
             console.log("parentNodeCodes ",that.parentNodeCodes);
 
-            that.draggable(parseInt(ulContainer));
+            that.dragNodelist(parseInt(ulContainer));
         },
         //批量删除
         delBatch(currentNode){
@@ -272,8 +297,8 @@ var dptTree = new Vue({
             $("#addModal").modal('hide');
 
         },
-        draggable(containerId,pnode_code){
-             // $('').sortable();
+        //单列拖拽节点，更改节点顺序
+        dragNodelist(containerId,pnode_code){
             var el= $('.ui-sortable').get(containerId);
             var ops={
                 group:"drag_example",
@@ -296,32 +321,107 @@ var dptTree = new Vue({
                     let dragCode=arr[1];
                     let flag=0;
                     //代表是向后拖拽-1
+                    console.log(pnode_code);
                     if(dragNewIndex>dragOldIndex){
                         flag=-1;
-                        //在oldIndex和newIndex之间的数据顺序-1
-                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},function (res) {
+                        //在oldIndex和newIndex之间的数据顺序-1或者+1
+                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},res1=>{
                             //oldindex更换顺序
-                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
-                            })
+                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
+                                res2=>{
+                                toastr.success("更改节点顺序成功");},
+                                err=>{
+                                toastr.error("更改节点顺序出错");}
+                            )},
+                           err=>{
+                            toastr.error("更改节点顺序出错");
                            })
                     }
                     else if (dragNewIndex<dragOldIndex){
                         flag=1;
                         //在oldIndex和newIndex之间的数据顺序+1
-                        getDataByPost('/departmentTree/updateDptTreeBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},function (res) {
-                            //oldindex更换顺序
-                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},function (res) {
+                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},res1=> {
+                                //oldindex更换顺序
+                                getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
+                                    res2=>{
+                                        toastr.success("更改节点顺序成功");},
+                                    err=>{
+                                    toastr.error("更改节点顺序出错");}
+                                )},
+                            err=>{
+                                toastr.error("更改节点顺序出错");
                             })
-                        })
-
                     }
                 },
-
             }
             var sortable=Sortable.create(el,ops);
+        },
+        //修改节点名称并且更新到数据库
+        //1.出现一个弹窗，里面含有节点名称，和查询出来的节点code,节点code是灰色的
+        //2.将修改好的名字和标准库比对，不允许出现和标准库相同的名称，如果出现了就提示换个名字
+        //3.用正则判断输入的是中文字符
+        //4.更新进数据库
+        //5.如果更新失败，提示更新失败
 
-}
+        //改变节点名称
+        changeNodeName(currentNode){
+            //当前eleID举例：990000000，可以按_分成前后两部分，前面是Id,后面是code
+            let nodeCode=$(currentNode.currentTarget).parents(".ele").attr("id");
+            let nodeName = $(currentNode.currentTarget).parents(".ele").find("label").text().trim();
+            //根据名字查询该节点是否存在在标准库中，不存在就可以修改名字
+            getDataByPost('/departmentTree/findNodeInSTbyNodeName?node_name='+nodeName.toString(),{},
+                res=>{
+                    console.log(res.data);
+                    if(res.data==false)
+                    {
+                        //这里尽量不去查数据库,通过获取到的当前元素的名称和id确定模态框中的值
+                        $('#updateNodeNameModal').modal('show');
+                        //给模态框的节点名称和节点代码赋值
+                        //NodeName NodeCode
+                        $("#NodeName").val(nodeName);
+                        $("#NodeCode").val(nodeCode);
+                        //根据nodecode查询数据库
+                    }
+                    else {
+                        toastr.error("不允许更改标准库中数据的名称");
+                    }
+                },
+                err=>{
+                    toastr.error(res.msg);
+                })
 
+        },
+        //判断是否更新文本框
+        ifChangeNodeName($event){
+            that.ifChangeNodeName_flag=1;
+        },
+        //更新到数据库并关闭模态框
+        updateNodeNamebyNodeCode(){
+            //点击更新的时候获得了当前文本框中的值，一并传给后端
+            //判断，如果节点名称有更新，执行update语句
+            if(that.ifChangeNodeName_flag==1){
+                let nodeName=$("#NodeName").val();
+                let nodeCode=$("#NodeCode").val();
+                //去标准库中查不能更改成标准库的名称
+                getDataByPost('/departmentTree/updateNameBynode_code?node_code='+nodeCode+'&node_name='+nodeName.toString(), {},
+                        res=>{
+                            if(res.code==200)
+                            {
+                                toastr.success("节点名更新成功");
+                            }
+                            else{
+                                toastr.errot(res.msg)
+                            }
+                        },
+                        err=>{
+                        toastr.error("查询更新节点出错");
+                })
+                that.ifChangeNodeName_flag=0
+            }
+
+
+            $('#updateNodeNameModal').modal('hide');
+        }
     }
 })
 
