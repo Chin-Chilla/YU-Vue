@@ -1,4 +1,4 @@
-//# sourceURL=departmentTreeV.js
+//# sourceURL=departmentTree.js
 var that;
 var dptTree = new Vue({
     el: '#dptTree',
@@ -10,7 +10,8 @@ var dptTree = new Vue({
             level3: [],
             level4: []
         },
-        checkedArr: [],
+        isShowLocalNode:true,
+        delBatchNodes: [],
         parentNodeCodes: {
             pCode0: '999999999',
             pCode1: '',
@@ -18,24 +19,14 @@ var dptTree = new Vue({
             pCode3: ''
         },
         addCode: 0,
-        array:{
-            demo1:[
-                {id:0,name:'haha'},
-                {id:1,name:'xixi'}
-            ],
-            demo2:[]
-        },
-
-
-
-        checkedArr:[],
-        pnode_code:[],
-        ifChangeNodeName_flag:0
+        delBatchNodes:[],
+        pnode_code:'999999999',
+        ifChangeNodeName_flag:0,
+        openMode: ''
     },
     mounted() {
         that = this;
-        var pCode = "999999999";
-        getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+pCode, {}, function (res) {
+        getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+that.pnode_code, {}, function (res) {
             var temp = [];
             for (var i = 0; i < res.data.length; i++) {
                 temp = res.data[i];
@@ -43,41 +34,54 @@ var dptTree = new Vue({
             }
 
         })
-        var pnode_code="999999999";
-        that.dragNodelist(0,pnode_code);
+        that.dragNodelist(0,that.pnode_code);
 
     },
     methods: {
         changeNodeColor(currentNode,flag){
             if(flag=='fold'){
-                $(currentNode).parents('.ele').css('background','#f4f4f4')
+                if(that.openMode == 'onClick'){
+                    $(currentNode).parents('.ele').css('background','#f4f4f4');
+                }
+                if(that.opneMode == 'dlbClick'){
+                    $(currentNode).css('background','#f4f4f4');
+                }
             }
             if(flag=='unfold'){
-                $(currentNode).parents('.ele').css('background','white');
+                if(that.openMode == 'onClick'){
+                    console.log("change color");
+                    $(currentNode).parents('.ele').css('background','white');
+                }
+                if(that.openMode == 'dblClick'){
+                    $(currentNode).css('background','white');
+                }
+
+
             }
         },
         changeNodeIcon(currentNode,flag){
             //折叠
             if(flag=='fold'){
-                $(currentNode).find('i').removeClass('fa-angle-left');
-                $(currentNode).find('i').addClass('fa-angle-right');
+                $(currentNode).find('.unfold').removeClass('fa-angle-left');
+                $(currentNode).find('.unfold').addClass('fa-angle-right');
             }
             //打开
             else if (flag=='unfold'){
-                $(currentNode).find('i').removeClass('fa-angle-right');
-                $(currentNode).find('i').addClass('fa-angle-left');
+                $(currentNode).find('.unfold').removeClass('fa-angle-right');
+                $(currentNode).find('.unfold').addClass('fa-angle-left');
             }
         },
         foldSubNode(currentNode){
             var flag='fold';
-            //currentNode指的是当前点击的节点
+            /*//currentNode指的是当前点击的节点
             var dptId = $(currentNode.currentTarget).attr("id").split("_")
             //dtpId将curentNode的Id划分为 button 0 020000000,按钮名，属于的级别和node_code
-            var currentButtonID=dptId[1];
+            var currentButtonID=dptId[1];*/
+            let nodeLevel = that.getLevelByUlId(currentNode);
             //循环每一个ele,把除了他自己的所有兄弟节点以及所有子节点都改变符号
             $.each($(".ele"),function(index,element){
-                if($(currentNode.currentTarget).parents('.ele').attr("id") != element.id &&
-                    parseInt(($(element).parents('.todo-list').attr("id")).toString().slice(-1)) >= parseInt(currentButtonID)){
+                if( that.getNodeCodeByLiId(currentNode) != element.id &&
+                    parseInt(($(element).parents('.todo-list').attr("id")).toString().slice(-1)) >= parseInt(nodeLevel)){
                     $(element).css('background','#f4f4f4');
                     //排查一下有没有同级节点或者子节点存在没关闭的情况，给这个关了
                     if($(element).find('i').hasClass('fa-angle-left')){
@@ -91,7 +95,7 @@ var dptTree = new Vue({
             that.changeNodeIcon(currentNode.currentTarget,'fold');
             //这里是对是否显示子节点的处理
             $.each($(".dpt_div"),function (index,element){
-                if(Number(element.id.substr(-1)) > Number(currentButtonID)){
+                if(Number(element.id.substr(-1)) > Number(nodeLevel)){
                     $(element).css('display', 'none');
                 }
             });
@@ -99,7 +103,7 @@ var dptTree = new Vue({
             //循环次数count
             let count = 0;
             for(let key in that.deptNodes){
-                    if(Number(currentButtonID) < count){
+                    if(Number(nodeLevel) < count){
                         that.deptNodes[key] = [];
                     }
                     count++;
@@ -108,133 +112,179 @@ var dptTree = new Vue({
         },
         //打开节点
         unfoldSubNode(currentNode){
-            var dptId = $(currentNode.currentTarget).attr("id").split("_")
-            var currentButtonID=dptId[1];
+            //当前节点所在层级
+            let nodeLevel = that.getLevelByUlId(currentNode);
             that.foldSubNode(currentNode);
             var flag='unfold';
             that.changeNodeColor(currentNode.currentTarget,flag);
             that.changeNodeIcon(currentNode.currentTarget,flag);
             $.each($(".dpt_div"),function (index,element){
-                if(Number(element.id.substr(-1))===Number(currentButtonID)+1){
+                if(Number(element.id.substr(-1))===Number(nodeLevel)+1){
                     $(element).css('display', 'block');
                 }
             });
-        },
-        loadChildNode(currentNode){
-            var btnID = $(currentNode.currentTarget).attr("id");
-            var tempCode = btnID.split("_");
-            var pCode = tempCode[2];
-            var ulContainer = parseInt(tempCode[1])+1;
 
         },
+        //通过双击加载子节点
+        loadChildNodesDblclick(currentNode){
+            let pCode = $(currentNode.currentTarget).attr("id");
+            let childrenLevel = parseInt(that.getLevelByUlId(currentNode))+1;
+            that.openMode = 'dblClick';
+            that.judegeTreeState(currentNode,pCode,childrenLevel);
+        },
+
+        //通过点击">"按钮加载子节点
+        loadChildNodesOnclick(currentNode){
+            //通过点击按钮的id获取节点code，作为pCode
+            let pCode = that.getNodeCodeByLiId(currentNode);
+            //通过点击按钮的id获取节点code，作为pCode
+            let childrenLevel = parseInt(that.getLevelByUlId(currentNode))+1;
+            that.openMode = 'onClick';
+            that.judegeTreeState(currentNode,pCode,childrenLevel);
+        },
+
         //判断此时树的状态（展开/隐藏）
-        judegeTreeState(currentNode){
-            if($(currentNode.currentTarget).children('i').hasClass('fa-angle-right')){
+        judegeTreeState(currentNode,pCode,childrenLevel){
+            if($(currentNode.currentTarget).find("i").filter(".unfold").hasClass('fa-angle-right')){
                 that.unfoldSubNode(currentNode);
-                that.getChildeNodes(currentNode);
+                that.getChildeNodes(pCode,childrenLevel);
             }else{
                 that.foldSubNode(currentNode);
             }
 
         },
+
         //通过父节点code查找所有子节点
-        getChildeNodes(currentNode){
-            //通过点击按钮的id获取节点code，作为pCode
-            var btnID = $(currentNode.currentTarget).attr("id");
-            var btnIDArr = btnID.split("_");
-            var pCode = btnIDArr[btnIDArr.length-1];
-            console.log("pcode======= " + pCode);
-
-            //获取ul的id编号
-            var ulContainer = parseInt(btnIDArr[1])+1;
-
+        getChildeNodes(pCode,childrenLevel){
             getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+pCode, {}, function (res) {
                 for (var i = 0; i < res.data.length; i++) {
                     let childObj = res.data[i];
-                    let count = 0;
-                    for(let key in that.deptNodes){
-                        if(count == ulContainer){
-                            that.deptNodes[key].push(childObj);
-                            break;
-                        }
-                        count++;
-                    }
+                    let keys = Object.keys(that.deptNodes);
+                    that.deptNodes[keys[childrenLevel]].push(childObj);
                 }
             })
-
             //保存各级父节点Code
             let keys = Object.keys(that.parentNodeCodes);
-            let nowKey = keys[ulContainer-1];
+            let nowKey = keys[childrenLevel-1];
             that.parentNodeCodes[nowKey] = pCode;
-            console.log("ulContainer " + ulContainer);
-            console.log("parentNodeCodes ",that.parentNodeCodes);
-
-            that.dragNodelist(parseInt(ulContainer));
+            that.dragNodelist(parseInt(childrenLevel),pCode);
         },
+
         //批量删除
         delBatch(currentNode){
-            that.checkedArr = [];
+            that.openMode == 'onClick';
+            that.delBatchNodes = [];
             var delBtnId = currentNode.currentTarget.id.split("_");
-            var delBtnNum = delBtnId[2];
+            //所在层级
+            var deptLevel = delBtnId[2];
+
+            if(deptLevel != 0){
+                let keys = Object.keys(that.parentNodeCodes);
+                let nowKey = keys[Number(deptLevel)-1];
+                //获取待删除节点的父节点
+                that.pnode_code = that.parentNodeCodes[nowKey];
+            }
+
             var boxNum = $(":checkbox:checked");
+            $(":checkbox:checked").each(function () {
+                var boxId = $(this).attr("id").slice(-1);
+                if(boxId == deptLevel){
+                    var nodeCode = $(this).parents("li").attr("id");
+                    that.delBatchNodes.push(nodeCode);
+                }
+            })
+            let data = {
+                delBatchNodes:that.delBatchNodes,
+                deptLevel:deptLevel,
+                pnode_code:that.pnode_code
+            }
+
             if(boxNum.length == 0){
                 toastr.warning("请选择至少一个节点!")
                 return false;
             }else{
-                var res = confirm("确定删除该节点吗？")
-                if (!res) {
-                    return false;
-                }
-                $(":checkbox:checked").each(function () {
-                    var boxId = $(this).attr("id").slice(-1);
-                    if(boxId == delBtnNum){
-                        var temp = $(this).parents("li").attr("id").split("_");
-                        var nodeCode = temp[1];
-                        that.checkedArr.push(nodeCode);
-                    }
-                })
-                getDataByGet('/departmentTree/delDepartmentNodes?checkedArr='+ that.checkedArr, {},function (res) {
+                swal({
+                    title: "您确定要删除选中节点吗",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#dd6b55",
+                    confirmButtonText: "确定",
+                    closeOnConfirm: true
+                }, confirm=> {
+                    getDataByPost('/departmentTree/delDepartmentNodes',data,res=>{
 
-                    $(":checkbox:checked").each(function () {
-                        var boxId = $(this).attr("id").slice(-1);
-                        if(boxId == delBtnNum){
-                            $(this).parents("li").remove();
-                        }
-                    })
-                    toastr.success("删除成功！");
+                        $(":checkbox:checked").each(function () {
+                            //复选框id的最后一位，代表所在层级
+                            var boxId = $(this).attr("id").slice(-1);
+                            if(boxId == deptLevel){
+                                //移除已删除节点的li标签
+                                $(this).parents(".ele").remove();
+                                let keys = Object.keys(that.deptNodes);
+                                //将已删除节点的子部门置空
+                                for(let i = parseInt(deptLevel)+1; i < 5; i++){
+                                    that.deptNodes[keys[i]] = [];
+                                }
+                            }
+                        })
+                        toastr.success("删除成功！");
+                    });
+                });
 
-
-                })
             }
-
-
         },
+
         //单节点删除
         delNode(currentNode){
-
+            let deptLevel = that.getLevelByUlId(currentNode);
+            let nodeCode = that.getNodeCodeByLiId(currentNode);
             let delNode = currentNode.currentTarget;
-            let btnID = $(currentNode.currentTarget).attr("id");
-            let tempCode = btnID.split("_");
-            let nodeCode = tempCode[tempCode.length-1];
-            let res = confirm("确定删除该节点吗？")
-            if (!res) {
-                return false;
+            if(deptLevel != 0){
+                let keys = Object.keys(that.parentNodeCodes);
+                let nowKey = keys[Number(deptLevel)-1];
+                //获取待删除节点的父节点
+                that.pnode_code = that.parentNodeCodes[nowKey];
             }
-            getDataByGet('/departmentTree/delDepartmentNode?nodeCode=' + nodeCode, {} ,function (res) {
-                $(delNode).parents("li").remove();
-                toastr.success("删除成功！");
-            })
+            let data = {
+                node_code:nodeCode,
+                deptLevel:deptLevel,
+                pnode_code:that.pnode_code
+            }
+
+            swal({
+                title: "您确定要删除选中节点吗",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#dd6b55",
+                confirmButtonText: "确定",
+                closeOnConfirm: true
+            }, confirm=> {
+                getDataByPost('/departmentTree/delDepartmentNode?',data,res=>{
+                    $(delNode).parents(".ele").remove();
+                    let keys = Object.keys(that.deptNodes);
+                    for(let i = parseInt(deptLevel)+1; i < 5; i++){
+                        that.deptNodes[keys[i]] = [];
+                    }
+                    toastr.success("删除成功！");
+                });
+            });
+
         },
-        //点击”+“按钮，显示模态框
+
+        //显示模态框
         showAddModal(currentDpt){
-            let addId = currentDpt.currentTarget.id;
-            let tempCode = addId.split("_");
-            that.addCode = tempCode[1];
             that.clearModel();
+            if(parseInt(that.addCode) == 0){
+                that.isShowLocalNode=false;
+            }
+            else{
+                that.isShowLocalNode=true;
+            }
             $("#addModal").modal("show");
         },
         //清空添加节点的模态框
         clearModel(){
+            $("#add99").attr("checked",false);
+            $("#addNodeName").attr("readonly",false);
             $("#addNodeName").disable = false;
             $("#addNodeCode").disable = false;
 
@@ -242,61 +292,114 @@ var dptTree = new Vue({
             $("#addNodeCode").val("");
 
         },
-        //添加新节点/本级节点
-        increaseNode(){
-            let node_name = $("#addNodeName").val();
-            let pnode_code = '999999999';
+
+        //添加同级节点
+        addEquativeNode(currentNode){
+            //通过“+”按钮的id获取所在层级
+            //例如第一层级“+”的id为 add_0,截取最后一位即为所在层级0
+            let addId = currentNode.currentTarget.id;
+            let levelArr = addId.split("_");
+            that.addCode = levelArr[1];
 
             if(that.addCode != 0){
-                console.log("jinijinin")
                 let keys = Object.keys(that.parentNodeCodes);
                 let nowKey = keys[Number(that.addCode)-1];
-                // //获取待添加节点的父节点
-                pnode_code = that.parentNodeCodes[nowKey];
+                //获取待添加节点的父节点
+                that.pnode_code = that.parentNodeCodes[nowKey];
             }
-            var data = {
-                pnode_code: pnode_code,
-                node_name: node_name,
-                level: that.addCode,
-                node_code: ''
-            }
-            // console.log("data is " , data);
-            getDataByPost('/departmentTree/insertDeptNode',data,function (res) {
-                console.log("res.data +" ,res.data);
-               if(res.code == 200){
-                   if(res.data.status == "allow"){
-                       let keys = Object.keys(that.deptNodes);
-                       data.node_code = res.data.node_code;
-                       that.deptNodes[keys[that.addCode]].splice(Number(res.data.list_order)-1,0,data);
-                       toastr.success("插入成功！");
-                   }else if(res.data.status == "refuse"){
-                       toastr.error("插入失败！");
-                   }else {
-                       let isOk = confirm("其他部门存在同名节点，是否继续添加？");
-                       if( !isOk ){
-                           return false;
-                       }
-                       console.log("data is ",data)
-                       getDataByPost('/departmentTree/insertRepetitiveDeptNode',data,function (res) {
-                           if(res.code == 200){
-                               let keys = Object.keys(that.deptNodes);
-                               data.node_code = res.data.node_code;
-                               that.deptNodes[keys[that.addCode]].splice(Number(res.data.list_order)-1,0,data);
-                               toastr.success("插入成功！");
-                           }else{
-                               toastr.error("插入失败,请联系管理员！");
-                           }
+            that.showAddModal();
 
-                       })
-
-                   }
-                }else{
-                    toastr.error("添加失败，请联系管理员！");
-                }
-            })
-            $("#addModal").modal('hide');
 
         },
+
+        //添加子节点
+        addChildNode(currentNode) {
+            //获取li标签的id，即
+            that.pnode_code = that.getNodeCodeByLiId(currentNode);
+            that.addCode = Number(that.getLevelByUlId(currentNode))+1;
+            that.showAddModal();
+            that.openMode = 'onClick';
+            that.unfoldSubNode(currentNode);
+            that.getChildeNodes(that.pnode_code,that.addCode);
+
+
+
+        },
+
+        //添加本级节点
+        addLocalNode(){
+            if($("#add99").prop("checked")){
+                $("#addNodeName").val("本级");
+                $("#addNodeName").attr("readonly",true);
+
+            }else {
+               that.clearModel();
+            }
+        },
+        //将新增节点写入数据库
+        increaseNode(){
+            let node_name = $("#addNodeName").val();
+            if(node_name.match(/^[ ]*$/)){
+                toastr.error("请输入待添加节点名");
+            }else if(parseInt(that.addCode)==0 && node_name == "本级" ){
+                toastr.error("一级部门无法添加本级节点");
+            }
+            else {
+                var data = {
+                    pnode_code: that.pnode_code,
+                    node_name: node_name,
+                    level: that.addCode,
+                    node_code: ''
+                }
+                getDataByPost('/departmentTree/insertDeptNode',data,function (res) {
+                    if(res.code == 200){
+                        if(res.data.status == "allow"){
+                            let keys = Object.keys(that.deptNodes);
+                            data.node_code = res.data.node_code;
+                            that.deptNodes[keys[that.addCode]].splice(Number(res.data.list_order)-1,0,data);
+                            toastr.success("插入成功！");
+                        }else if(res.data.status == "refuse"){
+                            toastr.error("有重复节点，插入失败！");
+                        }else {
+                            let isOk = confirm("其他部门存在同名节点，是否继续添加？");
+                            if( !isOk ){
+                                return false;
+                            }
+                            getDataByPost('/departmentTree/insertRepetitiveDeptNode',data,function (res) {
+                                if(res.code == 200){
+                                    let keys = Object.keys(that.deptNodes);
+                                    $("#addNodeCode").val(res.data.node_code);
+                                    data.node_code = res.data.node_code;
+                                    that.deptNodes[keys[that.addCode]].splice(Number(res.data.list_order)-1,0,data);
+                                    toastr.success("插入成功！");
+                                }else{
+                                    toastr.error("插入失败,请联系管理员！");
+                                }
+
+                            })
+
+                        }
+                    }else{
+                        toastr.error("添加失败，请联系管理员！");
+                    }
+                })
+                console.log("data " ,data);
+                $("#addModal").modal('hide');
+            }
+        },
+
+        //根据所在ul的id，获取level（所在层级）
+        getLevelByUlId(currentNode){
+            let ulId = $(currentNode.currentTarget).parents(".todo-list").attr("id");
+            return ulId.slice(-1);
+
+        },
+
+        //根据所在li的id，获取node_code
+        getNodeCodeByLiId(currentNode){
+            return $(currentNode.currentTarget).parents(".ele").attr("id");
+        },
+
         //单列拖拽节点，更改节点顺序
         dragNodelist(containerId,pnode_code){
             var el= $('.ui-sortable').get(containerId);
@@ -321,7 +424,6 @@ var dptTree = new Vue({
                     let dragCode=arr[1];
                     let flag=0;
                     //代表是向后拖拽-1
-                    console.log(pnode_code);
                     if(dragNewIndex>dragOldIndex){
                         flag=-1;
                         //在oldIndex和newIndex之间的数据顺序-1或者+1
