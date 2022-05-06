@@ -3,6 +3,7 @@ var that;
 var dptTree = new Vue({
     el: '#dptTree',
     data: {
+        flag: 'dept',
         deptNodes: {
             level0: [],
             level1: [],
@@ -26,7 +27,12 @@ var dptTree = new Vue({
     },
     mounted() {
         that = this;
-        getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+that.pnode_code, {}, function (res) {
+        let data = {
+            flag: that.flag,
+            pnode_code: that.pnode_code
+
+        }
+        getDataByPost("/departmentTree/loadDepartmentChildren", data, function (res) {
             var temp = [];
             for (var i = 0; i < res.data.length; i++) {
                 temp = res.data[i];
@@ -49,7 +55,6 @@ var dptTree = new Vue({
             }
             if(flag=='unfold'){
                 if(that.openMode == 'onClick'){
-                    console.log("change color");
                     $(currentNode).parents('.ele').css('background','white');
                 }
                 if(that.openMode == 'dblClick'){
@@ -156,7 +161,12 @@ var dptTree = new Vue({
 
         //通过父节点code查找所有子节点
         getChildeNodes(pCode,childrenLevel){
-            getDataByPost("/departmentTree/loadDepartmentChildren?pnode_code="+pCode, {}, function (res) {
+            let data={
+                flag: that.flag,
+                pnode_code: pCode
+
+            }
+            getDataByPost("/departmentTree/loadDepartmentChildren", data , function (res) {
                 for (var i = 0; i < res.data.length; i++) {
                     let childObj = res.data[i];
                     let keys = Object.keys(that.deptNodes);
@@ -194,6 +204,7 @@ var dptTree = new Vue({
                 }
             })
             let data = {
+                flag: that.flag,
                 delBatchNodes:that.delBatchNodes,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
@@ -245,6 +256,7 @@ var dptTree = new Vue({
                 that.pnode_code = that.parentNodeCodes[nowKey];
             }
             let data = {
+                flag: that.flag,
                 node_code:nodeCode,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
