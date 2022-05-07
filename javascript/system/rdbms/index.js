@@ -64,7 +64,6 @@ var app = new Vue({
                 data,
                 res => {
                     dataSourceList = res.data;
-                    console.log(dataSourceList);
                     $("#property_body").empty();
                     for (var o in dataSourceList) {
                         if (dataSourceList[o].realname == '"null"') dataSourceList[o].realname = "";
@@ -138,38 +137,66 @@ var app = new Vue({
                     department: departmentId,             //在选择单位中赋值
                     database_describe: database_describe
                 };
-                //后台方法调用
-                getDataByPost(
-                    '/system_rdbms/createConnect',
-                    data,
-                    res => {
-                        toastr.success("新建连接成功！");
-                        that.loadTable();
-                        departmentId = null;
-                    },
-                    err => {
-                        toastr.error("新建连接失败！");
-                        departmentId = null;
-                    }
-                )
+
+                var status = document.getElementById("saveConnectButton").innerHTML;
+                if (status == "保存"){
+                    // 后台方法调用
+                    getDataByPost(
+                        '/system_rdbms/createConnect',
+                        data,
+                        res => {
+                            toastr.success("新建连接成功！");
+                            that.loadTable();
+                            departmentId = null;
+                        },
+                        err => {
+                            toastr.error("新建连接失败！");
+                            departmentId = null;
+                        }
+                    )
+                } else if (status == "更新"){
+                    data.ID =  tempEditId;
+                    getDataByPost(
+                        '/system_rdbms/save_edit',
+                        data,
+                        res => {
+                            toastr.success("保存编辑成功!");
+                            that.loadTable();
+                            tempEditId = null;
+                        },
+                        err => {
+                            toastr.error("保存编辑失败！");
+                            tempEditId = null;
+                        }
+                    )
+
+                }
+
 
                 //将模态框内容重置
                 $('#exampleModal').modal('hide');
-                document.getElementById("database_chinesename").value = "";
-                document.getElementById("databaseSid").value = "";
-                document.getElementById("IP").value = "";
-                document.getElementById("port").value = "";
-                document.getElementById("username").value = "";
-                document.getElementById("password").value = "";
-                document.getElementById("department").value = "";
-                document.getElementById("database_describe").value = "";
-                document.getElementById("database_chinesename_info").innerHTML = "*(必填)";
-                document.getElementById("databaseSid_info").innerHTML = "*(必填)";
-                document.getElementById("IP_info").innerHTML = "*(必填)";
-                document.getElementById("port_info").innerHTML = "*(必填)";
-                document.getElementById("username_info").innerHTML = "*(必填)";
-                document.getElementById("password_info").innerHTML = "*(必填)";
+                this.restoreModalStatus();
             }
+        },
+
+        restoreModalStatus: function (){
+            document.getElementById("exampleModalLabel1").innerHTML = "新建数据库连接";
+            document.getElementById("saveConnectButton").innerHTML = "保存";
+
+            document.getElementById("database_chinesename").value = "";
+            document.getElementById("databaseSid").value = "";
+            document.getElementById("IP").value = "";
+            document.getElementById("port").value = "";
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
+            document.getElementById("department").value = "";
+            document.getElementById("database_describe").value = "";
+            document.getElementById("database_chinesename_info").innerHTML = "*(必填)";
+            document.getElementById("databaseSid_info").innerHTML = "*(必填)";
+            document.getElementById("IP_info").innerHTML = "*(必填)";
+            document.getElementById("port_info").innerHTML = "*(必填)";
+            document.getElementById("username_info").innerHTML = "*(必填)";
+            document.getElementById("password_info").innerHTML = "*(必填)";
         },
 
         //数据库参数检查
@@ -271,7 +298,6 @@ var app = new Vue({
                 if (confirm("将删除数据库及数据库表的所有信息，确定吗？")) {
                     $("#loading").css('display', 'block');
                     var data = { ID: ID };
-                    console.log(data);
                     getDataByPost(
                         '/system_rdbms/deleteDataBase',
                         data,
@@ -291,56 +317,60 @@ var app = new Vue({
 
         //打开编辑的模态框
         edit: function () {
-            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', '', res => {
-                that.zTreeObj_Edit = $.fn.zTree.init($("#addTree4"), setting, res.data);
-                var ischeck = document.getElementsByName("isChecked2");
-                var ID = [];
-                for (i = 0; i < ischeck.length; i++) {
-                    if (ischeck[i].checked == true) {
-                        var node = ischeck[i].parentNode.parentNode.parentNode.nextSibling;
-                        var id = node.innerHTML;
-                        ID.push(id);
-                    }
+            var ischeck = document.getElementsByName("isChecked2");
+            var ID = [];
+            for (i = 0; i < ischeck.length; i++) {
+                if (ischeck[i].checked == true) {
+                    var node = ischeck[i].parentNode.parentNode.parentNode.nextSibling;
+                    var id = node.innerHTML;
+                    ID.push(id);
                 }
-                if (ID.length > 1) {
-                    toastr.warning("一次只能选择一个需要编辑的数据库");
-                }
-                else if (ID.length <= 0) { toastr.warning("您还没有选择要编辑的数据库"); }
-                else {
-                    tempEditId = null;
-                    tempEditId = ID[0];
-                    that.edit_connect(id);
-                }
-            })
+            }
+            if (ID.length > 1) {
+                toastr.warning("一次只能选择一个需要编辑的数据库");
+            } else if (ID.length <= 0) {
+                toastr.warning("您还没有选择要编辑的数据库");
+            } else {
+                tempEditId = null;
+                tempEditId = ID[0];
+                that.edit_connect(id);
+            }
         },
-        edit_connect: function (id) {
-            var zTree = $.fn.zTree.getZTreeObj("addTree4");
-            document.getElementById("databasechinesename_info").innerHTML = "*(必填)";
-            document.getElementById("database_sid_info").innerHTML = "*(必填)";
-            document.getElementById("IPaddr_info").innerHTML = "*(必填)";
-            document.getElementById("portnum_info").innerHTML = "*(必填)";
-            document.getElementById("user_name_info").innerHTML = "*(必填)";
-            document.getElementById("key_info").innerHTML = "*(必填)";
-            document.getElementById("editDepartment_info").innerHTML = "*(必填)";
+
+        edit_connect: function (id){
+            document.getElementById("exampleModalLabel1").innerHTML = "编辑数据库连接";
+            document.getElementById("saveConnectButton").innerHTML = "更新";
+            $('#exampleModal').modal('show');
             var data = { ID: id };
+            var orgId;
             getDataByPost(
                 '/system_rdbms/showEditConnect',
                 data,
                 res => {
-                    var node = zTree.getNodeByParam("nodeId", res.data.orgId);
-                    $("#DBtype2").val(res.data.dbtype);
-                    $("#databasechinesename").val(res.data.dbCName);
-                    $("#database_sid").val(res.data.srcSid);
-                    $("#IPaddr").val(res.data.ipAddr);
-                    $("#portnum").val(res.data.srcPort);
-                    $("#user_name").val(res.data.srcUser);
-                    $("#key").val(res.data.srcPsw);
-                    $("#editDepartment").val(node.nodeName);
-                    $("#dbdesc").val(res.data.note);
-                    $('#exampleModal1').modal('show');
+                    $("#DBtype").val(res.data.dbtype);
+                    $("#database_chinesename").val(res.data.dbCName);
+                    $("#databaseSid").val(res.data.srcSid);
+                    $("#IP").val(res.data.ipAddr);
+                    $("#port").val(res.data.srcPort);
+                    $("#username").val(res.data.srcUser);
+                    $("#password").val(res.data.srcPsw);
+                    orgId = res.data.orgId;
+                    // $("#editDepartment").val(node.nodeName);
+                    $("#database_describe").val(res.data.note);
                 }
-            )
+            );
+            // $("#loadingOrg").css('display', 'block');
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', {}, res => {
+                that.zTreeObj_Edit = $.fn.zTree.init($("#addTree4"), setting, res);
+
+                var zTree4 = $.fn.zTree.getZTreeObj("addTree4");
+                var node = zTree4.getNodeByParam("nodeId", orgId);
+                $("#department").val(node.nodeName);
+                departmentId = orgId;
+            })
+            // $("#loadingOrg").css('display', 'none');
         },
+
         showEditDpModel: function () {
             $("#modelTree4").modal("show");
         },
@@ -359,51 +389,6 @@ var app = new Vue({
             }
             $("#modelTree4").modal("hide");
 
-        },
-        save_edit: function () {
-            var dbtype = $("#DBtype2").val();
-            var databasechinesename = $("#databasechinesename").val();
-            var database_sid = $("#database_sid").val();
-            var IPaddr = $("#IPaddr").val();
-            var portnum = $("#portnum").val();
-            var user_name = $("#user_name").val();
-            var key = $("#key").val();
-            var depart = $("#editDepartment").val();
-            var dbdesc = $("#dbdesc").val();
-            //获得数据源所属单位的ID
-            var zTree = $.fn.zTree.getZTreeObj("addTree4");
-            var node = zTree.getNodeByParam("nodeName", depart);
-            var departId = node.nodeId;
-            //参数准备工作
-            var data = {
-                dbtype: dbtype,
-                databasechinesename: databasechinesename,
-                database_sid: database_sid,
-                IPaddr: IPaddr,
-                user_name: user_name,
-                key: key,
-                portnum: portnum,
-                department: departId,
-                dbdesc: dbdesc,
-                ID: tempEditId            //tempEditId在edit()函数中赋值，当前所编辑的databaseId
-            };
-            //以上两步是play中利用ajax向后台传输参数的准备工作，以后统一用dataJson来做为key值。
-            getDataByPost(
-                '/system_rdbms/save_edit',
-                data,
-                res => {
-                    $('#exampleModal1').modal('hide');
-                    $('#property_body').remove();
-                    $('#example1').append("<tbody id='property_body'></tbody>");
-                    toastr.success("保存编辑成功!");
-                    that.loadTable();
-                    tempEditId = null;
-                },
-                err => {
-                    toastr.error("保存编辑失败！");
-                    tempEditId = null;
-                }
-            )
         },
 
         //测试数据库连接
@@ -429,7 +414,8 @@ var app = new Vue({
                     data,
                     res => {
                         if (res.data == true) {
-                            tempnode.innerHTML = "连接成功"
+                            tempnode.innerHTML = "连接成功";
+                            toastr.success("连接成功");
                             $("#loading").remove();
                         }
                         else {
@@ -643,11 +629,6 @@ var app = new Vue({
                 }
             )
         }
-
-
-
-
-
     }
 })
 
