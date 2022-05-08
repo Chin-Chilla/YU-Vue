@@ -1,3 +1,4 @@
+//# sourceURL=request.js
 var that;
 var app = new Vue({
 	el:"#vue",
@@ -93,6 +94,7 @@ var app = new Vue({
 			});
 		},
 		renderNewList(list){
+			console.log(list);
 			for(var i=0;i<list.length;i++){
 				//添加新的tr元素，统计数量
 				that.newListNumReq++;
@@ -105,11 +107,13 @@ var app = new Vue({
 				}
 				var onlyId = ''+that.pageNum+list[i].mdFileId;//tr的id
 				var checkboxId = 'checkbox'+list[i].status+(that.newListNumReq-1)+list[i].mdFileId; //checkbox的id，方便后台获取批量处理的dom
-
-				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdFileId+
-					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdFileId+
-					"','"+list[i].loc+"')\">"+list[i].mdName+
-					"</a></td><td>"+list[i].createTime+
+				//顺序是元数据名称 订阅时间 状态 申请人 申请单位 联系方式
+				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdName+
+					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdName+
+					"','"+list[i].loc+"')\">"+list[i].createTime+
+					"</a></td><td>"+list[i].proposer+
+					"</td><td>"+list[i].org+
+					"</td><td>"+list[i].contact+
 					"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
 					// "<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td>" +
 					"<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td></tr>")

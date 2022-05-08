@@ -35,7 +35,8 @@
             </div>
 
             <div style="margin: 10px 0; width: 100%">
-                <div style=" width: 90%; border: 1px dashed; color: #0c76df; text-align: center; padding: 5px; border-radius: 4px" data-toggle="modal" data-target="#exampleModal" onclick="createReq()">+ 创建申请</div>
+                <!--220401注释掉，需要重新申请-->
+<!--                <div style=" width: 90%; border: 1px dashed; color: #0c76df; text-align: center; padding: 5px; border-radius: 4px" data-toggle="modal" data-target="#exampleModal" onclick="createReq()">+ 创建申请</div>-->
                 <!--                    <input type="button" value="新建" permission="ss" class="PER_BTN btn btn-block btn-primary"-->
                 <!--                           data-toggle="modal" data-target="#exampleModal">-->
             </div>
@@ -44,9 +45,11 @@
                     <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
                         <thead>
                         <tr>
-                            <th style="min-width: 150px"><input type="checkbox" name="allChecked"  onclick="app.allChecked()">全选&nbsp&nbsp&nbsp元数据ID</th>
-                            <th style="min-width: 150px">元数据名称</th>
+                            <th style="min-width: 150px"><input type="checkbox" name="allChecked"  onclick="app.allChecked()">全选&nbsp&nbsp&nbsp元数据名称</th>
                             <th style="min-width: 150px">订阅时间</th>
+                            <th style="min-width: 150px">申请人</th>
+                            <th style="min-width: 150px">申请单位</th>
+                            <th style="min-width: 150px">联系方式</th>
                             <th style="min-width: 150px">状态</th>
                             <th style="min-width: 150px">操作
                                 <input type="button" class="'btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px" value="取消选中订阅" onclick="app.unsubscribeChecked()">

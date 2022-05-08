@@ -136,10 +136,12 @@ var app = new Vue({
 				// var singleIndex = that.newListNum-1;
 				// var singleStatus = list[i].status
 
-				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdFileId+
-					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdFileId+
-					"','"+list[i].loc+"')\">"+list[i].mdName+
-					"</a></td><td>"+list[i].createTime+
+				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdName+
+					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdName+
+					"','"+list[i].loc+"')\">"+list[i].createTime+
+					"</a></td><td>"+list[i].proposer+
+					"</td><td>"+list[i].org+
+					"</td><td>"+list[i].contact+
 					"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
 					// "<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td>" +
 					"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('"+list[i].mdFileId+"','"+list[i].status+"')\"></td>" +
