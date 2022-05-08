@@ -47,6 +47,73 @@
               <!-- /.modal-dialog -->
           </div>
       </form>
+      <form class="form-horizontal">
+          <div class="modal modal-default" id="addChildModal">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title">添加节点</h4>
+                      </div>
+                      <!--中间核心内容-->
+                      <div class="form-group">
+                          <label for="addChildNodeCode" class="col-sm-2 control-label">节点代码:</label>
+
+                          <div class="col-sm-10">
+                              <input  readonly="readonly" style="width:400px;" type="text" class="form-control" id="addChildNodeCode" placeholder="Code自动生成"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="addChildNodeName" class="col-sm-2 control-label">节点名称:</label>
+
+                          <div class="col-sm-10">
+                              <input style="width:400px;" type="text" class="form-control" id="addChildNodeName" placeholder="结点名称由汉字组成(*必填)"/>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <input type="button" type="button" @click="increaseChildNode()" style="margin:0px 80px 0px 0px;" class="btn btn-primary" value="添加">
+                      </div>
+                  </div>
+                  <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+          </div>
+      </form>
+      <form class="form-horizontal">
+          <div class="modal modal-default" id="updateNodeNameModal">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                              <span aria-hidden="true">&times;</span></button>
+                          <h4 class="modal-title">添加节点</h4>
+                      </div>
+                      <!--中间核心内容-->
+                      <div class="form-group">
+                          <label for="NodeCode" class="col-md-4 control-label">节点代码:</label>
+
+                          <div class="col-md-8">
+                              <input  readonly="readonly" style="width:400px;" type="text" class="form-control" id="NodeCode" placeholder="Code自动生成"/>
+                          </div>
+                      </div>
+                      <div class="form-group">
+                          <label for="NodeName" class="col-md-4 control-label">节点名称:</label>
+                          <div class="col-md-8">
+                              <input @change="ifChangeNodeName($event)" style="width:400px;" type="text" class="form-control" id="NodeName" placeholder="结点名称由汉字组成(*必填)"/>
+                          </div>
+                      </div>
+                      <div class="modal-footer">
+                          <input type="button" type="button" @click="updateNodeNamebyNodeCode()" style="margin:0px 80px 0px 0px;" class="btn btn-primary" value="更新">
+                      </div>
+                  </div>
+                  <!-- /.modal-content -->
+              </div>
+              <!-- /.modal-dialog -->
+          </div>
+      </form>
+<!--模态框结束-->
+
     <div class="col-md-12" style="position:absolute;float:left">
       <div class="box box-solid box-primary">
         <div class="box-header">
@@ -54,44 +121,14 @@
         </div>
 
       </div>
-        <form class="form-horizontal">
-            <div class="modal modal-default" id="updateNodeNameModal">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title">添加节点</h4>
-                        </div>
-                        <!--中间核心内容-->
-                        <div class="form-group">
-                            <label for="NodeCode" class="col-md-4 control-label">节点代码:</label>
 
-                            <div class="col-md-8">
-                                <input  readonly="readonly" style="width:400px;" type="text" class="form-control" id="NodeCode" placeholder="Code自动生成"/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="NodeName" class="col-md-4 control-label">节点名称:</label>
-                            <div class="col-md-8">
-                                <input @change="ifChangeNodeName($event)" style="width:400px;" type="text" class="form-control" id="NodeName" placeholder="结点名称由汉字组成(*必填)"/>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" type="button" @click="updateNodeNamebyNodeCode()" style="margin:0px 80px 0px 0px;" class="btn btn-primary" value="更新">
-                        </div>
-                    </div>
-                    <!-- /.modal-content -->
-                </div>
-                <!-- /.modal-dialog -->
-            </div>
-        </form>
       <div class="row align-items-start">
-        <div class="col-md-2 dpt_div" id="block0" style="background: #FFFFBF;height: 900px;margin-left: 5px">
+          <div class="box box-primary dataTables_scrollBody" style="height: 800px; overflow-y:scroll;margin: 10px 0px 0px;">
+        <div class="col-md-2 dpt_div" id="block0" style="background: #FFFFBF;height: 2200px;margin-left: 5px">
           <div style="margin-top: 12px;margin-bottom: 12px">
             <button id="batch_del_0" class="btn btn-primary" style="margin-left:5px;width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)" >批量删除</button>
             <button id="batch_import" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量导入</button>
-            <button id="coord_set" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">贯标设置</button>
+            <button id="coord_set" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;" @click="standardCompliment()">贯标设置</button>
           </div>
             <div class="box-header with-border">
               <h3 class="box-title" id="title0">一级部门</h3>
@@ -109,17 +146,16 @@
               <label for="checkboxPrimary0" >
                 {{item.node_name}}
               </label>
-              <div class="tools" style="z-index: 99;position: absolute;right: 0">
-                      <div class="dropdown" style="display:inline-block">
-                          <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
-                              <i class="fa fa-info-circle"></i>
-                          </button>
-                          <ul class="dropdown-menu">
-                              <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
-                              <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
-                          </ul>
-
-                      </div>
+              <div class="tools" style="z-index:99;position:absolute;right:0">
+                  <div class="dropdown" style="display:inline-block" >
+                      <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                          <i class="fa  fa-info-circle" ></i>
+                      </button>
+                              <ul class="dropdown-menu" >
+                                  <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                  <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                              </ul>
+                  </div>
                   <button :id="'buttonDel_0_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa  fa-minus-square"></i>
                   </button>
 
@@ -130,7 +166,7 @@
               </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block1" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 dpt_div" id="block1" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
             <button id="batch_del_1" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
           </div>
@@ -150,7 +186,7 @@
                       <label for="checkboxPrimary1" >
                           {{item.node_name}}
                       </label>
-                      <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                      <div class="tools" style="z-index:99;position:absolute;right: 0">
                           <div class="dropdown" style="display:inline-block">
                               <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                   <i class="fa  fa-info-circle"></i>
@@ -170,7 +206,7 @@
               </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block2" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 dpt_div" id="block2" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
             <button id="batch_del_2" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
           </div>
@@ -189,7 +225,7 @@
                       <label for="checkboxPrimary2" >
                           {{item.node_name}}
                       </label>
-                      <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                      <div class="tools" style="z-index:99;position:absolute;right: 0">
                           <div class="dropdown" style="display:inline-block">
                               <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
                                   <i class="fa  fa-info-circle"></i>
@@ -209,7 +245,7 @@
               </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block3" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 dpt_div" id="block3" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
             <button id="batch_del_3" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
           </div>
@@ -248,7 +284,7 @@
               </li>
           </ul>
         </div>
-        <div class="col-md-2 dpt_div" id="block4" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 dpt_div" id="block4" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
           <div style="margin-top: 12px;margin-bottom: 12px">
             <button id="batch_del_4" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
           </div>
@@ -287,6 +323,7 @@
               </li>
           </ul>
         </div>
+          </div>
       </div>
       </div>
 

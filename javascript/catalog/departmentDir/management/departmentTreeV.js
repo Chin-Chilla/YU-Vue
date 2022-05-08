@@ -1,4 +1,4 @@
-//# sourceURL=departmentTree.js
+//# sourceURL=departmentTreeV.js
 var that;
 var dptTree = new Vue({
     el: '#dptTree',
@@ -23,7 +23,9 @@ var dptTree = new Vue({
         delBatchNodes:[],
         pnode_code:'999999999',
         ifChangeNodeName_flag:0,
-        openMode: ''
+        openMode: '',
+        checkedArr:[],
+        ifChangeNodeName_flag:0,
     },
     mounted() {
         that = this;
@@ -42,8 +44,11 @@ var dptTree = new Vue({
         })
         that.dragNodelist(0,that.pnode_code);
 
+
+
     },
     methods: {
+        //改变节点颜色，表示是否被选中
         changeNodeColor(currentNode,flag){
             if(flag=='fold'){
                 if(that.openMode == 'onClick'){
@@ -64,6 +69,7 @@ var dptTree = new Vue({
 
             }
         },
+        //改变节点左右打开的图标
         changeNodeIcon(currentNode,flag){
             //折叠
             if(flag=='fold'){
@@ -128,7 +134,6 @@ var dptTree = new Vue({
                     $(element).css('display', 'block');
                 }
             });
-
         },
         //通过双击加载子节点
         loadChildNodesDblclick(currentNode){
@@ -158,7 +163,6 @@ var dptTree = new Vue({
             }
 
         },
-
         //通过父节点code查找所有子节点
         getChildeNodes(pCode,childrenLevel){
             let data={
@@ -333,9 +337,6 @@ var dptTree = new Vue({
             that.openMode = 'onClick';
             that.unfoldSubNode(currentNode);
             that.getChildeNodes(that.pnode_code,that.addCode);
-
-
-
         },
 
         //添加本级节点
@@ -432,78 +433,63 @@ var dptTree = new Vue({
                     //向前拖拽new<old，一切Index大于拖拽后new_Index的加一，拖拽的li根据Id更换Index
                     let dragNewIndex=evt.newIndex+1;
                     let dragOldIndex=evt.oldIndex+1;
-                    let arr=evt.item.id.split("_");
-                    let dragCode=arr[1];
+                    let dragCode=evt.item.id;
+                    console.log
                     let flag=0;
                     //代表是向后拖拽-1
                     if(dragNewIndex>dragOldIndex){
                         flag=-1;
-                        //在oldIndex和newIndex之间的数据顺序-1或者+1
-                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},res1=>{
-                            //oldindex更换顺序
-                            getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
-                                res2=>{
-                                toastr.success("更改节点顺序成功");},
-                                err=>{
-                                toastr.error("更改节点顺序出错");}
-                            )},
-                           err=>{
-                            toastr.error("更改节点顺序出错");
-                           })
+                        //更新节点顺序
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,flag)
                     }
+                    //向前拖拽
                     else if (dragNewIndex<dragOldIndex){
                         flag=1;
-                        //在oldIndex和newIndex之间的数据顺序+1
-                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},res1=> {
-                                //oldindex更换顺序
-                                getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
-                                    res2=>{
-                                        toastr.success("更改节点顺序成功");},
-                                    err=>{
-                                    toastr.error("更改节点顺序出错");}
-                                )},
-                            err=>{
-                                toastr.error("更改节点顺序出错");
-                            })
+                        //更新节点顺序
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,flag)
                     }
                 },
             }
             var sortable=Sortable.create(el,ops);
         },
-        //修改节点名称并且更新到数据库
-        //1.出现一个弹窗，里面含有节点名称，和查询出来的节点code,节点code是灰色的
-        //2.将修改好的名字和标准库比对，不允许出现和标准库相同的名称，如果出现了就提示换个名字
-        //3.用正则判断输入的是中文字符
-        //4.更新进数据库
-        //5.如果更新失败，提示更新失败
+        updateListOrder(new_order,old_order,node_code,pnode_code,flag){
+            getDataByPost('/departmentTree/updateListOrder', {
+                    new_order:new_order,
+                    old_order:old_order,
+                    node_code:node_code,
+                    pnode_code:pnode_code,
+                    flag:flag
+                },
+                res=>{
+                    if(res.code==200)
+                    {
+                        toastr.success("更改节点顺序成功");
+                    }
+                    else{
+                        toastr.success("更改节点顺序失败");
+                    }
+                }
+            )
+
+        },
+        //功能：修改节点名称并且更新到数据库
+        /*
+        1.点击修改节点按钮
+        2.出现一个弹窗，里面含有节点名称，和查询出来的节点code,节点code是灰色的不可修改的
+        3.将修改好的名字和标准库比对，不允许出现和标准库相同的名称，如果出现了就提示标准库已经存在
+        4.更新进后台数据库
+        */
 
         //改变节点名称
         changeNodeName(currentNode){
-            //当前eleID举例：990000000，可以按_分成前后两部分，前面是Id,后面是code
             let nodeCode=$(currentNode.currentTarget).parents(".ele").attr("id");
             let nodeName = $(currentNode.currentTarget).parents(".ele").find("label").text().trim();
-            //根据名字查询该节点是否存在在标准库中，不存在就可以修改名字
-            getDataByPost('/departmentTree/findNodeInSTbyNodeName?node_name='+nodeName.toString(),{},
-                res=>{
-                    console.log(res.data);
-                    if(res.data==false)
-                    {
-                        //这里尽量不去查数据库,通过获取到的当前元素的名称和id确定模态框中的值
-                        $('#updateNodeNameModal').modal('show');
-                        //给模态框的节点名称和节点代码赋值
-                        //NodeName NodeCode
-                        $("#NodeName").val(nodeName);
-                        $("#NodeCode").val(nodeCode);
-                        //根据nodecode查询数据库
-                    }
-                    else {
-                        toastr.error("不允许更改标准库中数据的名称");
-                    }
-                },
-                err=>{
-                    toastr.error(res.msg);
-                })
-
+            //这里尽量不去查数据库,通过获取到的当前元素的名称和id确定模态框中的值
+            $('#updateNodeNameModal').modal('show');
+            //给模态框的节点名称和节点代码赋值
+            //NodeName NodeCode
+            $("#NodeName").val(nodeName);
+            $("#NodeCode").val(nodeCode);
         },
         //判断是否更新文本框
         ifChangeNodeName($event){
@@ -511,32 +497,91 @@ var dptTree = new Vue({
         },
         //更新到数据库并关闭模态框
         updateNodeNamebyNodeCode(){
-            //点击更新的时候获得了当前文本框中的值，一并传给后端
             //判断，如果节点名称有更新，执行update语句
             if(that.ifChangeNodeName_flag==1){
                 let nodeName=$("#NodeName").val();
                 let nodeCode=$("#NodeCode").val();
-                //去标准库中查不能更改成标准库的名称
-                getDataByPost('/departmentTree/updateNameBynode_code?node_code='+nodeCode+'&node_name='+nodeName.toString(), {},
-                        res=>{
-                            if(res.code==200)
-                            {
-                                toastr.success("节点名更新成功");
-                            }
-                            else{
-                                toastr.errot(res.msg)
-                            }
-                        },
-                        err=>{
-                        toastr.error("查询更新节点出错");
-                })
-                that.ifChangeNodeName_flag=0
+                //如果节点存在在数据库中，提醒与模式库中的名字不同，是否还要修改？
+                getDataByPost('/departmentTree/findNodeInSTbyNodeName?node_name='+nodeName.toString(),{},
+                    res=>{
+                        console.log(res.data);
+                        if(res.data==false)
+                        {
+                            //向后端发送请求更新数据库
+                            that.updateNodeNameInDb(nodeName,nodeCode);
+
+                        }
+                        else {
+                            swal({
+                                title: "该名称存在于标准库中，是否要修改为这个名字？",
+                                type: "warning",
+                                showCancelButton: true,
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "确认修改",
+                                closeOnConfirm: true
+                            },confirm=>{
+                                that.updateNodeNameInDb(nodeName,nodeCode)
+                                }
+                            )
+                        }
+                    })
             }
-
-
             $('#updateNodeNameModal').modal('hide');
+        },
+        //向后端发送请求更新数据库
+        updateNodeNameInDb(nodeName,nodeCode){
+            //去标准库中查不能更改成标准库的名称
+            getDataByPost('/departmentTree/updateNameBynode_code?node_code='+nodeCode+'&node_name='+nodeName.toString(), {},
+                res=>{
+                    if(res.code==200)
+                    {
+                        toastr.success("节点名更新成功");
+                    }
+                    else{
+                        toastr.error("节点名更新失败")
+                    }
+                })
+            that.ifChangeNodeName_flag=0
+        },
+
+        //贯标设计
+        //获取当前的所有一级(或者其他级)部门
+        //拿到标准库里面当前级别的部门
+        //两者进行比较
+        //将当前没有的节点更新进数据库。
+        //前端更新数据
+        standardCompliment(){
+            let pnode_code='999999999';
+            getDataByPost('/departmentTree/standardCompliment?pnode_code='+pnode_code, {}, res=>{
+                if(res.code==200&&res.data.length>0)
+                {
+                    swal({
+                        title: "是否要补充所有一级节点",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "确定",
+                        closeOnConfirm: true
+                    },confirm=>{
+                        let nodes=res.data;
+                        for(let i=0;i<res.data.length;i++){
+                            let keys = Object.keys(that.deptNodes);
+                            that.deptNodes[keys[that.addCode]].splice(Number(nodes[i].list_order)-1,0,nodes[i]);}
+                        toastr.success("补充所有一级节点成功");
+                    })
+                }
+                else if(res.code==200&&res.data.length==0){
+                    toastr.error("没有待补充的一级节点");
+                }
+                else{
+                    toastr.error("补充所有一级节点失败")
+                }
+            })
         }
+
     }
-})
+    })
+
+
 
 
