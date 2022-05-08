@@ -108,6 +108,11 @@ var app = new Vue({
             $("#modelTree3").modal("hide");
         },
 
+        newConn: function () {
+            this.restoreModalStatus();
+            $('#exampleModal').modal('show');
+        },
+
         //保存新建的链接
         create_connect: function () {
             var b = that.checkdatabase_chinesename('database_chinesename', 'database_chinesename_info');
@@ -171,7 +176,6 @@ var app = new Vue({
                     )
 
                 }
-
 
                 //将模态框内容重置
                 $('#exampleModal').modal('hide');
