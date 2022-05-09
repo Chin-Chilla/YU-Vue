@@ -172,114 +172,114 @@
                             <h4 class="modal-title" id="exampleModalLabel1">新建数据库连接</h4>
                         </div>
                         <div class="modal-body">
-                            <div class="box box-primary" style="height:400px;overflow-x:hidden;margin:10px">
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="DBtype">数据库类型</label>
-                                            <select class="form-control" id="DBtype">
-                                                <option>Oracle数据库</option>
-                                                <option>达梦数据库</option>
-                                            </select>
+                            <div class="box box-primary" style="margin:10px">
+                                <div id="loadingModal" class="overlay" style="display:none;"><i class="fa fa-refresh fa-spin"></i></div>
+                                <div class="box-body" style="height:400px;overflow-x:hidden;">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="DBtype">数据库类型</label>
+                                                <select class="form-control" id="DBtype">
+                                                    <option>Oracle数据库</option>
+                                                    <option>达梦数据库</option>
+                                                </select>
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="DBtype1">*(必填)</p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="DBtype1">*(必填)</p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="database_chinesename" class="control-label">数据库中文名</label>
-                                            <input type="text" class="form-control" id="database_chinesename"
-                                                @blur="checkdatabase_chinesename('database_chinesename','database_chinesename_info')"
-                                                placeholder="请填写数据库中文名称！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="database_chinesename" class="control-label">数据库中文名</label>
+                                                <input type="text" class="form-control" id="database_chinesename"
+                                                    @blur="checkdatabase_chinesename('database_chinesename','database_chinesename_info')"
+                                                    placeholder="请填写数据库中文名称！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="database_chinesename_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="database_chinesename_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="databaseSid" class="control-label">数据库SID</label>
-                                            <input type="text" class="form-control" id="databaseSid"
-                                                @blur="checkdatabaseSid('databaseSid','databaseSid_info')"
-                                                placeholder="请填写数据库SID！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="databaseSid" class="control-label">数据库SID</label>
+                                                <input type="text" class="form-control" id="databaseSid"
+                                                    @blur="checkdatabaseSid('databaseSid','databaseSid_info')"
+                                                    placeholder="请填写数据库SID！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="databaseSid_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="databaseSid_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="IP" class="control-label">IP地址</label>
-                                            <input type="text" class="form-control" id="IP"
-                                                @blur="checkIP('IP','IP_info')" placeholder="请填写IP地址！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="IP" class="control-label">IP地址</label>
+                                                <input type="text" class="form-control" id="IP"
+                                                    @blur="checkIP('IP','IP_info')" placeholder="请填写IP地址！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="IP_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="IP_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="port" class="control-label">端口</label>
-                                            <input type="text" class="form-control" id="port"
-                                                @blur="checkport('port','port_info')" placeholder="请填写端口号！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="port" class="control-label">端口</label>
+                                                <input type="text" class="form-control" id="port"
+                                                    @blur="checkport('port','port_info')" placeholder="请填写端口号！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="port_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="port_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="username" class="control-label">用户名</label>
-                                            <input type="text" class="form-control" id="username"
-                                                @blur="checkusername('username','username_info')" placeholder="请填写用户名！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="username" class="control-label">用户名</label>
+                                                <input type="text" class="form-control" id="username"
+                                                    @blur="checkusername('username','username_info')" placeholder="请填写用户名！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="username_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="username_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="password" class="control-label">密码</label>
-                                            <input type="password" class="form-control" id="password"
-                                                @blur="checkpassword('password','password_info')" placeholder="请填写密码！">
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="password" class="control-label">密码</label>
+                                                <input type="password" class="form-control" id="password"
+                                                    @blur="checkpassword('password','password_info')" placeholder="请填写密码！">
+                                            </div>
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="password_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="password_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="department" class="control-label">数据源所属单位</label>
-                                            <input type="text" class="form-control" readonly id="department"
-                                                placeholder="请选择所属单位！">
-<!--                                            <div id="loadingOrg" class="overlay" style="display:none;">-->
-<!--                                                <i class="fa fa-refresh fa-spin"></i>-->
-<!--                                            </div>-->
-                                            <button type="button" class="btn btn-block btn-primary"
-                                                @click="showSelectDpModel">选择单位</button>
-                                        </div>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="department" class="control-label">数据源所属单位</label>
+                                                <input type="text" class="form-control" readonly id="department"
+                                                    placeholder="请选择所属单位！">
+                                                <button type="button" class="btn btn-block btn-primary"
+                                                    @click="showSelectDpModel">选择单位</button>
+                                            </div>
 
-                                    </div>
-                                    <p class="help-block" style="line-height:50px" id="department_info">*(必填)
-                                    </p>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group">
-                                        <div class="col-xs-7">
-                                            <label for="database_describe" class="control-label">数据库描述</label>
-                                            <input type="text" class="form-control" id="database_describe"
-                                                placeholder="请填写数据库描述！">
                                         </div>
+                                        <p class="help-block" style="line-height:50px" id="department_info">*(必填)
+                                        </p>
                                     </div>
-                                    <p class="help-block" style="line-height:50px" id="database_describe_info">
-                                    </p>
+                                    <div class="row">
+                                        <div class="form-group">
+                                            <div class="col-xs-7">
+                                                <label for="database_describe" class="control-label">数据库描述</label>
+                                                <input type="text" class="form-control" id="database_describe"
+                                                    placeholder="请填写数据库描述！">
+                                            </div>
+                                        </div>
+                                        <p class="help-block" style="line-height:50px" id="database_describe_info">
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -345,6 +345,7 @@ var app = new Vue({
             document.getElementById("exampleModalLabel1").innerHTML = "编辑数据库连接";
             document.getElementById("saveConnectButton").innerHTML = "更新";
             $('#exampleModal').modal('show');
+            $("#loadingModal").css('display', 'block');
             var data = { ID: id };
             var orgId;
             getDataByPost(
@@ -363,7 +364,6 @@ var app = new Vue({
                     $("#database_describe").val(res.data.note);
                 }
             );
-            // $("#loadingOrg").css('display', 'block');
             getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000', {}, res => {
                 that.zTreeObj_Edit = $.fn.zTree.init($("#addTree4"), setting, res);
 
@@ -372,7 +372,7 @@ var app = new Vue({
                 $("#department").val(node.nodeName);
                 departmentId = orgId;
             })
-            // $("#loadingOrg").css('display', 'none');
+            $("#loadingModal").css('display', 'none');
         },
 
         showEditDpModel: function () {
@@ -439,6 +439,8 @@ var app = new Vue({
 
         //在模态框中测试数据库连接
         testConnectInModal: function () {
+            $("#loadingModal").css('display', 'block');
+
             var ipaddr = document.getElementById("IP").value;//从modal框取ip地址
             var port_number = document.getElementById("port").value;
             var sid = document.getElementById("databaseSid").value;
@@ -463,9 +465,11 @@ var app = new Vue({
                     } else {
                         toastr.error("连接失败")
                     }
+                    $("#loadingModal").css('display', 'none');
                 },
                 err => {
-                    toastr.error("测试连接出错！")
+                    toastr.error("测试连接出错！");
+                    $("#loadingModal").css('display', 'none');
                 }
             )
         },
