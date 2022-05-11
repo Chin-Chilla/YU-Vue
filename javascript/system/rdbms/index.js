@@ -412,6 +412,8 @@ var app = new Vue({
             } else if (ID.length > 1) {
                 toastr.warning("一次只能测试一个数据库！");
             } else {
+                document.getElementById("testConnButton").disabled = true;
+                $("#loading").css('display', 'block');
                 var data = { databaseid: ID[0] };
                 getDataByPost(
                     '/system_rdbms/testConnect',
@@ -420,18 +422,19 @@ var app = new Vue({
                         if (res.data == true) {
                             tempnode.innerHTML = "连接成功";
                             toastr.success("连接成功");
-                            $("#loading").remove();
                         }
                         else {
                             toastr.error("连接失败！");
                             tempnode.innerHTML = "连接失败";
-                            $("#loading").remove();
                         }
+                        document.getElementById("testConnButton").disabled = false;
+                        $("#loading").css('display', 'none');
                     },
                     err => {
                         toastr.error("测试连接出错！");
                         tempnode.innerHTML = "连接失败";
-                        $("#loading").remove();
+                        document.getElementById("testConnButton").disabled = false;
+                        $("#loading").css('display', 'none');
                     }
                 )
             }
@@ -496,6 +499,7 @@ var app = new Vue({
             } else {
                 toastr.warning("开始抽取数据，请稍等...");
                 $("#loading").css('display', 'block');
+                document.getElementById("extractButton").disabled = true;
                 var data = { ID: ID };
                 getDataByPost(
                     '/system_rdbms/extractDataTable',
@@ -509,10 +513,12 @@ var app = new Vue({
                         that.loadTable();
                         console.log(res.data);
                         $("#loading").css('display', 'none');
+                        document.getElementById("extractButton").disabled = false;
                     },
                     err => {
                         toastr.error("抽取表失败！");
                         $("#loading").css('display', 'none');
+                        document.getElementById("extractButton").disabled = false;
                     }
                 )
             }
