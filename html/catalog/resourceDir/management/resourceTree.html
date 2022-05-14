@@ -1,10 +1,19 @@
 <section class="content" id="resTree">
     <div class="row align-items-start">
-        <div class="zTreeDemoBackground col-md-2" style="background: #ebebeb;height: 900px;padding-right: 5px">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">资源目录分类</h3>
+            </div>
+        </div>
+        <div class="box box-primary dataTables_scrollBody" style="height: 800px; overflow-y:scroll;margin: 10px 0px 0px;">
+        <div class="zTreeDemoBackground col-md-2" style="background: #edf0f7;height: 2200px;padding: 5px">
+            <div class="box-header">
+                <h3 class="box-title" style="text-align: left">部门树</h3>
+            </div>
             <ul id="treeDemo" class="ztree">
             </ul>
         </div>
-        <div class="col-md-2 res_div" id="block0" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 res_div" id="block0" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
             <div style="margin-top: 12px;margin-bottom: 12px">
                 <button id="batch_del_0" class="btn btn-primary" style="margin-left:5px;width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)" >批量删除</button>
                 <button id="batch_import" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量导入</button>
@@ -47,7 +56,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-2 res_div" id="block1" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 res_div" id="block1" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
             <div style="margin-top: 12px;margin-bottom: 12px">
                 <button id="batch_del_1" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
             </div>
@@ -87,7 +96,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-2 res_div" id="block2" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 res_div" id="block2" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
             <div style="margin-top: 12px;margin-bottom: 12px">
                 <button id="batch_del_2" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
             </div>
@@ -126,7 +135,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-2 res_div" id="block3" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 res_div" id="block3" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
             <div style="margin-top: 12px;margin-bottom: 12px">
                 <button id="batch_del_3" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
             </div>
@@ -165,7 +174,7 @@
                 </li>
             </ul>
         </div>
-        <div class="col-md-2 res_div" id="block4" style="background: #FFFFBF;height: 900px;margin-left: 5px;display: none">
+        <div class="col-md-2 res_div" id="block4" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
             <div style="margin-top: 12px;margin-bottom: 12px">
                 <button id="batch_del_4" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
             </div>
@@ -203,6 +212,7 @@
                     </div>
                 </li>
             </ul>
+        </div>
         </div>
     </div>
 </section>

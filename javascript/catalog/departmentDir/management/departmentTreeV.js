@@ -4,6 +4,7 @@ var dptTree = new Vue({
     el: '#dptTree',
     data: {
         flag: 'dept',
+        dbtable:'RC_DEPT',
         deptNodes: {
             level0: [],
             level1: [],
@@ -435,30 +436,31 @@ var dptTree = new Vue({
                     let dragOldIndex=evt.oldIndex+1;
                     let dragCode=evt.item.id;
                     console.log
-                    let flag=0;
+                    let indexFlag=0;
                     //代表是向后拖拽-1
                     if(dragNewIndex>dragOldIndex){
-                        flag=-1;
+                        indexFlag=-1;
                         //更新节点顺序
-                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,flag)
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,indexFlag)
                     }
                     //向前拖拽
                     else if (dragNewIndex<dragOldIndex){
-                        flag=1;
+                        indexFlag=1;
                         //更新节点顺序
-                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,flag)
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,indexFlag)
                     }
                 },
             }
             var sortable=Sortable.create(el,ops);
         },
-        updateListOrder(new_order,old_order,node_code,pnode_code,flag){
+        updateListOrder(new_order,old_order,node_code,pnode_code,indexFlag){
             getDataByPost('/departmentTree/updateListOrder', {
                     new_order:new_order,
                     old_order:old_order,
                     node_code:node_code,
                     pnode_code:pnode_code,
-                    flag:flag
+                    indexFlag:indexFlag,
+                    dbtable:that.dbtable
                 },
                 res=>{
                     if(res.code==200)

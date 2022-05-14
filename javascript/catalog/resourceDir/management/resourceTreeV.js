@@ -3,6 +3,7 @@ var resourceTree = new Vue({
     el: '#resTree',
     data:{
         flag: 'resource',
+        dbFlag:'RC_RESDIR_NEW',
         deptNodes: {
             level0: [],
             level1: [],
@@ -252,7 +253,7 @@ var resourceTree = new Vue({
 
                 if(treeNode.level > 0){
                     var unfoldStr = "<button type='button' class='btn btn-box-tool close' id= '" + treeNode.node_code  + "' data-widget='collapse' style='float: right'>" +
-                        "<i class=\"fa fa-plus-square \"></i>" +
+                        "<i class=\"fa fa-arrow-circle-o-right\"></i>" +
                         "</button>"
                     spanObj.after(unfoldStr);
                 }
@@ -310,43 +311,45 @@ var resourceTree = new Vue({
                     //向前拖拽new<old，一切Index大于拖拽后new_Index的加一，拖拽的li根据Id更换Index
                     let dragNewIndex=evt.newIndex+1;
                     let dragOldIndex=evt.oldIndex+1;
-                    let arr=evt.item.id.split("_");
-                    let dragCode=arr[1];
-                    let flag=0;
+                    let dragCode=evt.item.id;
+                    console.log
+                    let indexFlag=0;
                     //代表是向后拖拽-1
                     if(dragNewIndex>dragOldIndex){
-                        flag=-1;
-                        //在oldIndex和newIndex之间的数据顺序-1或者+1
-                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex+'&old_order='+dragOldIndex, {},res1=>{
-                                //oldindex更换顺序
-                                getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
-                                    res2=>{
-                                        toastr.success("更改节点顺序成功");},
-                                    err=>{
-                                        toastr.error("更改节点顺序出错");}
-                                )},
-                            err=>{
-                                toastr.error("更改节点顺序出错");
-                            })
+                        indexFlag=-1;
+                        //更新节点顺序
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,indexFlag)
                     }
+                    //向前拖拽
                     else if (dragNewIndex<dragOldIndex){
-                        flag=1;
-                        //在oldIndex和newIndex之间的数据顺序+1
-                        getDataByPost('/departmentTree/updateOrderBylist_order?flag='+ flag+'&pnode_code='+pnode_code+'&new_order='+parseInt(dragNewIndex-1)+'&old_order='+parseInt(dragOldIndex-1), {},res1=> {
-                                //oldindex更换顺序
-                                getDataByPost('/departmentTree/updateOrderbynode_code?node_code='+ dragCode+'&pnode_code='+pnode_code+'&new_order='+dragNewIndex, {},
-                                    res2=>{
-                                        toastr.success("更改节点顺序成功");},
-                                    err=>{
-                                        toastr.error("更改节点顺序出错");}
-                                )},
-                            err=>{
-                                toastr.error("更改节点顺序出错");
-                            })
+                        indexFlag=1;
+                        //更新节点顺序
+                        that.updateListOrder(dragNewIndex,dragOldIndex,dragCode,pnode_code,indexFlag)
                     }
                 },
             }
             var sortable=Sortable.create(el,ops);
+        },
+        updateListOrder(new_order,old_order,node_code,pnode_code,indexFlag){
+            getDataByPost('/departmentTree/updateListOrder', {
+                    new_order:new_order,
+                    old_order:old_order,
+                    node_code:node_code,
+                    pnode_code:pnode_code,
+                    indexFlag:indexFlag,
+                    dbFlag:that.dbFlag
+                },
+                res=>{
+                    if(res.code==200)
+                    {
+                        toastr.success("更改节点顺序成功");
+                    }
+                    else{
+                        toastr.success("更改节点顺序失败");
+                    }
+                }
+            )
+
         },
         //批量删除
         delBatch(currentNode){
