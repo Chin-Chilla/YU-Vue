@@ -4,7 +4,7 @@ var dptTree = new Vue({
     el: '#dptTree',
     data: {
         flag: 'dept',
-        dbtable:'RC_DEPT',
+        dbTable: 'RC_DEPT',
         deptNodes: {
             level0: [],
             level1: [],
@@ -31,7 +31,7 @@ var dptTree = new Vue({
     mounted() {
         that = this;
         let data = {
-            flag: that.flag,
+            dbTable: that.dbTable,
             pnode_code: that.pnode_code
 
         }
@@ -135,6 +135,7 @@ var dptTree = new Vue({
                     $(element).css('display', 'block');
                 }
             });
+
         },
         //通过双击加载子节点
         loadChildNodesDblclick(currentNode){
@@ -164,10 +165,11 @@ var dptTree = new Vue({
             }
 
         },
+
         //通过父节点code查找所有子节点
         getChildeNodes(pCode,childrenLevel){
             let data={
-                flag: that.flag,
+                dbTable: that.dbTable,
                 pnode_code: pCode
 
             }
@@ -209,7 +211,7 @@ var dptTree = new Vue({
                 }
             })
             let data = {
-                flag: that.flag,
+                dbTable: that.dbTable,
                 delBatchNodes:that.delBatchNodes,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
@@ -261,7 +263,7 @@ var dptTree = new Vue({
                 that.pnode_code = that.parentNodeCodes[nowKey];
             }
             let data = {
-                flag: that.flag,
+                dbTable: that.dbTable,
                 node_code:nodeCode,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
@@ -338,6 +340,9 @@ var dptTree = new Vue({
             that.openMode = 'onClick';
             that.unfoldSubNode(currentNode);
             that.getChildeNodes(that.pnode_code,that.addCode);
+
+
+
         },
 
         //添加本级节点
@@ -379,18 +384,7 @@ var dptTree = new Vue({
                             if( !isOk ){
                                 return false;
                             }
-                            getDataByPost('/departmentTree/insertRepetitiveDeptNode',data,function (res) {
-                                if(res.code == 200){
-                                    let keys = Object.keys(that.deptNodes);
-                                    $("#addNodeCode").val(res.data.node_code);
-                                    data.node_code = res.data.node_code;
-                                    that.deptNodes[keys[that.addCode]].splice(Number(res.data.list_order)-1,0,data);
-                                    toastr.success("插入成功！");
-                                }else{
-                                    toastr.error("插入失败,请联系管理员！");
-                                }
 
-                            })
 
                         }
                     }else{
@@ -460,7 +454,7 @@ var dptTree = new Vue({
                     node_code:node_code,
                     pnode_code:pnode_code,
                     indexFlag:indexFlag,
-                    dbtable:that.dbtable
+                    dbTable:that.dbTable
                 },
                 res=>{
                     if(res.code==200)

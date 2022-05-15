@@ -917,6 +917,7 @@ var index = new Vue({
                         var nodeId = treeNode.nodeId;
                         keySearch.loadFromTree(nodeId,"ObjectTree");
                     },
+
                     onAsyncSuccess: function objectTreeOnAsyncSuccess(event, treeId, treeNode, dataStr) {
                         that.hide0Nodes(that.objZtree,treeNode)
                     }

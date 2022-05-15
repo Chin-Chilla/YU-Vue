@@ -2,8 +2,8 @@ var that;
 var resourceTree = new Vue({
     el: '#objTree',
     data:{
-        flag: 'obj',
-        dbtable:'RC_OBJ_NEW',
+        flag:'obj',
+        dbTable: 'RC_OBJ_NEW',
         deptNodes: {
             level0: [],
             level1: [],
@@ -189,7 +189,7 @@ var resourceTree = new Vue({
         },
         getChildeNodes(pCode,childrenLevel){
             let data = {
-                flag: that.flag,
+                dbTable: that.dbTable,
                 pnode_code: pCode
             }
             getDataByPost("/departmentTree/loadDepartmentChildren", data , function (res) {
@@ -336,7 +336,7 @@ var resourceTree = new Vue({
                     node_code:node_code,
                     pnode_code:pnode_code,
                     indexFlag:indexFlag,
-                    dbtable:that.dbtable
+                    dbTable:that.dbTable
                 },
                 res=>{
                     if(res.code==200)
@@ -375,7 +375,7 @@ var resourceTree = new Vue({
                 }
             })
             let data = {
-                flag: that.flag,
+                dbTable: that.dbTable,
                 delBatchNodes:that.delBatchNodes,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
@@ -427,7 +427,7 @@ var resourceTree = new Vue({
                 that.pnode_code = that.parentNodeCodes[nowKey];
             }
             let data = {
-                flag: that.flag,
+                dbTable: that.dbTable,
                 node_code:nodeCode,
                 deptLevel:deptLevel,
                 pnode_code:that.pnode_code
