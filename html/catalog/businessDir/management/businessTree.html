@@ -1,0 +1,332 @@
+<section class="content" id="resTree">
+    <div class="row align-items-start">
+        <div class="box box-solid box-primary">
+            <div class="box-header">
+                <h3 class="box-title">资源目录分类</h3>
+            </div>
+        </div>
+        <div class="box box-primary dataTables_scrollBody" style="height: 800px; overflow-y:scroll;margin: 10px 0px 0px;">
+        <div class="zTreeDemoBackground col-md-2" style="background: #edf0f7;height: 2200px;padding: 5px">
+            <div class="box-header">
+                <h3 class="box-title" style="text-align: left">业务树</h3>
+            </div>
+            <ul id="treeDemo" class="ztree">
+            </ul>
+        </div>
+        <div class="col-md-2 res_div" id="block0" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
+            <div style="margin-top: 12px;margin-bottom: 12px">
+                <button id="batch_del_0" class="btn btn-primary" style="margin-left:5px;width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)" >批量删除</button>
+                <button id="batch_import" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">批量导入</button>
+                <button id="coord_set" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;">贯标设置</button>
+            </div>
+            <div class="box-header with-border">
+                <h3 class="box-title" id="title0">一级部门</h3>
+                <div class="box-tools pull-right">
+                    <button id="add_0" type="button" class="btn btn-box-tool all_add" @click="addEquativeNode($event)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+
+            <ul id="container0" class="todo-list ui-sortable" >
+                <li v-for="item in deptNodes.level0" class="ele"  :id=item.node_code draggable="true" @dblclick="loadChildNodesDblclick($event)">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary0">
+                        <label for="checkboxPrimary0" >
+                            {{item.node_name}}
+                        </label>
+                        <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                            <div class="dropdown" style="display:inline-block">
+                                <button class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa fa-info-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                    <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                                </ul>
+
+                            </div>
+                            <button :id="'buttonDel_0_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa  fa-minus-square"></i>
+                            </button>
+
+                            <button :id="'button_0_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNodesOnclick($event)" ><i class="fa fa-angle-right unfold"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 res_div" id="block1" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
+            <div style="margin-top: 12px;margin-bottom: 12px">
+                <button id="batch_del_1" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
+            </div>
+
+            <div class="box-header with-border" >
+                <h3 class="box-title" id="title1">二级部门</h3>
+                <div class="box-tools pull-right">
+                    <button id="add_1" class="btn btn-box-tool all_add" @click="addEquativeNode($event)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <ul id="container1" class="todo-list ui-sortable" >
+                <li v-for="item in deptNodes.level1" class="ele"  :id=item.node_code draggable="true" @dblclick="loadChildNodesDblclick($event)">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary1">
+                        <label for="checkboxPrimary1" >
+                            {{item.node_name}}
+                        </label>
+                        <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                            <div class="dropdown" style="display:inline-block">
+                                <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa  fa-info-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                    <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                                </ul>
+                            </div>
+                            <button :id="'buttonDel_1_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa  fa-minus-square"></i>
+                            </button>
+
+                            <button :id="'button_1_' + item.node_code " type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNodesOnclick($event)"><i class="fa fa-angle-right unfold"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 res_div" id="block2" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
+            <div style="margin-top: 12px;margin-bottom: 12px">
+                <button id="batch_del_2" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
+            </div>
+            <div class="box-header with-border">
+                <h3 class="box-title" id="title2" style="text-align: center">三级部门</h3>
+                <div class="box-tools pull-right">
+                    <button id="add_2" type="button" class="btn btn-box-tool all_add" @click="addEquativeNode($event)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <ul id="container2" class="todo-list ui-sortable" >
+                <li v-for="item in deptNodes.level2" class="ele"  :id=item.node_code draggable="true" @dblclick="loadChildNodesDblclick($event)">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary2">
+                        <label for="checkboxPrimary2" >
+                            {{item.node_name}}
+                        </label>
+                        <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                            <div class="dropdown" style="display:inline-block">
+                                <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa  fa-info-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                    <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                                </ul>
+                            </div>
+                            <button :id="'buttonDel_2_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa  fa-minus-square"></i>
+                            </button>
+
+                            <button :id="'button_2_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNodesOnclick($event)"><i class="fa fa-angle-right unfold"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 res_div" id="block3" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
+            <div style="margin-top: 12px;margin-bottom: 12px">
+                <button id="batch_del_3" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
+            </div>
+            <div class="box-header with-border">
+                <h3 class="box-title" id="title3" style="text-align: center">四级部门</h3>
+                <div class="box-tools pull-right">
+                    <button id="add_3" type="button" class="btn btn-box-tool all_add" @click="addEquativeNode($event)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <ul id="container3" class="todo-list ui-sortable" >
+                <li v-for="item in deptNodes.level3" class="ele"  :id=item.node_code draggable="true" @dblclick="loadChildNodesDblclick($event)">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary3">
+                        <label for="checkboxPrimary3" >
+                            {{item.node_name}}
+                        </label>
+                        <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                            <div class="dropdown" style="display:inline-block">
+                                <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa  fa-info-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                    <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                                </ul>
+                            </div>
+                            <button :id="'buttonDel_3_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa fa-minus-square"></i>
+                            </button>
+
+                            <button :id="'button_3_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNodesOnclick($event)"><i class="fa fa-angle-right unfold"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-2 res_div" id="block4" style="background: #FFFFBF;height: 2200px;margin-left: 5px;display: none">
+            <div style="margin-top: 12px;margin-bottom: 12px">
+                <button id="batch_del_4" class="btn btn-primary" style="width: 80px;height: 25px;line-height: 15px;"  @click="delBatch($event)">批量删除</button>
+            </div>
+            <div class="box-header with-border">
+                <h3 class="box-title" id="title4" style="text-align: center">五级部门</h3>
+                <div class="box-tools pull-right">
+                    <button id="add_4" type="button" class="btn btn-box-tool all_add" @click="addEquativeNode($event)">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            <ul id="container4" class="todo-list ui-sortable" >
+                <li v-for="item in deptNodes.level4" class="ele"  :id=item.node_code draggable="true" @dblclick="loadChildNodesDblclick($event)">
+                    <div class="icheck-primary d-inline">
+                        <input type="checkbox" id="checkboxPrimary4">
+                        <label for="checkboxPrimary4" >
+                            {{item.node_name}}
+                        </label>
+                        <div class="tools" style="z-index: 99;position: absolute;right: 0">
+                            <div class="dropdown">
+                                <button class="btn btn-tool nav-link dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false">
+                                    <i class="fa  fa-info-circle"></i>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" @click="changeNodeName($event)">更改节点名称</a></li>
+                                    <li><a href="#" @click="addChildNode($event)">新增子节点</a></li>
+                                </ul>
+                            </div>
+                            <button :id="'buttonDel_4_' + item.node_code" type="button" class="btn btn-tool" data-card-widget="collapse" @click="delNode($event)" ><i class="fa  fa-minus-square"></i>
+                            </button>
+
+                            <button :id="'button_4_' + item.node_code" type="button" class="btn btn-tool dpt_unfold_btn" data-card-widget="collapse" @click="loadChildNodesOnclick($event)"><i class="fa fa-angle-right unfold"></i>
+                            </button>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        </div>
+    </div>
+</section>
+<style type="text/css">
+    .ztree{
+        padding: 1px;
+        margin-top: 10px;
+    }
+    .ztree li ul{
+        margin-top:10px;
+        margin-left: 10px;
+        margin-bottom:10px;
+        padding:0
+    }
+
+    .ztree li {
+        white-space: nowrap;
+        line-height:30px;
+        margin: 2px;
+    }
+
+    .ztree li a {
+        width:100%;
+        height:auto;
+        padding-top: 0px;
+    }
+
+    .ztree li span.button {margin-top: -3px;}
+
+    .ztree li a{
+        border:1px solid #E3E3E3;
+        border-radius:3px;
+    }
+
+    .ztree li a:hover {
+        text-decoration:none;
+        background-color: #E7E7E7;
+        border:1px solid #94a0b4;
+        border-radius:3px;
+        color:#000;
+        font-weight:bolder;
+    }
+
+    .ztree li a.curSelectedNode {
+        background-color:#E7E7E7;border:0;height:30px;
+        /*background-color: #E7E7E7;
+        border:1px solid #94a0b4;
+        border-radius:3px;
+        height: 30px;*/
+    }
+
+    .ztree li a.level0{
+        font-size: 150%;
+        font-weight: normal;
+        padding: 3px 10px;
+        background: #E0E0E0;
+    }
+
+    .ztree li a.level1 {
+        font-size: 110%;
+        padding: 0px 10px;
+        background: #E0E0E0;
+    }
+
+    .ztree li a.level2 {
+        font-size: 90%;
+        font-weight: normal;
+        padding: 0px 10px;
+        background: #E0E0E0;
+    }
+
+    .ztree li a.level3,.level4,.level5 {
+        font-size: 90%;
+        font-weight: normal;
+        padding: 0px 10px;
+        background: #E0E0E0;
+    }
+    .ztree li span.button.noline_open {
+        background-position:0px,0px;
+    }
+
+    .ztree li span.button.switch.level0 {width: 20px; height:20px}
+    .ztree li span.button.switch.level1 {width: 20px; height:20px}
+    .ztree li span.button.noline_open {background-position: 0 0;}
+    .ztree li span.button.noline_close {background-position: -18px 0;}
+    .ztree li span.button.noline_open.level0 {background-position: 0 -18px;}
+    .ztree li span.button.noline_close.level0 {background-position: -18px -18px;}
+
+    .ztree li span.button {
+        background-image:url("/YU/stylesheet/common/zTree/demo/en/super/left_menuForOutLook.png");
+        *background-image:url("/YU/stylesheet/common/zTree/demo/en/super/left_menuForOutLook.gif")
+    }
+
+
+    /*.ztree * {font-size: 10pt;font-family:"Microsoft Yahei",Verdana,Simsun,"Segoe UI Web Light","Segoe UI Light","Segoe UI Web Regular","Segoe UI","Segoe UI Symbol","Helvetica Neue",Arial}
+    .ztree li ul{ margin:3px; padding:0 ;}
+    .ztree li {line-height:30px;background: white}
+    .ztree li a {width:200px;height:30px;padding-top: 0px;}
+    .ztree li a:hover {text-decoration:none; background-color: #E7E7E7;}
+    .ztree li a span.button.switch {visibility:hidden}
+    .ztree.showIcon li a span.button.switch {visibility:visible}
+    .ztree li a.curSelectedNode {background-color:#D4D4D4;border:0;height:30px;}
+    .ztree li span {line-height:30px;}
+    .ztree li span.button {margin-top: -7px;}
+    .ztree li span.button.switch {width: 16px;height: 16px;}
+
+    .ztree li a.level0 span {font-size: 150%;font-weight: bold; margin: 3px}
+    .ztree li span.button {background-image:url("./left_menuForOutLook.png"); *background-image:url("./left_menuForOutLook.gif")}
+    .ztree li span.button.switch.level0 {width: 20px; height:20px}
+    .ztree li span.button.switch.level1 {width: 20px; height:20px}
+    .ztree li span.button.noline_open {background-position: 0 0;}
+    .ztree li span.button.noline_close {background-position: -18px 0;}
+    .ztree li span.button.noline_open.level0 {background-position: 0 -18px;}
+    .ztree li span.button.noline_close.level0 {background-position: -18px -18px;}*/
+</style>
+<!--<script src="/YU/javascript/catalog/resourceDir/management/resZtree.js"></script>-->
+<script src="/YU/javascript/catalog/businessDir/management/businessTreeV.js"></script>
