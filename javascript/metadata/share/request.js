@@ -110,7 +110,7 @@ var app = new Vue({
 				//顺序是元数据名称 订阅时间 状态 申请人 申请单位 联系方式
 				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdName+
 					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdName+
-					"','"+list[i].loc+"')\">"+list[i].createTime+
+					"','"+list[i].loc+"')\">"+app.renderTime(list[i].createTime)+
 					"</a></td><td>"+list[i].proposer+
 					"</td><td>"+list[i].org+
 					"</td><td>"+list[i].contact+
@@ -223,6 +223,11 @@ var app = new Vue({
 			}else{
 				swal("请求错误，通过数据失败！", "", "error");
 			}
+		},
+		renderTime(date) {
+			var dates = new Date(date).toJSON();
+			return new Date(+new Date(dates) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
 		}
-	}
+
+}
 })

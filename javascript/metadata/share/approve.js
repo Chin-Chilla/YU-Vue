@@ -32,7 +32,6 @@ var app = new Vue({
 			pageNum:this.pageNum,
 			pageSize:this.pageSize,
 		},res=>{
-			console.log(res.data);
 			that.totalNum = res.data.total;
 			that.renderList(res.data.list);
 			that.renderPagination();
@@ -132,13 +131,14 @@ var app = new Vue({
 					that.status_show = "已通过";
 				}
 				var onlyId = ''+that.pageNum+list[i].mdFileId;//tr的id
-				var checkboxId = 'checkbox'+list[i].status+(that.newListNum-1)+list[i].mdFileId; //checkbox的id，方便后台获取批量处理的dom
+				var checkboxId = 'checkbox'+list[i].status+(that.newListNum-1)+list[i].mdFileId;
+					//checkbox的id，方便后台获取批量处理的dom
 				// var singleIndex = that.newListNum-1;
 				// var singleStatus = list[i].status
 
 				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdName+
 					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdName+
-					"','"+list[i].loc+"')\">"+list[i].createTime+
+					"','"+list[i].loc+"')\">"+app.renderTime(list[i].createTime)+
 					"</a></td><td>"+list[i].proposer+
 					"</td><td>"+list[i].org+
 					"</td><td>"+list[i].contact+
@@ -442,6 +442,10 @@ var app = new Vue({
 				swal("请求错误，通过数据失败！", "", "error");
 			}
 		},
+		renderTime(date) {
+			var dates = new Date(date).toJSON();
+			return new Date(+new Date(dates) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+		}
 
 	}
 })
