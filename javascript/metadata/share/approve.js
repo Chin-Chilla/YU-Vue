@@ -183,8 +183,8 @@ var app = new Vue({
 				pageSize:that.totalNum,
 			},res=>{
 				that.reqNum = res.data.zeroStatus;
-				that.passNum=res.data.oneStatus;
-				that.refusedNum=res.data.twoStatus;
+				that.refusedNum=res.data.oneStatus;
+				that.passNum=res.data.twoStatus;
 
 			});
 		},
