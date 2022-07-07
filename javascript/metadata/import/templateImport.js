@@ -6,6 +6,8 @@ var app = new Vue({
         count:0,
         indexJson:0,
         countJson:0,
+        indexJsonObj:0,
+        countJsonObj:0,
         simpleData:{
             enable:true,
             idKey:"node_id",
@@ -29,7 +31,7 @@ var app = new Vue({
         loadManage(){
 
         },
-        addfile:function(){
+        addfile(){
             this.index++;
             this.count++;
             $("#fileTableBody").append("<tr id=\"row_"+this.index+"\">" +
@@ -185,6 +187,68 @@ var app = new Vue({
                 "<dt><input type=\"text\" id=\"txtNumber_"+this.indexJson+"\" value=\"0,0,0,0\"  style=\"height:30px;width:270px;margin-left: 10px;\"/></dt></dl>\n" +
                 "</td>"+
                 "<td><button onclick=\"app.deleteTaRow("+this.indexJson+")\" style=\"width: 50px;height: 30px;margin-bottom: 6px;margin-left: 10px;\">删除</button></td>"+
+                "</tr>");
+        },
+
+
+
+        uploadJsonObj(){
+            file = $("#fileTableBodyJsonObj").find("input");
+            var formdata = new FormData();
+            file_num = file.length;
+            i = 0;
+            // console.log("in uploadJson")
+            // console.log(file_num)
+            while( i < file_num){
+                formdata.append("file",file[i].files[0]);
+                node_list = file[i+1].value;
+                $.ajax({
+                    xhrFields:{
+                        withCredentials:true
+                    },
+                    // "url":BASE_URL+"/matadata_import_fixed/upload",
+                    "url":BASE_URL+"/matadata_import/uploadJson"+ "?node_list=" + node_list + "&node_type=objNode",
+                    "data":formdata,
+                    "type":"POST",
+                    "processData":false,
+                    "contentType":false,
+                    // "dataType":"json",
+                    "success": function (msgJson) {
+                        if (msgJson.data.state == 'exceed') {
+                            alert(file_name+"起始行超出行数！");
+                        }
+                        if (msgJson.data.state == 'Permission denied') {
+                            alert(file_name+"当前用户不能在该节点下进行文件上传！");
+                        }
+                        if (msgJson.data.state == 'inconsistent') {
+                            alert(file_name+"Excel中的部门与选择结点不一致！");
+                        }
+                        // $("#loading").css('display', 'none'); //取消 loading 界面
+                        if (msgJson.data.state == 'ok') {
+                            toastr.success("导入成功！");
+                        }
+                    },
+                    "error": function (msgJson) {
+                        alert("导入错误！");
+                        $("#loading").css('display', 'none');
+                    }
+                })
+                i++;i++;
+                formdata.delete("file");
+            }
+        },
+        addfileJsonObj(){
+            this.indexJsonObj++;
+            this.countJsonObj++;
+            $("#fileTableBodyJsonObj").append("<tr id=\"row_"+this.indexJsonObj+"\">" +
+                "<td><form method=\"post\" id=\"upload_"+this.indexJsonObj+"\" enctype=\"multipart/form-data\" action=\"/matadata_import_fixed/batchRegisterResourceMetadata\">" +
+                // "<input type=\"file\" name=\"showfilename_"+this.index+"\" style=\"float:left;width: 300px;height: 30px;\">" +
+                "<input type=\"file\" id=\"showfilename"+this.indexJsonObj+"\"  name=\"showfilename\" style=\"float:left;width: 230px;height: 30px;\">" +
+                "</form></td>"+
+                "<td><dl style=\"float: left;margin:0 0 0 1px\">\n" +
+                "<dt><input type=\"text\" id=\"txtNumber_"+this.indexJsonObj+"\" value=\"0,0,0,0\"  style=\"height:30px;width:270px;margin-left: 10px;\"/></dt></dl>\n" +
+                "</td>"+
+                "<td><button onclick=\"app.deleteTaRow("+this.indexJsonObj+")\" style=\"width: 50px;height: 30px;margin-bottom: 6px;margin-left: 10px;\">删除</button></td>"+
                 "</tr>");
         },
     }
