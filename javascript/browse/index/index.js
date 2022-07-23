@@ -1325,41 +1325,41 @@ var index = new Vue({
 		            that.getObjNum();
 		            that.midPictureShow();
 		      //      that.showLevel2();
-                    that.setRankData();
+                    that.setRankLsitData();
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
 	        	
 	        })
 	    },
-        setRankData(){
+        setRankLsitData(){
             var totalArr = [];  //排序使用
             //动态获取部门名称以及数量放到申请榜等上面
-                getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
-                    that.xizangObjDep=that.getXizangDep(dataStr);
-                    getDataByGet('/index_manager/getResById?nodeId=1034', {}, dataStr=>{
-                        that.xizangResDep=that.getXizangDep(dataStr);
-                        for (var i = 0; i < that.xizangResDep.length; i++) {
-                            var tmp = { 'name': '', value: '' }
-                            tmp.name = that.xizangResDep[i].name;
-                            // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
-                            tmp.value = that.xizangResDep[i].value+that.xizangObjDep[i].value;
-                            totalArr.push(tmp)
-                        }
-                        totalArr.sort(function(a, b) {
-                            return b.value - a.value
-                        })
-                        index.totalData = totalArr.slice(0,10);
+            const nodeId = 1034;
+            getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
+                that.listChoosedObjDep=that.getLsitChoosedDep(dataStr,nodeId);
+                getDataByGet('/index_manager/getResById?nodeId='+nodeId, {}, dataStr=>{
+                    that.listChoosedResDep=that.getLsitChoosedDep(dataStr,nodeId);
+                    for (var i = 0; i < that.listChoosedResDep.length; i++) {
+                        var tmp = { 'name': '', value: '' }
+                        tmp.name = that.listChoosedResDep[i].name;
+                        // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
+                        tmp.value = that.listChoosedResDep[i].value+that.listChoosedObjDep[i].value;
+                        totalArr.push(tmp)
+                    }
+                    totalArr.sort(function(a, b) {
+                        return b.value - a.value
                     })
+                    index.totalData = totalArr.slice(0,10);
                 })
-
+            })
         },
 	    getObjTree(objdep_id){
 	        getDataByPost("/index_manager/queryObjTree", {
 	            "dep": objdep_id,
 	        }, res=> {
 	        	var dataStr = res.data;
-	            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
+                var arr = dataStr.substring(1, dataStr.length - 1).split(",");
 	            var arr1 = new Array();
                 var objCountMap = new Map();
 	            for (var i = 0; i < arr.length; i++) {
@@ -1917,10 +1917,10 @@ var index = new Vue({
             return parseInt(nodeName.substr(st, len))
         },
         //获取西藏的部门以及数量，后面如果需要复用类似的函数，只要将这个请求的节点设置为变量即可
-        getXizangDep(dataStr){
-	        var xizangObjOrResDep=[];
+        getLsitChoosedDep(dataStr, pnodeId){
+	        var listChoosedObjOrResDep=[];
             for (var i = 0; i < dataStr.length; i++) {
-                if (dataStr[i].pnodeId == 1034) {
+                if (dataStr[i].pnodeId == pnodeId) {
                     var str = dataStr[i].nodeName + "";
                     var num = parseInt(str.substr((str.indexOf("(") + 1), (str.indexOf(")") - 1)));
                     var name = str.substr(0, str.indexOf("("));
@@ -1928,10 +1928,10 @@ var index = new Vue({
                         value: num,
                         name: name,
                     }
-                    xizangObjOrResDep.push(data);
+                    listChoosedObjOrResDep.push(data);
                 }
             }
-            return xizangObjOrResDep;
+            return listChoosedObjOrResDep;
         },
 
     },
