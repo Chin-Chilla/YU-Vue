@@ -677,9 +677,7 @@ var index = new Vue({
         //用于测试
         test: [],
         img_src:'/YU/statics/imgs/BJlogo.png',
-        //存储西藏对象树和资源树的部门以及元数据数量
-        xizangObjDep:[],
-        xizangResDep:[],
+
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
@@ -1325,26 +1323,28 @@ var index = new Vue({
 		            that.getObjNum();
 		            that.midPictureShow();
 		      //      that.showLevel2();
-                    that.setRankLsitData();
+                    that.setRankListData();
 	        	}else{
 	        		toastr.warning(res.msg);
 	        	}
 	        	
 	        })
 	    },
-        setRankLsitData(){
+        setRankListData(){
             var totalArr = [];  //排序使用
             //动态获取部门名称以及数量放到申请榜等上面
-            const nodeId = 1034;
+            let listChoseObjDep = [];
+            let listChoseResDep = [];
+            const nodeId = 1002;
             getDataByGet('/object_manage/getObjTreeByCode?nodeCode=1000&addCount=true', {}, dataStr=>{
-                that.listChoosedObjDep=that.getLsitChoosedDep(dataStr,nodeId);
+                listChoseObjDep=that.getListChoseDep(dataStr,nodeId);
                 getDataByGet('/index_manager/getResById?nodeId='+nodeId, {}, dataStr=>{
-                    that.listChoosedResDep=that.getLsitChoosedDep(dataStr,nodeId);
-                    for (var i = 0; i < that.listChoosedResDep.length; i++) {
+                    listChoseResDep=that.getListChoseDep(dataStr,nodeId);
+                    for (var i = 0; i < listChoseResDep.length; i++) {
                         var tmp = { 'name': '', value: '' }
-                        tmp.name = that.listChoosedResDep[i].name;
+                        tmp.name = listChoseResDep[i].name;
                         // tmp.value = that.arrayAllData[i] + that.arrayAllObjData[i];
-                        tmp.value = that.listChoosedResDep[i].value+that.listChoosedObjDep[i].value;
+                        tmp.value = listChoseResDep[i].value+listChoseObjDep[i].value;
                         totalArr.push(tmp)
                     }
                     totalArr.sort(function(a, b) {
@@ -1917,8 +1917,8 @@ var index = new Vue({
             return parseInt(nodeName.substr(st, len))
         },
         //获取西藏的部门以及数量，后面如果需要复用类似的函数，只要将这个请求的节点设置为变量即可
-        getLsitChoosedDep(dataStr, pnodeId){
-	        var listChoosedObjOrResDep=[];
+        getListChoseDep(dataStr, pnodeId){
+	        var listChoseObjOrResDep=[];
             for (var i = 0; i < dataStr.length; i++) {
                 if (dataStr[i].pnodeId == pnodeId) {
                     var str = dataStr[i].nodeName + "";
@@ -1928,10 +1928,10 @@ var index = new Vue({
                         value: num,
                         name: name,
                     }
-                    listChoosedObjOrResDep.push(data);
+                    listChoseObjOrResDep.push(data);
                 }
             }
-            return listChoosedObjOrResDep;
+            return listChoseObjOrResDep;
         },
 
     },
