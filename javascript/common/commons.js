@@ -74,7 +74,10 @@ function getDataByGet(aURl,aJson,aCallback){
 				}
 			},
 			error:function(res){
-			    toastr.error(res.msg)
+				  if (res.msg != null)
+			    	toastr.error(res.msg)
+				  else
+					toastr.error("应用出错，请检查后台程序日志");
 			}
 	  })
 }

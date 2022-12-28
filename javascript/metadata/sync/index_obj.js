@@ -336,8 +336,11 @@ var app = new Vue({
             getDataByGet(
                 '/index_sync/showRevokeTree',
                 data,
-                function (res){
-                    $.fn.zTree.init($("#serviceTree2"), setting2, res);
+                res => {
+                    if (res != null)
+                        $.fn.zTree.init($("#serviceTree2"), setting2, res);
+                    else
+                        toastr.error("获取目标系统的对象目录失败！");
                 }
             )
         },
