@@ -8,24 +8,8 @@ var aJson = {};
  *      - ifSync         是否筛选同步状态
  */
 var synInfo = {};
-var setting;
-var setting1 = {
-    data: {
-        simpleData: {
-            enable: true,
-            idKey: "id",
-            pIdKey: "parentId",
-            rootPId: "0"
-        },
-        key: {
-            name: "text"
-        }
-    }, check: {
-        enable: true,
-        chkStyle: "checkbox",
-        chkboxType: {"Y": "ps", "N": "s"}
-    }
-};
+var setting, setting2;
+var targetLocations;
 var app = new Vue({
     //绑定html页面的id
     el: "#vue",
@@ -60,6 +44,24 @@ var app = new Vue({
                 onClick: that.zTreeSolr
             }
         };
+        setting2 = {
+            data: {
+                simpleData: {
+                    enable: true,
+                    idKey: "nodeId",
+                    pIdKey: "pnodeId",
+                    rootPId: "0"
+                },
+                key: {
+                    name: "nodeName"
+                }
+            },
+            check: {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: {"Y": "ps", "N": "s"}
+            }
+        };
     },
     //成员方法
     methods: {
@@ -80,6 +82,19 @@ var app = new Vue({
                 $("input:checked").prop("checked", false);
                 $(this).find("input[name='optionsRadios']").prop("checked", true);
             });
+            getDataByGet(
+                '/index_sync/getSyncTo',
+                {},function(res){
+                    let str="<option value=''>全部</option>>"
+                    targetLocations = res.data;
+                    for (var i =0; i < targetLocations.length; i++){
+                        var option = document.createElement("option");
+                        option.text = targetLocations[i].comment;
+                        option.value = targetLocations[i].location;
+                        $('#syncTo').append(option);
+                    }
+                }
+            );
         },
 
         zTreeSolr(event, treeId, treeNode) {
@@ -321,11 +336,8 @@ var app = new Vue({
             getDataByGet(
                 '/index_sync/showRevokeTree',
                 data,
-                res => {
-                    $.fn.zTree.init($("#serviceTree2"), setting1, res);
-                },
-                err => {
-                    toastr.error("加载目录树失败！");
+                function (res){
+                    $.fn.zTree.init($("#serviceTree2"), setting2, res);
                 }
             )
         },
