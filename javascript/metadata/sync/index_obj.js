@@ -143,7 +143,16 @@ var app = new Vue({
                     $("#sample_1").append("<tbody id='modaltbody1'>");
                     var msg = res.data;
                     for (var o in msg) {
-                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].idtitle + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
+                        $("#modaltbody1").append(" <tr>" +
+                            "<td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td>" +
+                            "<td>" + msg[o].id + "</td><td>" + msg[o].idtitle + "</td>" +
+                            "<td title='" + msg[o].idabs + "' style='width:250px'>" +
+                                "<div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;" +
+                                    "white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td>" +
+                            "<td title='" + msg[o].usr_abs + "' style='width:250px'>" +
+                                "<div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;" +
+                                    "white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td>" +
+                            "</tr>");
                         var icheck1 = document.getElementById("allpage");
                         if (icheck1.checked == true) {
                             $("input[name='cellChecker']").each(function () {
@@ -350,31 +359,53 @@ var app = new Vue({
             var treeObj = $.fn.zTree.getZTreeObj("serviceTree2");
             //目标树被点击的节点
             var nodes = treeObj.getCheckedNodes(true);
-            var array = new Array();
-            var arrayNode = new Array();
+            var selectedNodeIds = new Array();
+            var selectedNodeCode = new Array();
             for (var i = 0; i < nodes.length; i++) {
-                array.push(nodes[i].id);
-                //如果父节点是根节点，则将该节点的node_code加进数组
-                if (nodes[i].parentId == 1000) {
-                    arrayNode.push(nodes[i].node_code);
+                selectedNodeIds.push(nodes[i].nodeId);
+                //将叶节点的node_code加入数组
+                if (nodes[i].children == null) {
+                    selectedNodeCode.push(nodes[i].nodeCode);
                 }
             }
-            if (array.length == 0) {
+            if (selectedNodeIds.length == 0) {
                 toastr.warning("请选择目的节点");
                 return;
             }
-            synInfo.nodes = array;
-            synInfo.nodeForCode = arrayNode;
-            synInfo.sourceNode = nodeId;
-            synInfo.syncTo = $("#syncTo").val();
-            synInfo.ifSync = $("#ifSync").val();
+            if (selectedNodeCode.length > 1) {
+                toastr.warning("只可同步至目标系统的单一对象分类下");
+                return;
+            }
+            synInfo.nodes = selectedNodeIds;            //目标节点队列，路径上所有节点的ID
+            synInfo.nodeForCode = selectedNodeCode;     //目标节点代码，叶节点的Code
+            synInfo.sourceNode = nodeId;                //源节点ID，用于界定同步的元数据对象
+            synInfo.syncTo = $("#syncTo").val();        //目标系统的名称，并于Locations配置文件中寻找目标solr地址
+            synInfo.ifSync = $("#ifSync").val();        //0：未同步；1：已同步；2：所有资源
             synInfo.nodeType = "obj_node";
+
             //区别处理部分数据或全部结果
             if (document.getElementById("allpage").checked == true) {
                 // 处理全部结果
-                synInfo.mdfileidList = new Array(); //清空部分选择的记录
+                synInfo.mdfileidList = new Array(); //通过标记一个空的队列，来表示同步所有候选元数据
+            } else {
+                //TODO ：需要完善此处的功能，来获取所有被选择的元数据行，并将mdfileID置入 synInfo.mdfileidList 中
+
+                // console.log("process a part of results");
+                // var table = document.getElementById("sample_1");
+                // $("input[name='cellChecker']").each(function () {
+                //     console.log("the status : " + JSON.stringify((this).checked));
+                //     if (JSON.stringify((this).checked) == "true"){
+                //         // var node = $(this).parentNode.nextSibling;
+                //         var row = $(this).parentNode.rowIndex; //所在行数
+                //         var x = table.rows[row].cells; //所有列
+                //         var mdfileid = x[0].firstChild.value;
+                //         console.log("the mdfile id is: " + mdfileid);
+                //     } else {
+                //         console.log("Cannot process");
+                //     }
+                // })
             }
-            that.sync();
+            // that.sync();
         },
 
         sync() {
