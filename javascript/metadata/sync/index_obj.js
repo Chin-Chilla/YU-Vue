@@ -392,21 +392,15 @@ var app = new Vue({
                 synInfo.mdfileidList = new Array(); //通过标记一个空的队列，来表示同步所有候选元数据
             } else {
                 //TODO ：需要完善此处的功能，来获取所有被选择的元数据行，并将mdfileID置入 synInfo.mdfileidList 中
-
-                // console.log("process a part of results");
-                // var table = document.getElementById("sample_1");
-                // $("input[name='cellChecker']").each(function () {
-                //     console.log("the status : " + JSON.stringify((this).checked));
-                //     if (JSON.stringify((this).checked) == "true"){
-                //         // var node = $(this).parentNode.nextSibling;
-                //         var row = $(this).parentNode.rowIndex; //所在行数
-                //         var x = table.rows[row].cells; //所有列
-                //         var mdfileid = x[0].firstChild.value;
-                //         console.log("the mdfile id is: " + mdfileid);
-                //     } else {
-                //         console.log("Cannot process");
-                //     }
-                // })
+                //console.log("process a part of results");
+                synInfo.mdfileidList = new Array();
+                var check = $("input[name='cellChecker']:checked");//选中的复选框
+                check.each(function () {
+                    var row = $(this).parent("td").parent("tr");
+                    var mdfileID = row.find("td").eq(1).text();
+                    synInfo.mdfileidList.push(mdfileID);
+                });
+                //console.log(synInfo.mdfileidList);
             }
             that.sync();
         },
