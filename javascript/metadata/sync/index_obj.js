@@ -398,21 +398,6 @@ var app = new Vue({
                     synInfo.mdfileidList.push(mdfileID);
                 });
                 //console.log(synInfo.mdfileidList);
-
-                // console.log("process a part of results");
-                // var table = document.getElementById("sample_1");
-                // $("input[name='cellChecker']").each(function () {
-                //     console.log("the status : " + JSON.stringify((this).checked));
-                //     if (JSON.stringify((this).checked) == "true"){
-                //         // var node = $(this).parentNode.nextSibling;
-                //         var row = $(this).parentNode.rowIndex; //所在行数
-                //         var x = table.rows[row].cells; //所有列
-                //         var mdfileid = x[0].firstChild.value;
-                //         console.log("the mdfile id is: " + mdfileid);
-                //     } else {
-                //         console.log("Cannot process");
-                //     }
-                // })
             }
             that.sync();
         },
