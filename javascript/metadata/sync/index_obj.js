@@ -414,7 +414,7 @@ var app = new Vue({
                 //     }
                 // })
             }
-            // that.sync();
+            that.sync();
         },
 
         sync() {
