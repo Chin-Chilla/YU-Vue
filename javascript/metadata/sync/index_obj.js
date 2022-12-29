@@ -16,6 +16,7 @@ var app = new Vue({
     //成员变量
     data: {
         nodeId: '',
+        nodeCode: ''
     },
     //初始化方法
     mounted() {
@@ -99,6 +100,7 @@ var app = new Vue({
 
         zTreeSolr(event, treeId, treeNode) {
             nodeId = treeNode.nodeId;
+            nodeCode = treeNode.nodeCode;
             that.showTable();
         },
 
@@ -377,8 +379,9 @@ var app = new Vue({
                 return;
             }
             synInfo.nodes = selectedNodeIds;            //目标节点队列，路径上所有节点的ID
-            synInfo.nodeForCode = selectedNodeCode;     //目标节点代码，叶节点的Code
+            synInfo.nodeForCode = selectedNodeCode[0];  //目标节点代码，叶节点的Code
             synInfo.sourceNode = nodeId;                //源节点ID，用于界定同步的元数据对象
+            synInfo.sourceNodeCode = nodeCode;          //源节点Code，用于界定同步的元数据对象
             synInfo.syncTo = $("#syncTo").val();        //目标系统的名称，并于Locations配置文件中寻找目标solr地址
             synInfo.ifSync = $("#ifSync").val();        //0：未同步；1：已同步；2：所有资源
             synInfo.nodeType = "obj_node";
@@ -405,7 +408,7 @@ var app = new Vue({
                 //     }
                 // })
             }
-            // that.sync();
+            that.sync();
         },
 
         sync() {
