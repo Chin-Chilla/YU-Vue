@@ -25,11 +25,8 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/html/browse/index/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/browse/index/index.html" afterDir="false" />
+    <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="change .idea/workspace.xml">
       <change beforePath="$PROJECT_DIR$/javascript/browse/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/browse/index/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/javascript/metadata/sync/index_obj.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/metadata/sync/index_obj.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -161,7 +158,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="change sync index_obj.js for xi zang for the time being" />

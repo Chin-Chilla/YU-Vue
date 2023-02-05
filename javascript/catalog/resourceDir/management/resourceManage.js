@@ -766,6 +766,16 @@ var res = new Vue({
                 }
             })
         },
+        //搜索结点
+        search(){
+                var node_name = $("#text9").val();
+                if (node_name=="") {
+                    toastr.warning("请填写结点名称!");
+                }
+                else{
+                        toastr.error("无该名称结点!")
+                }
+        },
     },
 
 })

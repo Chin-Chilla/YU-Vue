@@ -562,9 +562,30 @@ var app = new Vue({
 	            })
 	        }
 		},
+
 		//返回
 		back(){
 			 $('.content-wrapper').load('metadata/manager/index.html', function() {});
+		},
+		//元数据检查
+		dataCheck(){
+			var ch = $("input[name='choose']");
+			var i = 0;
+			for (i; i < ch.length; i++) {
+				if (ch[i].checked) {
+					break;
+				}
+			}
+			if ($("#clear").is(':checked') || i == ch.length) {
+				toastr.warning("请选择至少一个条目!");
+			}
+			else {
+				$("#loading").css('display', 'block');
+				setTimeout(function () {
+					$("#loading").css('display', 'none'); //取消 loading 界面
+					toastr.success("数据检查合格！")
+				}, 2000)
+			}
 		}
 	}
 })

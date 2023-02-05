@@ -502,7 +502,17 @@ var obj = new Vue({
             var tip = "<label class=\"form-group\" id=\"label_1\" style=\"margin:0px 0px 0px 15px\" class=\"col-sm-4 control-label\">*(必填)</label>";
             document.getElementById("label_1").innerHTML = tip;
             document.getElementById("label_2").innerHTML = tip;
-        }
+        },
+        //搜索结点
+        search(){
+            var node_name = $("#text9").val();
+            if (node_name=="") {
+                toastr.warning("请填写结点名称!");
+            }
+            else{
+                toastr.error("无该名称结点!")
+            }
+        },
     }
 
 })

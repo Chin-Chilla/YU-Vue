@@ -898,6 +898,7 @@ var index = new Vue({
                     otherParam: {"addCount":"true", "withUncheck":"false"}
                 },
                 data: {
+                    withUncheck,
                     simpleData: {
                         enable: true,
                         idKey: "nodeId",
@@ -932,6 +933,7 @@ var index = new Vue({
                             that.arrayRightBarObj.push(num);
                         }
                     }
+             //       console.log("dataStr====="+dataStr);
                     that.objZtree = $.fn.zTree.init($("#objTree"), settingObject, dataStr);
                     that.hide0Nodes(that.objZtree);
             })

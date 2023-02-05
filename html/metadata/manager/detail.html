@@ -57,10 +57,11 @@
                                 </select>
                                 <label style="padding-top:10px;margin-left:5px">条数据</label>
                                 <div style="padding: 5px 5px 5px 5px;padding-right: 20px" class="pull-right ">
+                                    <input type="button" value="元数据检查" :disabled="isCataLog=='0'" class="btn btn-primary" id="check" style="width:80px;height: 35px;padding-left: 3px;" @click="dataCheck">
                                     <input type="button" value="批量导出" :disabled="isCataLog=='0'" class="btn btn-primary" id="export" style="width:80px;height: 35px;" @click="batchExport">
                                     <!-- <input type="button" value="更新节点" :disabled="isCataLog=='0'" class="btn btn-primary" id="updateNode" style="width:80px;height: 35px;" @click="showUpdate"> -->
                                     <input type="button" value="更新对象" :disabled="isCataLog=='0'" class="btn btn-primary" id="update" style="width:80px;height: 35px;" @click="catalogue(1)">
-                                    <input type="button" value="编目对象" :disabled="isCataLog=='1'" class="btn btn-primary" id="catalog" style="width:80px;height: 35px;" @click="goCataLog">
+                                    <input type="button" value="目录提交" :disabled="isCataLog=='1'" class="btn btn-primary" id="catalog" style="width:80px;height: 35px;" @click="goCataLog">
                                     <input type="button" value="取消编目" :disabled="isCataLog=='0'" class="btn btn-primary" id="delete" style="width:80px;height: 35px;padding: 0px" @click="deleteCatalog">
                                     <input type="button" value="返回" class="btn btn-primary" id="back" style="width:80px;height: 35px;" @click="back">
                                 </div>
