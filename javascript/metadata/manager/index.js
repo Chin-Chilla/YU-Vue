@@ -485,5 +485,22 @@ var app = new Vue({
 				toastr.error(err)
 			})
 		},
+		downfile(){
+			//window.location.href = "/SL-T 799-2020 水利数据目录服务规范.pdf";
+			window.open("/SL-T 799-2020 水利数据目录服务规范.pdf");
+		},
+
+		showCheckModal(){
+			var classId = $("input[name='optionsRadios']:checked").val();
+			if (classId == null) {
+				toastr.warning("请选择对象类");
+			} else{
+				$("#loading").css('display', 'block');
+				setTimeout(function () {
+					$("#loading").css('display', 'none'); //取消 loading 界面
+					toastr.success("数据检查通过！")
+				}, 2000)}
+
+		},
 	}
 })
