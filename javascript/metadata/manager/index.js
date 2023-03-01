@@ -495,12 +495,39 @@ var app = new Vue({
 			if (classId == null) {
 				toastr.warning("请选择对象类");
 			} else{
-				$("#loading").css('display', 'block');
-				setTimeout(function () {
-					$("#loading").css('display', 'none'); //取消 loading 界面
-					toastr.success("数据检查通过！")
-				}, 2000)}
-
+				$('#checkprogressModal').modal({backdrop: 'static', keyboard: false})
+				var interval = 4*that.total/90;
+				if(interval<100){
+					interval=100;
+				}
+				var	timer = setInterval(function(){
+					if(that.progress==100){
+						clearInterval(timer)
+						return;
+					}
+					var tmp = Math.random()/2
+					if(Math.random()>0.5){
+						tmp = 1+tmp
+					}else{
+						tmp =1-tmp
+					}
+					that.progress = Math.round((that.progress+tmp)*10)/10
+					if(that.progress>99){
+						that.progress = 99
+						clearInterval(timer);
+					}
+				},interval)
+				setTimeout(function (){
+					that.progress=100;
+				},5000)
+				setTimeout(function(){
+							$("#checkprogressModal").modal('hide')
+						},5500)
+						setTimeout(function(){
+							toastr.success("数据检查成功!");
+							$('.content-wrapper').load('metadata/manager/index.html', function() {});
+						},6000)
+					}
 		},
 	}
 })
