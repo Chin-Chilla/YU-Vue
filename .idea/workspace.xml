@@ -26,7 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="change .idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/javascript/browse/index/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/javascript/browse/index/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/html/metadata/sync/index_obj.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/metadata/sync/index_obj.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,10 +69,14 @@
       </set>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="PackageJsonUpdateNotifier">
     <dismissed value="$PROJECT_DIR$/package.json" />
   </component>
   <component name="ProjectId" id="1vk0QcNzLr2OwqTPwhq6FSUnxaO" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -84,6 +88,7 @@
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -108,6 +113,7 @@
       <workItem from="1628837120094" duration="1644000" />
       <workItem from="1628850409548" duration="6357000" />
       <workItem from="1628858649956" duration="660000" />
+      <workItem from="1677635271912" duration="311000" />
     </task>
     <task id="LOCAL-00001" summary="change sync index_obj.js for xi zang for the time being">
       <created>1627090839913</created>
@@ -134,7 +140,7 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="2" />
+    <option name="version" value="3" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">

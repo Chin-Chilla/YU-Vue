@@ -404,6 +404,8 @@ var app = new Vue({
 
         sync() {
             $("#loading").css('display', 'block');
+            var solrQuerystr = document.getElementById("solrQueryStr").value;
+            synInfo.solrQueryStr = solrQuerystr;
             var data = {
                 synInfo: synInfo
             };
