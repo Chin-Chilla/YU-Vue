@@ -32,6 +32,7 @@ var app = new Vue({
 
 		enumFieldList:[],//枚举字段
 		enumeration:'',//枚举
+		enumerationtable:'',//枚举字典表
 
 		// 新增联系人
 		contactName:'',
@@ -158,6 +159,7 @@ var app = new Vue({
 	            var attenchname=treeNode.nodename;               //待添加属性中文名 （与关联字段中文名可能不同）
 	            var metaid=treeNode.metaid;                      //属性ATT_ID
 	            var enumerationcode=treeNode.enumerationcode;    //所属枚举项字段名称
+				var enumerationtable=treeNode.enumerationtable;	 //所属枚举项来源的字典表名称
 	            that.relationTableName = "("+atttableenname+")";
 	            var selectedFieldChName = null;
 
@@ -186,7 +188,8 @@ var app = new Vue({
 
 	            that.enumeration = ''
 	            if(enumerationcode!="null"){
-	                that.enumeration = enumerationcode
+					that.enumerationtable = enumerationtable
+					that.enumeration = "(" + enumerationtable + "):" + attenchname + "(" + enumerationcode + ")"
 	            }
 
 	            //清除统计字段
@@ -343,7 +346,7 @@ var app = new Vue({
             for (var o in msg) {
                 var selected = "";
                 var name = msg[o].tabCName==null?'':msg[o].tabCName
-                if(msg[o].tabEName.indexOf('DIC')!=-1){
+                if(msg[o].tabEName == that.enumerationtable){
                     selected = " selected = \"selected\" ";
                     foundDefaultValue = true;
                 }
