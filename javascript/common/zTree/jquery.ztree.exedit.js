@@ -43,7 +43,7 @@
 			showRemoveBtn: true,
 			showRenameBtn: true,
 			removeTitle: "删除",
-			renameTitle: "重命名",
+			renameTitle: "修改",
 			drag: {
 				autoExpandTrigger: false,
 				isCopy: true,

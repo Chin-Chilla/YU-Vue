@@ -315,7 +315,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
         data,
         res => {
             editState = 1;
-            toastr.success("重命名成功！");
+            toastr.success("修改成功！");
         },
         err => {
             isCancel = true;

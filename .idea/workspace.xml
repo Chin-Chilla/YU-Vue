@@ -26,7 +26,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="change .idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/html/metadata/sync/index_obj.html" beforeDir="false" afterPath="$PROJECT_DIR$/html/metadata/sync/index_obj.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,6 +85,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/Desktop/hhu工作笔记/YU-Vue-before" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
@@ -114,6 +115,7 @@
       <workItem from="1628850409548" duration="6357000" />
       <workItem from="1628858649956" duration="660000" />
       <workItem from="1677635271912" duration="311000" />
+      <workItem from="1677837362036" duration="2133000" />
     </task>
     <task id="LOCAL-00001" summary="change sync index_obj.js for xi zang for the time being">
       <created>1627090839913</created>
@@ -171,40 +173,5 @@
     <MESSAGE value="实现登出功能，主页面左上角展示用户名和身份，实现yu之间目录资源树的同步功能" />
     <MESSAGE value="change .idea/workspace.xml" />
     <option name="LAST_COMMIT_MESSAGE" value="change .idea/workspace.xml" />
-  </component>
-  <component name="WindowStateProjectService">
-    <state x="842" y="382" key="#Notifications" timestamp="1627090774044">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="842" y="382" key="#Notifications/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1627090774044" />
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog" timestamp="1628858755716">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="-1028" y="166" width="977" height="1548" key="DiffContextDialog/0.0.1920.1040/-1080.0.1080.1880@-1080.0.1080.1880" timestamp="1628857230931" />
-    <state x="92" y="92" width="1736" height="856" key="DiffContextDialog/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1628858755716" />
-    <state x="740" y="260" key="FileChooserDialogImpl" timestamp="1627097346527">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="740" y="260" key="FileChooserDialogImpl/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1627097346527" />
-    <state x="780" y="221" key="RollbackChangesDialog" timestamp="1628837334702">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="780" y="221" key="RollbackChangesDialog/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1628837334702" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1627097380789">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1627097380789" />
-    <state x="552" y="239" key="Vcs.Push.Dialog.v2" timestamp="1627090842184">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="552" y="239" key="Vcs.Push.Dialog.v2/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1627090842184" />
-    <state x="753" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1628837365259">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="753" y="433" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1628837365259" />
-    <state x="662" y="254" width="596" height="532" key="find.popup" timestamp="1628858943521">
-      <screen x="0" y="0" width="1920" height="1040" />
-    </state>
-    <state x="662" y="254" width="596" height="532" key="find.popup/0.0.1920.1040/-1080.0.1080.1880@0.0.1920.1040" timestamp="1628858943521" />
   </component>
 </project>
