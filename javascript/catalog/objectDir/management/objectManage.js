@@ -315,7 +315,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
         data,
         res => {
             editState = 1;
-            toastr.success("重命名成功！");
+            toastr.success("修改成功！");
         },
         err => {
             isCancel = true;
@@ -474,11 +474,18 @@ var obj = new Vue({
             var node_name = $("#text9").val();
             var tip = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/error_icon.png'/></span>";
             var primary = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/correct_icon.png'/></span>";
+            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
+            var treeNode = treeObj.getSelectedNodes();
             if (node_name == "") {
                 document.getElementById("label_1").innerHTML = tip;
-
             } else {
-                document.getElementById("label_1").innerHTML = primary;
+                var nodes = treeObj.getNodesByParam("nodeName", node_name, treeNode[0]);
+                if (nodes.length > 0) {
+                    document.getElementById("label_1").innerHTML = tip + "已有该名称结点";
+                    document.getElementById("text9").value="";
+                } else {
+                    document.getElementById("label_1").innerHTML = primary + "该名称可用";
+                }
             }
         },
 

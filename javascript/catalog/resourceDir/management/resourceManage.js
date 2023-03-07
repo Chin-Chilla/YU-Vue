@@ -243,7 +243,8 @@ function addHoverDom(treeId, treeNode) {
                         toastr.error("增加固定节点出错！");
                     }
                 )
-            } else {
+            }
+            else {
                 //增加单个节点（单位名称/部门本级/资源分类）
                 //判断填写信息是否完整
                 /**
@@ -256,7 +257,8 @@ function addHoverDom(treeId, treeNode) {
                  */
                 if (((nodeName == "") && (type != 1 || ($("#add_type").val() == "0" && type == "4"))) || ($("#add_type").val() == "0" && type != "4")) {
                     toastr.error("信息不完整！")
-                } else {
+                }
+                else {
                     //信息完整，调用后台方法
                     var data = {
                         pNodeId: pnodeId,
@@ -423,7 +425,7 @@ function zTreeOnRename(event, treeId, treeNode, isCancel) {
         data,
         res => {
             editState = 1;
-            toastr.success("重命名成功！");
+            toastr.success("修改成功！");
         },
         err => {
             isCancel = true;
@@ -557,14 +559,20 @@ var res = new Vue({
             var node_name = $("#text9").val();
             var tip = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/error_icon.png'/></span>";
             var primary = "<span style='margin-right:25px;'><img width='20px' src='/YU/statics/imgs/correct_icon.png'/></span>";
+            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
+            var treeNode = treeObj.getSelectedNodes();
             if (node_name == "") {
                 document.getElementById("label_1").innerHTML = tip;
-
             } else {
-                document.getElementById("label_1").innerHTML = primary;
+                var nodes = treeObj.getNodesByParam("nodeName", node_name, treeNode[0]);
+                if (nodes.length > 0) {
+                    document.getElementById("label_1").innerHTML = tip + "已有该名称结点";
+                    document.getElementById("text9").value="";
+                } else {
+                    document.getElementById("label_1").innerHTML = primary + "该名称可用";
+                }
             }
         },
-
         //初始化模态框
         clearModel() {
             var radio = document.getElementsByName("nodeType");
@@ -724,7 +732,7 @@ var res = new Vue({
                     nodes[0].checkState = "1";
                     nodes[0].refuse_note = "";
                     var dom = $("#" + tId + "_span");
-                    dom.css({ "color": "", "background-color": "" });
+                    dom.css({"color": "", "background-color": ""});
                     toastr.success("操作成功！")
                 } catch (e) {
                     toastr.error("操作失败！")
@@ -758,7 +766,7 @@ var res = new Vue({
                     nodes[0].checkState = "2";
                     nodes[0].refuse_note = $("#refuse_note").val();
                     var dom = $("#" + tId + "_span");
-                    dom.css({ "color": "red", "background-color": "rgba(0,0,0,0.3)" });
+                    dom.css({"color": "red", "background-color": "rgba(0,0,0,0.3)"});
                     toastr.success("操作成功！")
                 } catch (e) {
                     toastr.error("操作失败！")
@@ -766,16 +774,7 @@ var res = new Vue({
                 }
             })
         },
-        //搜索结点
-        search(){
-                var node_name = $("#text9").val();
-                if (node_name=="") {
-                    toastr.warning("请填写结点名称!");
-                }
-                else{
-                        toastr.error("无该名称结点!")
-                }
-        },
-    },
 
+
+    }
 })
