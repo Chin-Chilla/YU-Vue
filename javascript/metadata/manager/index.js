@@ -487,8 +487,19 @@ var app = new Vue({
 		},
 		downfile(){
 			//window.location.href = "/SL-T 799-2020 水利数据目录服务规范.pdf";
-			window.open("/SL-T 799-2020 水利数据目录服务规范.pdf");
-		},
+			var text1=window.open("/SL-T 799-2020 水利数据目录服务规范.pdf");
+			var text2=window.open("/SL_T 213-2020 水利对象分类与编码总则.pdf");
+			text1.onload =function () {
+			setTimeout(function (){
+				text1.document.title="SL-T 799-2020 水利数据目录服务规范";
+			},60)},
+			text2.onload =function () {
+					setTimeout(function (){
+						text2.document.title="SL_T 213-2020 水利对象分类与编码总则";
+					},60)
+
+
+		}},
 
 		showCheckModal(){
 			var classId = $("input[name='optionsRadios']:checked").val();
