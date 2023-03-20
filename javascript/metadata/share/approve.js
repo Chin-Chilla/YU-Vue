@@ -28,7 +28,7 @@ var app = new Vue({
 	mounted(){
 
 		that = this;
-		getDataByPost('/user/getSubList',{
+		getDataByPost('/user/getReqList',{
 			pageNum:this.pageNum,
 			pageSize:this.pageSize,
 		},res=>{
@@ -36,7 +36,7 @@ var app = new Vue({
 			that.renderList(res.data.list);
 			that.renderPagination();
 		});
-		getDataByPost('/user/getSubList',{
+		getDataByPost('/user/getReqList',{
 			pageNum:1,
 			pageSize:that.totalNum,
 		},res=>{
@@ -76,18 +76,6 @@ var app = new Vue({
 					app.renderNewList(list);
 				}
 			}
-			//
-			// console.log($("#tbody").children("tr")[0].id.substr(0,1));
-			// console.log($("#tbody").children("tr")[0].id);
-			// console.log($("#tbody").children("tr")[0].id.substr(0,1)==='1');
-			// console.log($("#tbody").children("tr")[0].id.substr(0,1)===''+that.pageNum);
-			// console.log(that.pageNum);
-			// console.log($("#tbody").children("tr").length);
-			// var test1=$("#tbody").children("tr")[0];
-			// var test2 = $(test1).children("td")[0];
-			// var test3 = $(test2).children("input")[0];
-			// console.log("选中的："+test3)
-
 
 
 		},
@@ -96,7 +84,7 @@ var app = new Vue({
 			//将当前页获取到，来标注页内tr元素的唯一id
 			that.pageNum=nowPage;
 
-			getDataByPost('/user/getSubList',{
+			getDataByPost('/user/getReqList',{
 				pageNum:nowPage,
 				pageSize:size,
 
@@ -104,7 +92,7 @@ var app = new Vue({
 				that.totalNum = res.data.total;
 
 				that.renderList(res.data.list);
-				that.renderPagination();
+				//that.renderPagination();
 			});
 		},
 		//渲染分页
@@ -123,29 +111,28 @@ var app = new Vue({
 			for(var i=0;i<list.length;i++){
 				//添加新的tr元素，统计数量
 				that.newListNum++;
-				if (list[i].status == 0){
+				if (list[i].status == 2){
 					that.status_show = "审核中";
-				}else if(list[i].status == 1){
+				}else if(list[i].status == 4){
 					that.status_show = "未通过";
 				}else{
 					that.status_show = "已通过";
 				}
-				var onlyId = ''+that.pageNum+list[i].mdFileId;//tr的id
-				var checkboxId = 'checkbox'+list[i].status+(that.newListNum-1)+list[i].mdFileId;
+				var onlyId = ''+that.pageNum+list[i].orderId;//tr的id
+				var checkboxId = 'checkbox'+list[i].status+list[i].orderId;
 					//checkbox的id，方便后台获取批量处理的dom
 				// var singleIndex = that.newListNum-1;
 				// var singleStatus = list[i].status
 
-				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp"+list[i].mdName+
-					"</td><td><a style='cursor: pointer;'' onclick=\"keySearch.detail('"+list[i].mdName+
-					"','"+list[i].loc+"')\">"+app.renderTime(list[i].createTime)+
+				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+list[i].orderId+
+					"</td><td><a style='cursor: pointer;' onclick=\"app.showdetail('"+list[i].orderId+"')\">"+app.renderTime(list[i].createTime)+
 					"</a></td><td>"+list[i].proposer+
 					"</td><td>"+list[i].org+
 					"</td><td>"+list[i].contact+
 					"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
-					// "<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td>" +
-					"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('"+list[i].mdFileId+"','"+list[i].status+"')\"></td>" +
-					"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('"+list[i].mdFileId+"','"+list[i].status+"')\"></td></tr>")
+
+					"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('"+list[i].orderId+"','"+list[i].status+"')\"></td>" +
+					"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('"+list[i].orderId+"','"+list[i].status+"')\"></td></tr>")
 
 				$(":checkbox[name='single']")[that.newListNum-1].checked=that.isAllChecked;
 				$(":checkbox[name='single']")[that.newListNum-1].id=checkboxId;
@@ -182,13 +169,36 @@ var app = new Vue({
 			getDataByPost('/user/getStatusNum',{
 				pageSize:that.totalNum,
 			},res=>{
-				that.reqNum = res.data.zeroStatus;
-				that.refusedNum=res.data.oneStatus;
-				that.passNum=res.data.twoStatus;
+				console.log(res.data)
+				that.reqNum = res.data.twoStatus;
+				that.refusedNum=res.data.fourStatus;
+				that.passNum=res.data.threeStatus;
 
 			});
 		},
+		showdetail(orderId){
+			console.log(orderId)
+			if(orderId){
+				$("#column_body").empty();
+				$("#Modal").modal('show');
+				getDataByPost(
+					'/user/getOrderInfo',
+					{
+						id:orderId
+					},
+					res => {
+						console.log(res.data);
+						for (var o in res.data) {
+							$("#column_body").append("<tr><td><div class='checker'><span><input type='checkbox' class='checkboxes' value='1' name='isChecked1'/></span></div></td><td>" + res.data[o].orderId + "</td><td>" + res.data[o].mdFileId + "</td><td>" + res.data[o].mdName + "</td></tr>");
+						}
+					},
+					err => {
+						toastr.error("查看表失败！");
+					}
+				)
+			}
 
+		},
 		allChecked(){
 			that.isAllChecked = $(":checkbox[name='allChecked']")[0].checked;//点击时同步状态，克表示取消了全选和全选，不用按钮来实现这个操作的原因时，这个复选框的状态可以表示是否被全选
 			for(i=0;i<$(":checkbox[name='single']").length;i++){
@@ -197,7 +207,6 @@ var app = new Vue({
 		},
 		single(){
 			// var singleStatus = Number($(":checkbox[name='single']").id.substr(8,1));
-
 
 			//绑定单击事件，进行check数量统计
 			singleCount=0;
@@ -209,15 +218,14 @@ var app = new Vue({
 
 		},
 
-
 		pass(id,status,allPass){
 			if(allPass){
-				if (status != 0){
+				if (status != 2){
 					// swal("状态已变，操作失败！", "", "error");
 					// alert("状态以便操作失败！")
 					that.passOrRefusedErrorNum++;
 				}else {
-					getDataByPost('/user/passSubMeta', {
+					getDataByPost('/user/passReqMeta', {
 						id: id
 					}, res => {
 						app.backMessage(res);
@@ -225,7 +233,7 @@ var app = new Vue({
 				}
 
 			}else{
-				if (status != 0){
+				if (status != 2){
 					swal("状态已变，操作失败！", "", "error");
 				}else{
 					swal({
@@ -236,7 +244,7 @@ var app = new Vue({
 						confirmButtonText: "通过",
 						closeOnConfirm: true
 					}, confirm=> {
-						getDataByPost('/user/passSubMeta',{
+						getDataByPost('/user/passReqMeta',{
 							id:id
 						},res=>{
 							app.backMessage(res);
@@ -248,12 +256,12 @@ var app = new Vue({
 
 		refuse(id,status,allRefuse){
 			if(allRefuse){
-				if (status != 0){
+				if (status != 2){
 					// swal("状态已变，操作失败！", "", "error");
 					// alert("状态以便操作失败！")
 					that.passOrRefusedErrorNum++;
 				}else {
-					getDataByPost('/user/refuseSubMeta', {
+					getDataByPost('/user/refuseReqMeta', {
 						id: id
 					}, res => {
 						app.backMessage(res,true);
@@ -261,7 +269,7 @@ var app = new Vue({
 				}
 
 			}else{
-				if (status != 0){
+				if (status != 2){
 					swal("状态已变，操作失败！", "", "error");
 				}else {
 					swal({
@@ -270,9 +278,9 @@ var app = new Vue({
 						showCancelButton: true,
 						confirmButtonColor: "#DD6B55",
 						confirmButtonText: "拒绝",
-						closeOnConfirm: false
+						closeOnConfirm: true
 					}, confirm => {
-						getDataByPost('/user/refuseSubMeta', {
+						getDataByPost('/user/refuseReqMeta', {
 							id: id
 						}, res => {
 
@@ -296,24 +304,17 @@ var app = new Vue({
 						var allNum=0;
 						if($(":checkbox[name='allChecked']")[0].checked){
 							console.log("走了全选分支");
-							// that.isAllChecked=false;
 
-							// for(var i=0;i<that.allListData.length;i++){
-							// 	var id = that.allListData[i].mdFileId;
-							// 	var status = that.allListData[i].status;
-							// 	console.log(id)
-							// 	app.pass(id,status,true);
-							// }
 							$.each($(that.allListData),function (index,element) {
-								app.pass(element.mdFileId,element.status,true);
+								app.pass(element.orderId,element.status,true);
 
 							})
 							allNum = Number(that.allListData.length);
 
 						}else{
 							$.each($(":checkbox:checked"),function (index,element) {
-								console.log(element.id.substr(10));
-								app.pass(element.id.substr(10),element.id.substr(8,1),true);
+								console.log(element);
+								app.pass(element.id.substr(9),element.id.substr(8,1),true);
 
 							})
 							allNum = Number($(":checkbox:checked").length);
@@ -364,7 +365,7 @@ var app = new Vue({
 						// that.isAllChecked=false;
 
 						$.each($(that.allListData),function (index,element) {
-							app.refuse(element.mdFileId,element.status,true);
+							app.refuse(element.orderId,element.status,true);
 
 						})
 						allNum = Number(that.allListData.length);
@@ -372,7 +373,7 @@ var app = new Vue({
 					}else{
 						$.each($(":checkbox:checked"),function (index,element) {
 							// console.log(element.id.substr(10));
-							app.refuse(element.id.substr(10),element.id.substr(8,1),true);
+							app.refuse(element.id.substr(9),element.id.substr(8,1),true);
 
 						})
 						allNum = Number($(":checkbox:checked").length);
@@ -421,8 +422,7 @@ var app = new Vue({
 					that.status_show = "已通过";
 				}
 
-
-				getDataByPost('/user/getSubList',{
+				getDataByPost('/user/getReqList',{
 					pageNum:this.pageNum,
 					pageSize:this.pageSize,
 				},res=>{
@@ -431,7 +431,7 @@ var app = new Vue({
 					that.renderList(res.data.list,true);
 					that.renderPagination();
 				});
-				getDataByPost('/user/getSubList',{
+				getDataByPost('/user/getReqList',{
 					pageNum:1,
 					pageSize:that.totalNum,
 				},res=>{
