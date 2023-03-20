@@ -682,31 +682,26 @@ var keySearch = new Vue({
                 }
             }
         },
-        showModal: function(id,name,loc){
-            $("#myModal").modal("show");
-            this.sub_id = id;
-            this.sub_name = name;
-            this.sub_loc = loc;
-        },
-        subscribe: function(){
+        // showModal: function(id,name,loc){
+        //     $("#myModal").modal("show");
+        //     this.sub_id = id;
+        //     this.sub_name = name;
+        //     this.sub_loc = loc;
+        // },
+        subscribe: function(id,name,loc){
             var proposer = $("#proposer").val();
             var org = $("#org").val();
             var contact = $("#contact").val();
-
-
-
-
             var description = $("#description").val();
             getDataByPost('/user/subscribe',{
-                id:this.sub_id,
-                name:this.sub_name,
-                loc:this.sub_loc,
+                id:id,
+                name:name,
+                loc:loc,
                 proposer:proposer,
                 org:org,
                 contact:contact,
                 description:description,
-                status:0
-
+                status:1
             },res=>{
                 if(res.code==200){
 
@@ -794,7 +789,7 @@ var keySearch = new Vue({
                         "</td></tr>" +
                         loc +
                         share_way+
-                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.showModal('" + msg.id + "','"+name+"')\">   </div></div></div>")
+                        "</tbody></table></div>   </div>        </div>    </div>    <div class=\"col-md-2\"></div><div class=\"row\">    <div class=\"col-xs-12\" style=\"  text-align: center\">        <input type=\"button\" value=\"返回\" class=\"btn-warning btn\" onclick=\"detailPage.goBack()\">    <input type=\"button\" value=\"订阅\" class=\"btn-primary btn\" onclick=\"keySearch.subscribe('" + msg.id + "','"+name+"')\">   </div></div></div>")
                     
                 });
                 
@@ -880,7 +875,7 @@ var keySearch = new Vue({
             var name = content1 + content2 + content3;
             name=name.replace(/<font color="red">/g,"");
             name=name.replace(/<\/font>/g,"");
-            var buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.showModal('" + msg.result[i][0].id + "','"+name+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
+            var buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+name+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
             return buttonhtml;
         },
 

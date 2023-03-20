@@ -34,121 +34,74 @@
 <!--                </div>-->
             </div>
 
-            <div style="margin: 10px 0; width: 100%">
-                <!--220401注释掉，需要重新申请-->
-<!--                <div style=" width: 90%; border: 1px dashed; color: #0c76df; text-align: center; padding: 5px; border-radius: 4px" data-toggle="modal" data-target="#exampleModal" onclick="createReq()">+ 创建申请</div>-->
-                <!--                    <input type="button" value="新建" permission="ss" class="PER_BTN btn btn-block btn-primary"-->
-                <!--                           data-toggle="modal" data-target="#exampleModal">-->
-            </div>
-            <div class="box-body table-responsive no-padding right_down">
-                <div style="margin: 10px 0; width: 100%">
-                    <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
-                        <thead>
-                        <tr>
-                            <th style="min-width: 150px"><input type="checkbox" name="allChecked"  onclick="app.allChecked()">全选&nbsp&nbsp&nbsp元数据名称</th>
-                            <th style="min-width: 150px">订阅时间</th>
-                            <th style="min-width: 150px">申请人</th>
-                            <th style="min-width: 150px">申请单位</th>
-                            <th style="min-width: 150px">联系方式</th>
-                            <th style="min-width: 150px">状态</th>
-                            <th style="min-width: 150px">操作
-                                <input type="button" class="'btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px" value="取消选中订阅" onclick="app.unsubscribeChecked()">
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody id="tbody">
+                            <div style="margin: 10px 0; width: 100%">
+                                <!--220401注释掉，需要重新申请-->
+                                <!--                <div style=" width: 90%; border: 1px dashed; color: #0c76df; text-align: center; padding: 5px; border-radius: 4px" data-toggle="modal" data-target="#exampleModal" onclick="createReq()">+ 创建申请</div>-->
+                                <!--                    <input type="button" value="新建" permission="ss" class="PER_BTN btn btn-block btn-primary"-->
+                                <!--                           data-toggle="modal" data-target="#exampleModal">-->
+                            </div>
+                            <div class="box-body table-responsive no-padding right_down">
+                                <div style="margin: 10px 0; width: 100%">
+                                    <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
+                                        <thead>
+                                        <tr>
+                                            <th style="min-width: 150px"><input type="checkbox" name="allChecked"  onclick="app.allChecked()">全选&nbsp&nbsp&nbsp申请号</th>
+                                            <th style="min-width: 150px">订阅时间</th>
+                                            <th style="min-width: 150px">申请人</th>
+                                            <th style="min-width: 150px">申请单位</th>
+                                            <th style="min-width: 150px">联系方式</th>
+                                            <th style="min-width: 150px">状态</th>
+                                            <th style="min-width: 150px">操作
+                                                <input type="button" class="'btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px" value="取消选中申请" onclick="app.unrequestChecked()">
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="tbody">
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
-    <div class="modal-dialog" role="document" style="height:400px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel1">申请信息</h4>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+                    <div class="modal-dialog" role="document" style="height:400px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel1">查看申请数据</h4>
             </div>
             <div class="modal-body">
-                <div class="box box-primary" style="height:350px;overflow-x:hidden;margin:10px">
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <!--<label for="manager" class="control-label">负责人</label>
-                                <input type="text" class="form-control" id="manager" placeholder="请填写负责人ID！">-->
-                                <label for="title" class="control-label">标题</label>
-                                <input type="text" class="form-control" id="title"
-                                       @blur="checkdatabase_chinesename('database_chinesename','database_chinesename_info')"
-                                       placeholder="请输入">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="useness" class="control-label">申请用途</label>
-                                <input type="text" class="form-control" id="useness"
-                                       @blur="checkdatabase_chinesename('database_chinesename','database_chinesename_info')"
-                                       placeholder="输入用途">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="detail" class="control-label">详细描述</label>
-                                <input type="text" class="form-control" id="detail"
-                                       @blur="checkdatabaseSid('databaseSid','databaseSid_info')"
-                                       placeholder="请输入详细描述，如申请目的、数据范围等">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="contact" class="control-label">联系人</label>
-                                <input type="text" class="form-control" id="contact"
-                                       @blur="checkIP('IP','IP_info')" >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="company" class="control-label">单位</label>
-                                <input type="text" class="form-control" id="company"
-                                       @blur="checkport('port','port_info')" >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="tel" class="control-label">联系方式</label>
-                                <input type="text" class="form-control" id="tel"
-                                       @blur="checkusername('username','username_info')" >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group">
-                            <div class="col-xs-7">
-                                <label for="reqTime" class="control-label">申请时间</label>
-                                <!--                                    <input class="form-control  datepicker input-sm"  id="reqTime"  @blur="checkpassword('password','password_info')" readonly="readonly" id="beginTime" type="text">-->
-                                <input class="form-control  datepicker input-sm" readonly="readonly" id="reqTime" type="text">
-                            </div>
+                <div class="box box-primary" style="height:400px;overflow-x:hidden;margin:10px;0px;0px;0px"
+                     id="viewTable1">
+                    <div class="row" id="viewTable">
+                        <div class="col-md-12">
+                            <table id="example2" class="table table-bordered table-striped">
+                                <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="checkboxes1"
+                                               onchange="DataManage.selectall('checkboxes1','isChecked1')" />
+                                    </th>
+                                    <th>订单ID</th>
+                                    <th>元数据ID</th>
+                                    <th>元数据名称</th>
+                                </tr>
+                                </thead>
+                                <tbody id="column_body">
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-                <!--                </div>-->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @click="create_connect">提交</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                </div>
+
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-primary" id="">通用信息</button>
+                <button type="button" class="btn btn-primary" id="getColumn">字段信息</button>-->
+                <!--<button type="button" class="btn btn-default" onclick="DataManage.showCatalogModal('isChecked1')">编目字段</button>-->
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
             </div>
         </div>
     </div>
