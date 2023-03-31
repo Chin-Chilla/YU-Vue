@@ -89,36 +89,96 @@ var app = new Vue({
 				}
 			});
 		},
-		renderNewList(list){
-			console.log(list);
-			for(var i=0;i<list.length;i++){
-				//添加新的tr元素，统计数量
-				that.newListNumReq++;
-				if (list[i].status == 2){
-					that.status_show = "审核中";
-				}else if(list[i].status == 3){
-					that.status_show = "已通过";
-				}else{
-					that.status_show = "未通过";
-				}
-				var onlyId = ''+that.pageNum+list[i].orderId;//tr的id
-				var checkboxId = 'checkbox'+list[i].status+(that.newListNumReq-1)+list[i].orderId; //checkbox的id，方便后台获取批量处理的dom
-				//顺序是元数据名称 订阅时间 状态 申请人 申请单位 联系方式
-				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+list[i].orderId+ "</td>" +
-					"<td><a style='cursor: pointer;' onclick=\"app.showdetail('"+list[i].orderId+"')\">"+app.renderTime(list[i].createTime)+ "</a></td>" +
-					"<td>"+list[i].proposer+ "</td>" +
-					"<td>"+list[i].org+ "</td>" +
-					"<td>"+list[i].contact+
-					"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
-					// "<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td>" +
-					"<td><input type='button' value='取消申请'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unrequest('"+list[i].orderId+"')\"></td></tr>"
-					+ "<tr>"+"<td>"+"订单"+"</td></tr>")
+		renderNew(list,list1){
+			var name='';
+			for (var j=0;j<list1.length;j++){
+				name+=list1[j].mdName
+				name+=','
+			}
+			console.log(name)
+			that.newListNum++;
+			that.listNum=2*that.newListNum
+			if (list.status == 2) {
+				that.status_show = "审核中";
+			} else if (list.status == 4) {
+				that.status_show = "未通过";
+			} else {
+				that.status_show = "已通过";
+			}
+			var onlyId = '' + that.pageNum + list.orderId;//tr的id
+			var checkboxId = 'checkbox' + list.status + list.orderId;
 
-				$(":checkbox[name='single']")[that.newListNumReq-1].checked=that.isAllChecked;
-				$(":checkbox[name='single']")[that.newListNumReq-1].id=checkboxId;
-				$("#tbody").children("tr")[that.newListNumReq-1].id=onlyId;
+			$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+list.orderId+ "</td>" +
+							"<td><a style='cursor: pointer;' onclick=\"app.showdetail('"+list.orderId+"')\">"+app.renderTime(list.createTime)+ "</a></td>" +
+							"<td>"+list.proposer+ "</td>" +
+							"<td>"+list.org+ "</td>" +
+							"<td>"+list.contact+
+							"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
+							// "<td><input type='button' value='取消订阅'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unsubscribe('"+list[i].mdFileId+"')\"></td>" +
+							"<td><input type='button' value='取消申请'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.unrequest('"+list.orderId+"')\"></td></tr>"+
+				+ "<tr>"+"<td></td>"+ "<td>"+name.substr(0,10)+"..."+"</td>"+"</tr>"
+				// +"<tr>"+"<td></td>"+"<td>"+list1[1].mdFileId+"</td>" +"<td></td>"+
+				// "<td>"+list1[1].mdName+"</td>"+"</tr>"
+				// +"<tr>"+"<td></td>"+"<td>"+list1[2].mdFileId+"</td>" +"<td></td>"+
+				// "<td>"+list1[2].mdName+"</td>"+"</tr>"
+			)
+			$(":checkbox[name='single']")[that.newListNum - 1].checked = that.isAllChecked;
+			$(":checkbox[name='single']")[that.newListNum - 1].id = checkboxId;
+			$("#tbody").children("tr")[that.listNum - 2].id = onlyId;
+			$("#tbody").children("tr")[that.listNum - 1].id = onlyId;
+			//console.log(($('#tbody').children("tr")))
+
+		},
+		renderNewList(list) {
+			for (let i = 0; i < list.length; i++) {
+				//console.log(this.list1)
+				//添加新的tr元素，统计数量
+				// that.newListNum++;
+				// if (list[i].status == 2) {
+				// 	that.status_show = "审核中";
+				// } else if (list[i].status == 4) {
+				// 	that.status_show = "未通过";
+				// } else {
+				// 	that.status_show = "已通过";
+				// }
+				// var onlyId = '' + that.pageNum + list[i].orderId;//tr的id
+				// var checkboxId = 'checkbox' + list[i].status + list[i].orderId;
+				//
+				// $("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + list[i].orderId +
+				// 	"</td><td><a style='cursor: pointer;' onclick=\"app.showdetail('" + list[i].orderId + "')\">" + app.renderTime(list[i].createTime) +
+				// 	"</a></td><td>" + list[i].proposer +
+				// 	"</td><td>" + list[i].org +
+				// 	"</td><td>" + list[i].contact +
+				// 	"</td><td><el-button type=\"success\" size=\"mini\">" + that.status_show + "</el-button></td>" +
+				// 	"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('" + list[i].orderId + "','" + list[i].status + "')\"></td>" +
+				// 	"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('" + list[i].orderId + "','" + list[i].status + "')\"></td></tr>")
+				// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 0) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 0) + "</td></tr>" +
+				// 	// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 1) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 1) + "</td></tr>" +
+				// 	// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 2) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 2) + "</td></tr>"
+				// 	// + "<tr>"+"<td></td>"+"<td>"+this.list1[0]+"</td>" +"<td></td>"+
+				// 	// "<td>"+this.list1[0]+"</td>"+"</tr>"
+				// 	// +"<tr>"+"<td></td>"+"<td>"+list1[1].mdFileId+"</td>" +"<td></td>"+
+				// 	// "<td>"+list1[1].mdName+"</td>"+"</tr>"
+				// 	// +"<tr>"+"<td></td>"+"<td>"+list1[2]+"</td>" +"<td></td>"+
+				// 	// "<td>"+that.namelist[2]+"</td>"+"</tr>"
+				// )
+				let currentOrderId = list[i].orderId
+				//console.log(currentOrderId)
+				getDataByPost('/user/getOrderInfo', {
+					id: currentOrderId
+				}, res => {
+					this.renderNew(list[i],res.data)
+
+				})
+
+				// $(":checkbox[name='single']")[that.newListNum - 1].checked = that.isAllChecked;
+				// $(":checkbox[name='single']")[that.newListNum - 1].id = checkboxId;
+				// $("#tbody").children("tr")[that.newListNum - 1].id = onlyId;
+
 
 			}
+			//console.log($('#tbody').children("tr"))
+			// this.getMdFileIdByOrderId(list[1].orderId, 0).then((data) => console.log(data))
 		},
 		showdetail(orderId){
 			console.log(orderId)

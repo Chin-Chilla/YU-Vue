@@ -17,12 +17,14 @@ var app = new Vue({
 		refusedNum:0,
 		totalNum:0,
 		status_show:"",//状态
-
-
 		forStart:true,//判断是否是第一次进行当前页的加载，来决定是否清空tbody的子元素
 		newListNum:0,
+		listNum:0,
 		isAllChecked:false,//判断是否点击过全选按钮，防止先全选然后进行局部取消的操作，这样会使伪全选失效
-		passOrRefusedErrorNum:0,//统计批量通过的出错数;
+		passOrRefusedErrorNum:0,//统计批量通过的出错数;,
+			namelist: {},  //记录当前类型的配置文件 showDetail
+			idlist: {}, //记录当前待显示的元数据内容
+		list1:Object.create(null),
 
 	},
 	mounted(){
@@ -47,14 +49,9 @@ var app = new Vue({
 	},
 	methods:{
 		renderList(list,isCilcked){
-			console.log("isclicked是："+isCilcked)
 			if(that.forStart || isCilcked){
-				//第一次加载进行tbody子元素的清空,并且初始化
 				$("#tbody").empty();
-				console.log("走了empty")
-				// $(":checkbox[name='allChecked']")[0].checked=false;
 				app.renderNewList(list);
-
 				that.forStart=false;
 			}else{
 				//非第一次则进行tr子元素的隐藏
@@ -64,20 +61,17 @@ var app = new Vue({
 				for(var i=0;i<$("#tbody").children("tr").length;i++){
 
 					if($("#tbody").children("tr")[i].id.substr(0,1)===''+that.pageNum){
-						console.log("标签已存在，直接设置display")
+
 						$("#tbody").children("tr")[i].style.display='';
 						forGetNew = false;//已有子元素 ，只需设置display显示
 					}else{
 						$("#tbody").children("tr")[i].style.display="none";
 					}
 				}
-
 				if(forGetNew){
 					app.renderNewList(list);
 				}
 			}
-
-
 		},
 		//
 		changePage(nowPage, size){
@@ -92,7 +86,6 @@ var app = new Vue({
 				that.totalNum = res.data.total;
 
 				that.renderList(res.data.list);
-				//that.renderPagination();
 			});
 		},
 		//渲染分页
@@ -107,69 +100,101 @@ var app = new Vue({
 				}
 			});
 		},
-		renderNewList(list){
-			for(var i=0;i<list.length;i++){
+		renderNew(list,list1){
+			var name='';
+			for (var j=0;j<list1.length;j++){
+				name+=list1[j].mdName
+				name+=','
+			}
+			console.log(name)
+			that.newListNum++;
+			that.listNum=2*that.newListNum
+			if (list.status == 2) {
+				that.status_show = "审核中";
+			} else if (list.status == 4) {
+				that.status_show = "未通过";
+			} else {
+				that.status_show = "已通过";
+			}
+			var onlyId = '' + that.pageNum + list.orderId;//tr的id
+			var checkboxId = 'checkbox' + list.status + list.orderId;
+
+			$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + list.orderId +
+				"</td><td><a style='cursor: pointer;' onclick=\"app.showdetail('" + list.orderId + "')\">" + app.renderTime(list.createTime) +
+				"</a></td><td>" + list.proposer +
+				"</td><td>" + list.org +
+				"</td><td>" + list.contact +
+				"</td><td><el-button type=\"success\" size=\"mini\">" + that.status_show + "</el-button></td>" +
+				"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('" + list.orderId + "','" + list.status + "')\"></td>" +
+				"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('" + list.orderId + "','" + list.status + "')\"></td></tr>"
+				+ "<tr>"+"<td></td>"+ "<td>"+name.substr(0,10)+"..."+"</td>"+"</tr>"
+				// +"<tr>"+"<td></td>"+"<td>"+list1[1].mdFileId+"</td>" +"<td></td>"+
+				// "<td>"+list1[1].mdName+"</td>"+"</tr>"
+				// +"<tr>"+"<td></td>"+"<td>"+list1[2].mdFileId+"</td>" +"<td></td>"+
+				// "<td>"+list1[2].mdName+"</td>"+"</tr>"
+			)
+			$(":checkbox[name='single']")[that.newListNum - 1].checked = that.isAllChecked;
+			$(":checkbox[name='single']")[that.newListNum - 1].id = checkboxId;
+			$("#tbody").children("tr")[that.listNum - 2].id = onlyId;
+			$("#tbody").children("tr")[that.listNum - 1].id = onlyId;
+			//console.log(($('#tbody').children("tr")))
+
+		},
+		 renderNewList(list) {
+			for (let i = 0; i < list.length; i++) {
+				//console.log(this.list1)
 				//添加新的tr元素，统计数量
-				that.newListNum++;
-				if (list[i].status == 2){
-					that.status_show = "审核中";
-				}else if(list[i].status == 4){
-					that.status_show = "未通过";
-				}else{
-					that.status_show = "已通过";
-				}
-				var onlyId = ''+that.pageNum+list[i].orderId;//tr的id
-				var checkboxId = 'checkbox'+list[i].status+list[i].orderId;
-					//checkbox的id，方便后台获取批量处理的dom
-				// var singleIndex = that.newListNum-1;
-				// var singleStatus = list[i].status
+				// that.newListNum++;
+				// if (list[i].status == 2) {
+				// 	that.status_show = "审核中";
+				// } else if (list[i].status == 4) {
+				// 	that.status_show = "未通过";
+				// } else {
+				// 	that.status_show = "已通过";
+				// }
+				// var onlyId = '' + that.pageNum + list[i].orderId;//tr的id
+				// var checkboxId = 'checkbox' + list[i].status + list[i].orderId;
+				//
+				// $("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp" + list[i].orderId +
+				// 	"</td><td><a style='cursor: pointer;' onclick=\"app.showdetail('" + list[i].orderId + "')\">" + app.renderTime(list[i].createTime) +
+				// 	"</a></td><td>" + list[i].proposer +
+				// 	"</td><td>" + list[i].org +
+				// 	"</td><td>" + list[i].contact +
+				// 	"</td><td><el-button type=\"success\" size=\"mini\">" + that.status_show + "</el-button></td>" +
+				// 	"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('" + list[i].orderId + "','" + list[i].status + "')\"></td>" +
+				// 	"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('" + list[i].orderId + "','" + list[i].status + "')\"></td></tr>")
+					// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 0) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 0) + "</td></tr>" +
+				// 	// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 1) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 1) + "</td></tr>" +
+				// 	// "<tr><td>" + app.getMdFileIdByOrderId(list[i].orderId, 2) + "</td>" + "<td></td>" + "<td>" + app.getNameByOrderId(list[i].orderId, 2) + "</td></tr>"
+				// 	// + "<tr>"+"<td></td>"+"<td>"+this.list1[0]+"</td>" +"<td></td>"+
+				// 	// "<td>"+this.list1[0]+"</td>"+"</tr>"
+				// 	// +"<tr>"+"<td></td>"+"<td>"+list1[1].mdFileId+"</td>" +"<td></td>"+
+				// 	// "<td>"+list1[1].mdName+"</td>"+"</tr>"
+				// 	// +"<tr>"+"<td></td>"+"<td>"+list1[2]+"</td>" +"<td></td>"+
+				// 	// "<td>"+that.namelist[2]+"</td>"+"</tr>"
+				// )
+				let currentOrderId = list[i].orderId
+				//console.log(currentOrderId)
+			getDataByPost('/user/getOrderInfo', {
+					id: currentOrderId
+				}, res => {
+					this.renderNew(list[i],res.data)
 
-				$("#tbody").append("<tr><td><input type='checkbox' name='single' onclick=app.single()>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp"+list[i].orderId+
-					"</td><td><a style='cursor: pointer;' onclick=\"app.showdetail('"+list[i].orderId+"')\">"+app.renderTime(list[i].createTime)+
-					"</a></td><td>"+list[i].proposer+
-					"</td><td>"+list[i].org+
-					"</td><td>"+list[i].contact+
-					"</td><td><el-button type=\"success\" size=\"mini\">"+that.status_show+"</el-button></td>" +
+				})
 
-					"<td><input type='button' value='拒绝'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.refuse('"+list[i].orderId+"','"+list[i].status+"')\"></td>" +
-					"<td><input type='button' value='通过'' class='btn btn-primary col-lg-2' style='width:80px;height: 35px;margin: 0px 5px 0px 5px' onclick=\"app.pass('"+list[i].orderId+"','"+list[i].status+"')\"></td></tr>")
-
-				$(":checkbox[name='single']")[that.newListNum-1].checked=that.isAllChecked;
-				$(":checkbox[name='single']")[that.newListNum-1].id=checkboxId;
-				$("#tbody").children("tr")[that.newListNum-1].id=onlyId;
-
+				// $(":checkbox[name='single']")[that.newListNum - 1].checked = that.isAllChecked;
+				// $(":checkbox[name='single']")[that.newListNum - 1].id = checkboxId;
+				// $("#tbody").children("tr")[that.newListNum - 1].id = onlyId;
 
 
 			}
-		},
-		// unsubscribe(id){
-		//
-		// 	swal({
-		// 		title: "您确定要取消订阅吗",
-		// 		type: "warning",
-		// 		showCancelButton: true,
-		// 		confirmButtonColor: "#DD6B55",
-		// 		confirmButtonText: "取消订阅",
-		// 		closeOnConfirm: false
-		// 	}, confirm=> {
-		// 		getDataByPost('/user/unsubscribe',{
-		// 			id:id
-		// 		},res=>{
-		// 			if(res.code==200){
-		// 				swal("取消订阅成功！", "", "success");
-		// 				that.changePage(1,that.pageSize);
-		// 				// that.reload();
-		// 			}
-		// 		});
-		// 	});
-		//
-		// },
 
+		},
 		getStatusNum(){
 			getDataByPost('/user/getStatusNum',{
 				pageSize:that.totalNum,
 			},res=>{
-				console.log(res.data)
+				//console.log(res.data)
 				that.reqNum = res.data.twoStatus;
 				that.refusedNum=res.data.fourStatus;
 				that.passNum=res.data.threeStatus;
@@ -206,14 +231,12 @@ var app = new Vue({
 			}
 		},
 		single(){
-			// var singleStatus = Number($(":checkbox[name='single']").id.substr(8,1));
-
-			//绑定单击事件，进行check数量统计
+			// // var singleStatus = Number($(":checkbox[name='single']").id.substr(8,1));
+			// //绑定单击事件，进行check数量统计
 			singleCount=0;
-			for(i=0;i<$(":checkbox[name='single']").length;i++){
-				if($(":checkbox[name='single']")[i].checked) singleCount++;
-				//通过实现加载过的tr与加载过的checkbox的选中状态实现伪全选，视觉上没问题，然后后台改实现逻辑，实际功能也不会有问题
-				$(":checkbox[name='allChecked']")[0].checked=(singleCount==$("#tbody").children("tr").length);
+			for(i=0;i<$(":checkbox[name='single']").length;i++) {
+				if ($(":checkbox[name='single']")[i].checked) singleCount++;
+				$(":checkbox[name='allChecked']")[0].checked = (singleCount == $("#tbody").children("tr").length);
 			}
 
 		},

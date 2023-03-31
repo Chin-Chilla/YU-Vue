@@ -18,7 +18,9 @@ var keySearch = new Vue({
         value: '',
         sub_id:'',
         sub_name:'',
-        sub_loc:''
+        sub_loc:'',
+        subcount: 0,
+        subed: 0
     },
 
     mounted(){
@@ -274,6 +276,7 @@ var keySearch = new Vue({
 
                             var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                 "<div class=\"row\">" +
+                                "<input type='checkbox' value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"+' name='single'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                 "<a target=\"_blank\" onclick=keySearch.detail('"+$.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">"
                                 + msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                             // $("#t_titles").append(xxx);
@@ -315,6 +318,7 @@ var keySearch = new Vue({
 
                             var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                 "<div class=\"row\">" +
+                                "<input type='checkbox' value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'name='single' onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                 "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">"
                                 + msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
 
@@ -369,6 +373,7 @@ var keySearch = new Vue({
 
                             var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                 "<div class=\"row\">" +
+                                "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"' onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                 "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">"
                                 + msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                             // $("#t_titles").append(xxx);
@@ -417,6 +422,7 @@ var keySearch = new Vue({
 
                             var ahtml = "<div style=\"border: 1px silver solid;position: relative; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                 "<div class=\"row\">" +
+                                "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                 "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">"
                                 + msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
 
@@ -553,6 +559,7 @@ var keySearch = new Vue({
                             if(keySearch.classID!=''){
                                 var ahtml = "<div style=\"border: 1px silver solid;position: relative; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\">" +
+                                    "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].
                                         source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
                                     msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
@@ -567,6 +574,7 @@ var keySearch = new Vue({
                             }else{
                                 var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\" >" +
+                                    "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
                                     msg.result[i][1].value +"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
 
@@ -628,6 +636,7 @@ var keySearch = new Vue({
 
                                 var ahtml = "<div style=\"border: 2px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\">" +
+                                    "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                     "<a target=\"_blank\" onclick='" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].
                                         source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
                                     msg.result[i][1].value+"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
@@ -644,6 +653,7 @@ var keySearch = new Vue({
                             {
                                 var ahtml = "<div style=\"border: 1px silver solid; margin-bottom: 10px;padding: 10px 20px 0px 20px\">" +
                                     "<div class=\"row\">" +
+                                    "<input type='checkbox' name='single'value='"+$.trim(msg.result[i][0].id)+","+msg.result[i][1].value+"'onclick=keySearch.single('"+$.trim(msg.result[i][0].id)+"')>"+
                                     "<a target=\"_blank\" onclick=keySearch.detail('" + $.trim(msg.result[i][0].id) + "','" + msg.result[i][0].source + "') style=\"font-size: 18px;color: #1E6BB4;font-weight: 500;cursor:pointer\">" +
                                     msg.result[i][1].value +"</a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" +buttonhtml;
                             }
@@ -878,6 +888,90 @@ var keySearch = new Vue({
             var buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+name+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
             return buttonhtml;
         },
+        allChecked(){
+                for (i = 0; i < $(":checkbox[name='single']").length; i++) {
+                    $(":checkbox[name='single']")[i].checked = 1;
+                }
+        },
+        allClearChecked(){
+            for (i = 0; i < $(":checkbox[name='single']").length; i++) {
+                $(":checkbox[name='single']")[i].checked = 0;
+            }
+        },
+        sub: function(id,name,loc){
+            var proposer = $("#proposer").val();
+            var org = $("#org").val();
+            var contact = $("#contact").val();
+            var description = $("#description").val();
+            getDataByPost('/user/subscribe',{
+                id:id,
+                name:name,
+                loc:loc,
+                proposer:proposer,
+                org:org,
+                contact:contact,
+                description:description,
+                status:1
+            },res=>{
+                    keySearch.countCode(res.code)
+            })
+        },
+        countCode(code){
+            keySearch.subcount++
+            if (code==200){
+            }else{
+            keySearch.subed=1
+            }
+            keySearch.toastrSub()
+        },
+        toastrSub(){
+            if (keySearch.subcount==$(":checkbox:checked").length) {
+                if (keySearch.subed== 0)
+                    toastr.success("订阅成功！");
+                else {
+                    toastr.warning("已订阅！请勿重复订阅！")
+                    keySearch.subcount = 0;
+                    keySearch.subed=0
+                }
+            }
+
+        },
+        subscribeChecked() {
+            var i=0;
+            if($(":checkbox:checked").length) {
+                swal({
+                    title: "您确定要订阅这批数据吗",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "确定",
+                    closeOnConfirm: true
+                }, function () {
+                    var arr = new Array();
+                    for (var i = 0; i < $(":checkbox:checked").length; i++) {
+                        if ($(":checkbox:checked")[i].checked) {
+                            arr.push($(":checkbox")[i].value);
+                        }
+                    }
+                    //console.log(arr)
+                    for (var i = 0; i < arr.length; i++) {
+                        id=arr[i].substr(0,32)
+                        name=arr[i].substr(33)
+                        keySearch.sub(id,name)
+                    }
+                    //console.log(keySearch.subcount)
+
+                })
+            }else{
+                swal("无选中数据！", "", "error");
+            }
+
+        },
+
+        single(id){
+            //console.log(id)
+        }
+
 
     },
 });

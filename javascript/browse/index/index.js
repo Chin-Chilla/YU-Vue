@@ -898,7 +898,6 @@ var index = new Vue({
                     otherParam: {"addCount":"true", "withUncheck":"false"}
                 },
                 data: {
-                    withUncheck,
                     simpleData: {
                         enable: true,
                         idKey: "nodeId",
