@@ -25,9 +25,7 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="change .idea/workspace.xml">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="bb3bbe0d-0f41-4355-9509-bb087ce6581d" name="Default Changelist" comment="change .idea/workspace.xml" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -116,6 +114,7 @@
       <workItem from="1628858649956" duration="660000" />
       <workItem from="1677635271912" duration="311000" />
       <workItem from="1677837362036" duration="2133000" />
+      <workItem from="1679649391601" duration="532000" />
     </task>
     <task id="LOCAL-00001" summary="change sync index_obj.js for xi zang for the time being">
       <created>1627090839913</created>
