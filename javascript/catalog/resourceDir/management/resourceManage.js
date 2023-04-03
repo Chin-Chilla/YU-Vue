@@ -194,6 +194,11 @@ function addHoverDom(treeId, treeNode) {
         //初始化
         that.clearModel();
         $("#myModal").modal('show');
+        if(!treeNode.children) {
+            getDataByGet('/index_manager/getResTreeByCode?nodeCode='+treeNode.nodeId+'&addCount=false&withUncheck=true', aJson, res => {
+                 that.treeNodes.addNodes(treeNode,res,isSilent = true);
+            });
+        }
         var type;
         if (treeNode.nodeCode.indexOf("_") == -1) {
             $("#root_node").removeClass("hidden");
@@ -222,7 +227,6 @@ function addHoverDom(treeId, treeNode) {
             var nodeName = $("#text9").val();
             var note = $("#text12").val();
             var level = treeNode.level;
-
             if (type == "3") {
                 //增加固定节点
                 var data = {
@@ -563,11 +567,12 @@ var res = new Vue({
             var treeNode = treeObj.getSelectedNodes();
             if (node_name == "") {
                 document.getElementById("label_1").innerHTML = tip;
-            } else {
+            }
+            else {
                 var nodes = treeObj.getNodesByParam("nodeName", node_name, treeNode[0]);
                 if (nodes.length > 0) {
                     document.getElementById("label_1").innerHTML = tip + "已有该名称结点";
-                    document.getElementById("text9").value="";
+                    document.getElementById("text9").value = "";
                 } else {
                     document.getElementById("label_1").innerHTML = primary + "该名称可用";
                 }
