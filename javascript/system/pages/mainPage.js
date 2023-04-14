@@ -46,9 +46,15 @@ MainPage = {
         //遍历json数组,拼接菜单树
         for (var i = 0; i < menuJson.length; i++) {
             if (menuJson[i].children.length == 0 && menuJson[i].show == "show") {
-                aHtml += "<li class=" + menuJson[i].className + ">" +
-                    "<a href='#' onclick=MainPage.setContent('" + menuJson[i].href + "','none') style='background-color:#E7F3FA'> " +
-                    "<span>" + menuJson[i].name + "</span></a></li>";
+                if(menuJson[i].className=="main") {
+                    aHtml += "<li class=" + menuJson[i].className + ">" +
+                        "<a href='#' onclick=MainPage.setContent('" + menuJson[i].href + "','none') style='background-color:#E7F3FA'> " +
+                        "<span>" + menuJson[i].name + "</span></a></li>";
+                }else {
+                    aHtml += "<li class=" + menuJson[i].className + ">" +
+                        "<a href='#' onclick=MainPage.setContent('" + menuJson[i].href + "','"+menuJson[i].className+"') style='background-color:#E7F3FA'> " +
+                        "<span>" + menuJson[i].name + "</span></a></li>";
+                }
             } else if (menuJson[i].show == "show") {
                 aHtml += "<li class='treeview " + menuJson[i].className + "'>" +
                     "<a href='#' style='background-color:#E7F3FA'> " +
