@@ -27,26 +27,30 @@ var keySearch = new Vue({
     },
     methods: {
         load(sign){
-            var data = {};
-            $("#pagination").empty();
-            $("#text1").empty();
-            keySearch.keyWord2 = $("#keyWord2").val();
-            //二次搜索输入的关键词
+            if ($("#keyWord").val() == "") {
+                toastr.warning("关键词不能为空!");
+            }else{if (sign==1)toastr.warning("通过目录查询搜索框，可根据相应目录的元数据，查询相关目录信息，实现元数据关联和元数据全文检索！");
+                var data = {};
+                $("#pagination").empty();
+                $("#text1").empty();
+                keySearch.keyWord2 = $("#keyWord2").val();
+                //二次搜索输入的关键词
 
 
-            $.ajax({
-                type:'GET',
-                url:'/YU/html/browse/search/keySearch.html',
-                success:function(body,heads,status){
-                
-                    $(".left_down").html(body);//分布图、遥感影像、元数据热搜榜
-                    keySearch.firstName = "";
-                    keySearch.secondName = "";
-                    keySearch.keyWord = $("#keyWord").val();
-                    keySearch.keySearch(sign,keySearch.treeType);
+                $.ajax({
+                    type:'GET',
+                    url:'/YU/html/browse/search/keySearch.html',
+                    success:function(body,heads,status){
 
-                }
-            });
+                        $(".left_down").html(body);//分布图、遥感影像、元数据热搜榜
+                        keySearch.firstName = "";
+                        keySearch.secondName = "";
+                        keySearch.keyWord = $("#keyWord").val();
+                        keySearch.keySearch(sign,keySearch.treeType);
+
+                    }
+                });}
+
         },
         filter:function () {
             var data = {
@@ -172,7 +176,8 @@ var keySearch = new Vue({
                     TreeType: keySearch.treeType,
                     PageNo: keySearch.pageNo,
                     PageSize: keySearch.pageSize,
-                    datacat:keySearch.datacat
+                    datacat:keySearch.datacat,
+                    flag:flag
                 };
 
                 getDataByPost('/key_search/queryforindex', data, function (res) {
@@ -254,7 +259,8 @@ var keySearch = new Vue({
                 Word2: keyword2,
                 PageNo: keySearch.pageNo,
                 PageSize: keySearch.pageSize,
-                datacat:keySearch.datacat
+                datacat:keySearch.datacat,
+                flag:flag
             };
             //长江委按钮
             if(LOCATION=="cjw"){
