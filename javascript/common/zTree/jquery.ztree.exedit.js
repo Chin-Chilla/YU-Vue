@@ -42,7 +42,7 @@
 			editNameSelectAll: false,
 			showRemoveBtn: true,
 			showRenameBtn: true,
-			removeTitle: "删除",
+			removeTitle: "删除或裁剪",
 			renameTitle: "修改",
 			drag: {
 				autoExpandTrigger: false,
