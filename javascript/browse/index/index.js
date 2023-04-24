@@ -23,6 +23,28 @@ function quickSort(nums,l,h){
         quickSort(nums,i+1,h);
     }
 }
+function quickSort1(nums,l,h){
+    if(l<h){
+        var i=l, j=h, x=nums[l];
+        while(i<j){
+            while( i<j && nums[j].name<=x.name ){
+                j--;
+            }
+            if (i<j){
+                nums[i++] = nums[j];
+            }
+            while( i<j && nums[i].name>x.name){
+                i++;
+            }
+            if (i<j){
+                nums[j--] = nums[i];
+            }
+        }
+        nums[i] = x;
+        quickSort1(nums,l,i-1);
+        quickSort1(nums,i+1,h);
+    }
+}
 var index = new Vue({
     el: "#vue", //绑定之前html写的ID
     data: { //相当于成员变量
@@ -609,6 +631,143 @@ var index = new Vue({
                 }
             }]
         },
+        searchChart: {
+            title: {
+                text: '资源目录分布图',
+                x: 'center',
+                bottom: '0%',
+                textStyle: {
+                    fontSize: 14
+                }
+            },
+            color: ['rgb(25, 183, 207)'],
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow',
+                }
+            },
+            legend: {
+                name: '基础对象数据',
+                orient: 'vertical',
+                left: 'left',
+                data: ['基础对象数据']
+            },
+            grid: {
+                x: 80,
+                y: 80,
+                bottom: 80
+            },
+            xAxis: {
+                data:[],
+                axisLabel: {
+                    inside: false,
+                },
+                axisTick: {
+                    show: false
+                },
+            },
+            yAxis: {
+                // type: 'log',
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                },
+                // logBase: 10,
+                // min: 1,
+                // axisLabel: {
+                // }
+            },
+            series: [{
+                name: '基础对象数据',
+                type: 'bar',
+                data: [],
+                barWidth: 40,
+            }]
+        },
+        searchChart2: {
+            title: {
+                text: '水利信息目录资源对象分布图',
+                x: 'center',
+                bottom: '0%',
+                textStyle: {
+                    fontSize: 14
+                }
+            },
+            color: ['#668B8B', '#19B7CF', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+            tooltip: {
+                trigger: 'item',
+                formatter: "{a} <br/>{b} : {c} ({d}%)"
+            },
+            legend: {
+                orient: 'vertical',
+                left: 'left',
+                data: []
+            },
+            calculable: true,
+            series: {
+                //minAngle: 5,
+                name: '对象数据分布',
+                type: 'pie',
+                radius: ['35%', '70%'],
+                label: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                lableLine: {
+                    normal: {
+                        show: false
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                data: []
+            }
+        },
+        searchChart3:{
+            title: {
+                text: '用户浏览统计图',
+                x: 'center',
+                bottom: '0%',
+                textStyle: {
+                    fontSize: 14
+                }
+            },
+            xAxis:{
+                type:'category',
+                data:[],
+                axisLabel: {
+                    inside: false,
+                },
+                axisTick: {
+                    show: false
+                },
+            },
+            yAxis:{
+                axisTick: {
+                    show: false
+                },
+                splitLine: {
+                    show: false
+                },
+                type:'value'
+            },
+            series:[
+                {
+                    type:'line',
+                    data:[],
+                    itemStyle : { normal: {label : {show: true}}}
+                }
+            ]
+
+        },
         //存储图表需要用到的资源目录树的数据
         catalogTreeData: [],
         leftUpCatalogTreeData: {},
@@ -647,6 +806,7 @@ var index = new Vue({
         //存储“水利部汇交情况图”中水利部本级以及各个直属单位的数据量
         arrayRightBar: [],
         arrayRightBarObj: [],
+        arrayVistData:[],
         //水利部目录资源分布图echarts对象
         myChartleft: '',
         myChartmid: '',
@@ -658,6 +818,7 @@ var index = new Vue({
         //流域、省级目录资源分布图echarts对象 （左、右）
         myChartleftDown: '',
         myChartrightDown: '',
+        myChartDown:'',
         //第2行条形图
         arrayBar: [],
         //雷达图 行政、业务、综合、其他数据总量
@@ -769,6 +930,7 @@ var index = new Vue({
            // that.myChartRightData = echarts.init(document.getElementById('right_data_pic'));
           //  that.myChartleftDown = echarts.init(document.getElementById('left_down'));
             that.myChartrightDown = echarts.init(document.getElementById('right_down'));
+            that.myChartDown=echarts.init(document.getElementById('down'));
             //加载动画
             that.showLoading(that.myChartleft);
             that.showLoading(that.myChartmid);
@@ -777,6 +939,7 @@ var index = new Vue({
         //    that.showLoading(that.myChartRightData);
       //     that.showLoading(that.myChartleftDown);
             that.showLoading(that.myChartrightDown);
+            that.showLoading(that.myChartDown);
 
             that.showPictrue();
 
@@ -886,6 +1049,7 @@ var index = new Vue({
                         }
                     }
                     that.getChartNum();
+                that.searchPictureShow3()
             })
 
             var settingObject = {
@@ -1934,6 +2098,104 @@ var index = new Vue({
             }
             return listChoseObjOrResDep;
         },
+        searchPictureShow1() {
+            getDataByPost('/show_detail/getChartByType',{
+                flag:1,
+            },res=>{
+                that.findNew(res.data,1)
+            })
+        },
+        searchPictureShow2() {
+            getDataByPost('/show_detail/getChartByType',{
+                flag:2,
+            },res=>{
+                that.findNew(res.data,2)
+            })
+        },
+        searchPictureShow3() {
+            getDataByPost('/show_detail/getChartByType',{
+                flag:3,
+            },res=>{
+                that.findNew(res.data,3)
+            })
+        },
+        showChart(list){
+            that.searchChart.title.text = list.chartName;
+
+            //只要有统计项，则设置相关控件为可视
+            $("#down").removeClass("hidden");
+            $("#right_downall").addClass("hidden");
+            $("#no_visitdata").addClass("hidden");
+            var arr=new Array()
+            x_Data=list.xData.split(',')
+            for(var i=0;i<x_Data.length;i++){
+                arr.push(x_Data[i].substr(1,x_Data[i].length-2))
+            }
+            that.searchChart.series[0].data=list.yData.split(',');
+            that.searchChart.xAxis.data=arr;
+            that.myChartDown.clear();
+            that.myChartDown.setOption(that.searchChart);
+            that.myChartDown.hideLoading();
+
+        },
+        showChart1(list){
+            // if(list.xName=="对象类型")
+            // {
+            var arr=new Array()
+            that.arrayVistData = []
+            y_Data = list.yData.replaceAll('},', '}+')
+            y_Data = y_Data.split('+')
+            x_Data=list.xData.split(',')
+            for (var i = 0; i < y_Data.length; i++) {
+                y_Data[i] = y_Data[i].substr(1, y_Data[i].length).split(',')
+                that.arrayVistData.push({
+                    name: y_Data[i][0].split(':')[1].replaceAll('\"', ''),
+                    value: y_Data[i][1].split(':')[1].replace('}', '')
+                })
+                arr.push(x_Data[i].substr(1,x_Data[i].length-2))
+            }
+            that.myChartDown.clear();
+            that.searchChart2.title.text = list.chartName;
+            that.searchChart2.series.data = that.arrayVistData;
+            that.searchChart2.legend.data = arr;
+            that.myChartDown.setOption(that.searchChart2);
+            that.myChartDown.hideLoading();
+        },
+        showChart2(list){
+            that.myChartDown.clear();
+            var arr=list.xData.split(',');
+            for (var i=0;i<arr.length;i++){
+                arr[i]=arr[i].substr(1,arr[i].length-2)
+            }
+            $("#down").removeClass("hidden");
+            $("#right_downall").addClass("hidden");
+            $("#no_visitdata").addClass("hidden");
+            that.searchChart2.title.text = list.chartName;
+            that.searchChart3.series[0].data=list.yData.split(',');
+            that.searchChart3.xAxis.data=arr;
+            that.myChartDown.setOption(that.searchChart3);
+            that.myChartDown.hideLoading();
+        },
+        findNew(list,flag){
+            var arr=new Array()
+            for(var i=0;i<list.length;i++){
+                arr.push({
+                    name:list[i].chartId
+                })
+            }
+            quickSort1(arr,0,arr.length-1)
+            getDataByPost('/show_detail/getChartBar',{
+                id:arr[0].name,
+            },res=>{
+                // console.log(res.data)
+                if(flag==1)
+                    that.showChart(res.data)
+                else if (flag==2)
+                    that.showChart1(res.data)
+                else if (flag==3)
+                    that.showChart2(res.data)
+            })
+        }
 
     },
 })

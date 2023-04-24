@@ -29,7 +29,7 @@ var keySearch = new Vue({
         load(sign){
             if ($("#keyWord").val() == "") {
                 toastr.warning("关键词不能为空!");
-            }else{if (sign==1)toastr.warning("通过目录查询搜索框，可根据相应目录的元数据，查询相关目录信息，实现元数据关联和元数据全文检索！");
+            }else{
                 var data = {};
                 $("#pagination").empty();
                 $("#text1").empty();

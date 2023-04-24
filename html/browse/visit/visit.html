@@ -1,0 +1,139 @@
+<section class="content" id="vue">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box">
+                <div class="box-footer table-hover" style="border-bottom: 1px solid #ececec">
+                    <div class="pull-left">
+                        <h4 class="box-title" style="margin-top: 10px">浏览统计</h4>
+                    </div>
+<!--                        <div class="pull-right">-->
+<!--                            <a href="/YU/html/browse/index/index.html" style="font-size: 16px;-->
+<!--                                    padding-right: 10px ">返回主页</a>-->
+<!--                            &lt;!&ndash; <a href="/logout" style="font-size: 16px;-->
+<!--                            padding-right: 10px;color:red;">注销</a> &ndash;&gt;-->
+<!--                        </div>-->
+                </div>
+            </div>
+            <form class="form-horizontal">
+            <div class="box-header">
+                <div class="form-group" style="margin-right: 10px;">
+                    <label class="col-xs-1 control-label">关键字:</label>
+                    <div class="date col-xs-1">
+                        <input class="form-control input-sm" v-model="keyword" id="keyword" type="text">
+                    </div>
+                    <label class="col-xs-1 control-label">对象类型:</label>
+                    <div class="col-xs-1">
+                        <select class="form-control select2" id="pClassName" style="height: 30px;" @click="showObjLev2">
+                                                                <option value="">全选</option>
+                                                                <option value="江河湖泊">江河湖泊</option>
+                                                                <option value="水利工程">水利工程</option>
+                                                                <option value="监测站（点）">监测站（点）</option>
+                                                                <option value="其他管理对象">其他管理对象</option>
+                        </select>
+                    </div>
+                    <label class="col-xs-1 control-label" style="width:80px">对象名称:</label>
+                    <div class="date col-xs-1">
+                        <select class="form-control select2" id="className" style="height: 30px;margin:0px 10px"></select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-right: 10px">
+                    <label class="col-xs-1 control-label">用户名称:</label>
+                    <div class="col-xs-1">
+                        <input class="form-control input-sm" v-model="userName" type="text" id="userName">
+                    </div>
+                    <label class="col-xs-1 control-label">搜索时间范围:</label>
+                    <div class="date col-xs-1">
+                        <input class="form-control  datepicker input-sm" readonly="readonly" id="beginTime" type="text">
+                    </div>
+                    <label class="col-lg-1 control-label" style="width:80px">&nbsp&nbsp至:</label>
+                    <div class="date col-xs-1">
+                        <input class="form-control  datepicker input-sm" readonly="readonly" id="endTime" type="text">
+                    </div>
+                    <!-- /.input group -->
+                    <div class="col-xs-6"></div>
+                </div>
+                <div class="form-group">
+                    <div class="pull-right" style="padding-right: 30px">
+                        <input type="button" value="查询" style="width:80px;height: 35px;" class="btn btn-primary" @click="search">
+                        <input type="button" value="重置" style="width:80px;height: 35px;" class="btn btn-primary" @click="reset">
+                    </div>
+                </div>
+            </div>
+            </form>
+            <div class="box-body table-responsive no-padding right_down">
+                <div style="margin: 10px 0; width: 100%">
+                    <table class="table table-responsive no-padding" style="font-size: 16px;width: 100%;">
+                        <thead>
+                        <tr>
+                            <th style="min-width: 150px">用户ID</th>
+                            <th style="min-width: 150px">时间</th>
+                            <th style="min-width: 150px">浏览数据ID</th>
+                            <th style="min-width: 150px">数据名称</th>
+                            <th style="min-width: 150px">数据类型</th>
+                            <th style="min-width: 150px">对象类型</th>
+                            <th style="min-width: 100px">用户名</th>
+                            <th style="min-width: 150px">联系方式</th>
+                            <th style="min-width: 150px">单位</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="overlay" id="loading" style="display: none">
+                    <i class="fa fa-refresh fa-spin"></i>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin: 0px 0px 0px 0px;">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-12">
+                    <form class="form-horizontal" style="z-index: 999; float: right; margin: 10px;margin-right: -30px;position: absolute;right:0px;">
+                        <div class="form-group" style="margin-right: 40px;">
+                            <label class="col-xs-1 control-label" style="width:50px">x轴:</label>
+                            <div class="col-xs-1"style="width:80px">
+                                <select class="form-control select2" id="xData" style="height: 30px;" @click="showY">
+                                    <option value="">全选</option>
+                                    <option value="时间">时间</option>
+                                    <option value="对象类型">对象类型</option>
+                                </select>
+                            </div>
+                            <label class="col-xs-1 control-label" style="width:50px">y轴:</label>
+                            <div class="date col-xs-1">
+                                <select class="form-control select2" id="yData" style="height: 30px;margin:0px 10px;width:80px" @click="showMethod"></select>
+                            </div>
+                        </div>
+                    <div class="form-group" style="margin-right: 40px;">
+                        <label class="col-xs-1 control-label"style="width:50px">方式:</label>
+                        <div class="col-xs-1"style="width:90px">
+                            <select class="form-control select2" id="chartType" style="height: 30px;width:80px" @click="getNum"></select>
+                        </div>
+                        <button class="btn-primary" style="height: 30px;width:100px;margin-left: 10px"type="button" id="savechbtn1" @click="saveChartBar()">更新到前台</button>
+
+                    </div>
+                    </form>
+                    <div id="right_down" style="height: 438px;
+                                              border: 1px solid #9d9d9d;
+                                              margin-left: 10px;">
+                    </div>
+                    <div id="no_objdata" class="hidden" style="height: 438px; border: 1px solid rgb(157, 157, 157); margin-left: 10px; text-align: center; position: relative;">
+                        <div style="margin-top: 120px;">
+                            <div><span class="iconfont icon-zanwushuju" style="
+                                                      font-size: 100px;
+                                                      color: gray;"></span>
+                            </div>
+                            <font size="6" style="font-size: 20px; color: gray;"> 暂无对象数据</font>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="main-footer" style="height: 40px;margin: 0 auto">
+
+    </footer>
+</section>
+<script type="text/javascript" src="/YU/javascript/browse/index/datav.min.js"></script>
+<script type="text/javascript" src="/YU/javascript/common/echarts/echarts.min.js"></script>
+<script src="/YU/javascript/browse/visit/visit.js"></script>
