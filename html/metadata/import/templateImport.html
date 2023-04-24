@@ -22,6 +22,7 @@
 
                                 <button class="btn btn-primary" style="float: left;width:90px;height: 35px;margin-left: 10px"  @click="download">下载模板 </button>
                                 <button class="btn btn-primary" style="float: left;width:105px;height: 35px;margin-left: 10px"  @click="downloadZip">打包下载模板</button>
+                                <button type="button" class="btn btn-primary" @click="help" style="width:100px;height: 35px;margin-bottom: 10px;margin-left: 10px;">帮助</button>
                                 <!-- <input type="button" class="btn btn-warning" value="下载模板" @click="download" style="float: left;width:90px;height: 35px;margin-left: 10px">
                                  <input type="button" class="btn btn-warning" value="打包下载模板" @click="downloadZip" style="float: left;width:105px;height: 35px;margin-left: 10px">
                                  -->
@@ -44,16 +45,19 @@
                                     <button type="button" value="+" class="btn btn-primary" @click="addfile" style="width: 35px;height: 35px;margin-bottom: 10px;margin-left: 10px;">+</button>
                                 </div>
                                 <button type="button" class="btn btn-primary" @click="upload" style="width:100px;height: 35px;margin-bottom: 10px;margin-left: 10px;">导入所选项</button>
-
+                                <button type="button" class="btn btn-primary" @click="dataCheck" style="width:125px;height: 35px;margin-bottom: 10px;margin-right: 10px;">元数据格式校验</button>
                                 <div style="width:1500px;margin: 0;display: inline-block;">
                                     <label id="label1" style="margin-top: 20px; display: none;" ><input type="radio" name="isShow" value="show">是否显示</label>
                                     <label id="label2" style="margin-left: 30px; display: none;"><input type="radio" name="isMust" value="must">是否必填</label>
-                                    <table border="1" id="sample_1" class="table" style="width: 100%;display: inline-table;border-collapse: collapse;table-layout: fixed">
+
+                                    <div id="tablescorll" style="overflow: auto;overflow-x: scroll;overflow-y: hidden;width: 1100px;display: none">
+                                    <table border="1" id="sample_1" style="text-align: center;vertical-align:middle;width:2000px;display: inline-table;table-layout:fixed;word-wrap: break-word">
                                         <thead id="modelthead1" bgcolor="#b0c4de">
                                         </thead>
-                                        <tbody id="modaltbody1" style="border-collapse: collapse;overflow-x: scroll;">
+                                        <tbody id="modaltbody1">
                                         </tbody>
                                     </table>
+                                    </div>
                                 </div>
                                 <div>
                                     <div style="float: left;text-align: right;margin: 10px 0 0 335px"> <!--360px  450px-->
@@ -124,5 +128,45 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog"  aria-labelledby="ModalLabel">
+    <div class="modal-dialog" role="document" style="height:400px;">
+        <div class="modal-content" style="width: 800px">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel1">查看填写说明</h4>
+            </div>
+            <div class="modal-body">
+                <div class="box box-primary" style="height:400px;margin:10px 0px 0px 0px;"  id="viewTable1">
+                    <div class="row" id="viewTable">
+                        <div class="col-md-12" >
+                            <div>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:200px" class="control-label">属性名称：&nbsp;</label>
+                                <select style="float: left;width: 400px;height:35px" id="propOption" v-model="prOption">
+                                </select>
+                                <br><br><br>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:200px" class="control-label">定义：&nbsp;</label>
+                                <textarea disabled="disabled" style="float: left;width: 400px;" rows="2" id="def"></textarea>
+                                <br><br><br>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:200px" class="control-label">数据类型：&nbsp;</label>
+                                <textarea disabled="disabled" style="float: left;width: 400px;" rows="2" id="dataType"></textarea>
+                                <br><br><br>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:200px" class="control-label">精度(取值范围)：&nbsp;</label>
+                                <textarea disabled="disabled" style="float: left;width: 400px;" rows="2" id="jingdu"></textarea>
+                                <br><br><br>
+                                <label style="float: left;text-align:right;padding-top: 5px;width:200px" id="prLabel4" class="control-label">要求：&nbsp;</label>
+                                <textarea disabled="disabled" style="float: left;width: 400px;" rows="4" id="req"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+               <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script src="/YU/javascript/metadata/import/templateImport.js"></script>
 
