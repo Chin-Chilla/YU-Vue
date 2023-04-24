@@ -181,7 +181,8 @@ function addHoverDom(treeId, treeNode) {
     var sObj = $("#" + treeNode.tId + "_span");
     if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
     var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-        + "' title='注册子节点' onfocus='this.blur();'></span>";
+        + "' title='新增子节点' onfocus='this.blur();'></span>"+"<span class='button search' id='searchBtn_" + treeNode.tId
+        + "' title='查询子节点' onfocus='this.blur();'></span>";
     sObj.after(addStr);
     var btn = $("#addBtn_" + treeNode.tId);
     if (btn) btn.bind("click", function () {
@@ -240,11 +241,11 @@ function addHoverDom(treeId, treeNode) {
                     data,
                     res => {
                         editState = 1;
-                        toastr.success("注册子节点成功！");
+                        toastr.success("增加固定节点成功！");
                         that.treeNodes.addNodes(treeNode, res.data);
                     },
                     err => {
-                        toastr.error("注册子节点出错！");
+                        toastr.error("增加固定节点出错！");
                     }
                 )
             }
@@ -279,11 +280,11 @@ function addHoverDom(treeId, treeNode) {
                             editState = 1;
                             $("#myModal").modal('hide');
                             that.treeNodes.addNodes(treeNode, res.data);
-                            toastr.success("注册子节点成功！")
+                            toastr.success("增加节点成功！")
                         },
                         err => {
                             $("#myModal").modal('hide');
-                            toastr.error("注册子节点出错！")
+                            toastr.error("增加节点出错！")
                         }
                     )
                 }
@@ -294,12 +295,56 @@ function addHoverDom(treeId, treeNode) {
         // })
         // that.treeNodes.addNodes(treeNode,res);
     });
+    var btn1 = $("#searchBtn_" + treeNode.tId);
+    if (btn1) btn1.bind("click", function () {
+        $("#searchIpt").val("");
+        $("#searchRes").empty();
+        $("#searchModal").show();
+        if (!treeNode.children) {
+            getDataByGet('/index_manager/getResTreeByCode?nodeCode=' + treeNode.nodeId + '&addCount=false&withUncheck=true', aJson, res => {
+                that.treeNodes.addNodes(treeNode, res, isSilent = true);
+            });
+        }
+        var searchBtn=document.getElementById("searchBtn");
+        searchBtn.onclick = function (){
+            var node_name = $("#searchIpt").val();
+            console.log(node_name);
+            var treeObj = $.fn.zTree.getZTreeObj("serviceTree");
+            if (node_name == "") {
+                toastr.warning("节点名称不能为空！")
+            } else {
+                var nodes = treeObj.getNodesByParamFuzzy("nodeName", node_name, treeNode);
+                if (nodes.length > 0) {
+                    $("#searchRes").empty();
+                    for (var i = 0; i < nodes.length; i++) {
+                        var s=nodes[i].nodeName;
+                        var pnode=nodes[i];
+                        console.log(s);
+                        while(pnode=pnode.getParentNode()) {
+                            s=pnode.nodeName+'/'+s;}
+                        $("#searchRes").append(s + "\n");
+                    }
+                } else {
+                    $("#searchRes").empty();
+                    $("#searchRes").append("无该名称节点\n");
+                }
+            }
+        }
+        var closeBtn=document.getElementById("closeBtn");
+        closeBtn.onclick = function () {
+            $("#searchModal").hide();
+        }
+    });
 };
 function removeHoverDom(treeId, treeNode) {
     $("#addBtn_" + treeNode.tId).unbind().remove();
+    $("#searchBtn_" + treeNode.tId).unbind().remove();
 };
 function beforeRemove(treeId, treeNode) {
-    var res;
+    var res = confirm("确定删除该节点吗？")
+    if (!res) {
+        return false;
+    }
     var nodeId = treeNode.nodeId;
     var data = {
         nodeId: nodeId,
@@ -316,17 +361,9 @@ function beforeRemove(treeId, treeNode) {
             toastr.error("请求错误！");
         }
     )
-    if(nodeHasChild){
-        res = confirm("确定裁剪该节点吗？")
-    }else{
-        res = confirm("确定删除该节点吗？")
-    }
-    if (!res) {
-        return false;
-    }
     if (!nodeHasData) {
         if (nodeHasChild) {
-            var cue = confirm("是否要裁剪该节点下所有节点？");
+            var cue = confirm("是否要删除该节点下所有节点？");
             if (cue) {
                 return true;
             }
@@ -335,11 +372,7 @@ function beforeRemove(treeId, treeNode) {
             return true;
         }
     } else {
-        if (nodeHasChild) {
-            toastr.warning("该节点下有数据不能裁剪！");
-        } else {
-            toastr.warning("该节点下有数据不能删除！");
-        }
+        toastr.warning("该节点下有数据不能删除！");
         return false;
     }
 };
@@ -410,40 +443,19 @@ function zTreeEditOnclick(event, treeId, treeNode) {
     }
 };
 function zTreeOnRemove(event, treeId, treeNode) {
-    var resSuccess;
-    var resFail;
     var nodeId = treeNode.nodeId;
     var data = {
         nodeId: nodeId
     }
-    getDataByPost1(
-        '/resource_manage/hasDataAndChild',
-        data,
-        res => {
-            nodeHasData = res.data[0];
-            nodeHasChild = res.data[1];
-        },
-        err => {
-            toastr.error("请求错误！");
-        }
-    )
-    if(nodeHasChild){
-        resSuccess = "裁剪节点成功！"
-        resFail = "裁剪节点失败！"
-    }else{
-        resSuccess = "删除节点成功！"
-        resFail = "删除节点失败！"
-    }
-
     getDataByPost(
         '/resource_manage/delete',
         data,
         res => {
             editState = 1;
-            toastr.success(resSuccess)
+            toastr.success("删除节点成功！")
         },
         err => {
-            toastr.error(resFail);
+            toastr.error("删除节点失败！");
         }
     )
 };
@@ -809,6 +821,7 @@ var res = new Vue({
                 }
             })
         },
+
 
 
     }

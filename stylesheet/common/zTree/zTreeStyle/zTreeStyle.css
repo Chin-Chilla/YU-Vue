@@ -30,7 +30,6 @@ website:	http://code.google.com/p/jquerytree/
 	border:0 none; cursor: pointer;outline:none;
 	background-color:transparent; background-repeat:no-repeat; background-attachment: scroll;
 	background-image:url("./img/zTreeStandard.png"); *background-image:url("./img/zTreeStandard.gif")}
-
 .ztree li span.button.chk {width:13px; height:13px; margin:0 3px 0 0; cursor: auto}
 .ztree li span.button.chk.checkbox_false_full {background-position:0 0}
 .ztree li span.button.chk.checkbox_false_full_focus {background-position:0 -14px}
@@ -77,6 +76,7 @@ website:	http://code.google.com/p/jquerytree/
 .ztree li span.button.remove {margin-right:2px; background-position:-110px -64px; vertical-align:top; *vertical-align:middle}
 /*自己增加的add添加时用到的图标*/
 .ztree li span.button.add {margin-right:2px; background-position:-143px 0px; vertical-align:top; *vertical-align:middle}
+.ztree li span.button.search {margin-right:2px; vertical-align:top; *vertical-align:middle;background-position:0px 0px;background-image:url("./img/search.png");}
 
 .ztree li span.button.ico_loading{margin-right:2px; background:url(./img/loading.gif) no-repeat scroll 0 0 transparent; vertical-align:top; *vertical-align:middle}
 
