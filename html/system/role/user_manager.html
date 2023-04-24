@@ -381,9 +381,10 @@
                                                 <th class="table-checkbox sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 24px;">
                                                     <div class="checker"><span></span></div>
                                                 </th>
-                                                <th>角色代码</th>
-                                                <th>角色名称</th>
-                                                <th>角色中文名称</th>
+                                                <th width="100px">角色代码</th>
+                                                <th width="170px">角色名称</th>
+                                                <th width="120px">角色中文名称</th>
+                                                <th>角色权限</th>
                                             </tr>
                                         </thead>
                                         <tbody id="modaltbody2">
@@ -393,6 +394,7 @@
                                                 <td>{{item.roleCode}}</td>
                                                 <td>{{item.roleName}}</td>
                                                 <td>{{item.roleDesc}}</td>
+                                                <td>{{item.note}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -504,6 +506,16 @@
                                     </div>
                                 </div>
                                 <p class="help-block" style="line-height:50px" id="mydivrealname"><br>
+                                </p>
+                            </div><br>
+                            <div class="row">
+                                <div class="form-group">
+                                    <div class="col-xs-8">
+                                        <label for="typeahead_example_modal_3" class="control-label">角色职能</label><br>
+                                        <textarea v-model="editRoleWork" type="text" class="form-control" id="role_work_modal_2" placeholder=" "></textarea>
+                                    </div>
+                                </div>
+                                <p class="help-block" style="line-height:50px" id="mydivrealwork"><br>
                                 </p>
                             </div><br>
                             <div class="modal-footer">
