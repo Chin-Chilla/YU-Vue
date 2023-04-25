@@ -184,7 +184,7 @@ var app = new Vue({
 			startTime:$("#beginTime").val(),
 			endTime:$("#endTime").val()
 		},res=>{
-			console.log(res.data)
+			//console.log(res.data)
 			that.totalNum=res.data.total;
 			that.renderList(res.data.list);
 			that.renderPagination();
@@ -305,7 +305,7 @@ var app = new Vue({
 				startTime:$("#beginTime").val(),
 				endTime:$("#endTime").val()
 			},res=>{
-				console.log(res)
+				//console.log(res)
 				that.totalNum=res.data.total;
 				that.newListNumReq=0;
 				that.renderList(res.data.list,true);
@@ -331,7 +331,7 @@ var app = new Vue({
 		getNum(){
 			var flag=$("#chartType").val();
 			getDataByPost('/show_detail/getViewList',{
-					pageSize:37,
+					pageSize:that.totalNum,
 					pageNum:1,
 				},res=> {
 				if(flag==1)
@@ -438,8 +438,8 @@ var app = new Vue({
 				flag:that.save
 			},res=>
 			{
-				if (res.code==200)toastr.success("保存成功！")
-				else toastr.error("保存失败！")
+				if (res.code==200)toastr.success("更新成功！")
+				else toastr.error("更新失败！")
 			})
 			}else if(that.save==2){
 				// console.log("饼图")
@@ -452,8 +452,8 @@ var app = new Vue({
 					flag:that.save
 				},res=>
 				{
-					if (res.code==200)toastr.success("保存成功！")
-					else toastr.error("保存失败！")
+					if (res.code==200)toastr.success("更新成功！")
+					else toastr.error("更新失败！")
 				})
 			}else{
 				// console.log("折线图")
@@ -599,7 +599,7 @@ var app = new Vue({
 				quickSort(data,0,data.length-1)
 				data=that.CDate(data,1)
 
-				console.log(data)
+				//console.log(data)
 				for(var i=data.length-1;i>=0;i--){
 					that.arrayDepObjTotal.push(data[i].value)
 					Xdata.push(data[i].name)
@@ -702,7 +702,7 @@ var app = new Vue({
 				$("#chartType").append("<option value='0'>全选</option>");
 				$("#chartType").append("<option value='1'>柱状图</option>");
 				$("#chartType").append("<option value='2'>饼状图</option>");
-				$("#chartType").append("<option value='3'>折线图图</option>");
+				$("#chartType").append("<option value='3'>折线图</option>");
 			}
 
 		},
