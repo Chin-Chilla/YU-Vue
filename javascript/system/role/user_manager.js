@@ -18,7 +18,8 @@ var UserPage = new Vue({
         editRoleId:'',
         editRoleCode:'',
         editRoleName:'',
-        editRoleDesc:''
+        editRoleDesc:'',
+        editRoleWork:''
     },
     mounted() {
         that = this;
@@ -618,6 +619,7 @@ var UserPage = new Vue({
 	        			that.editRoleCode = res.data.roleCode;
 		                that.editRoleName = res.data.roleName;
 		                that.editRoleDesc = res.data.roleDesc;
+                        that.editRoleWork = res.data.note;
 		                $("#exampleModal7").modal('show');
 	        		}
             	})
@@ -630,7 +632,8 @@ var UserPage = new Vue({
 	    			roleGuid:that.editRoleId,
 	    			roleName:that.editRoleName,
 	    			roleCode:that.editRoleCode,
-	    			roleDesc:that.editRoleDesc
+	    			roleDesc:that.editRoleDesc,
+                    roleWork:that.editRoleWork
 	    		},function(res){
 	    			if(res.msg=="SUCCESS"){
 	    				toastr.success("修改成功！")
