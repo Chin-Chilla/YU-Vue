@@ -188,7 +188,7 @@ var app = new Vue({
 			that.renderList(res.data.list);
 			that.renderPagination();
 		})
-		that.myChartrightDown = echarts.init(document.getElementById('right_down'));
+		//that.myChartrightDown = echarts.init(document.getElementById('right_down'));
 		$(function() {
 			$('.datepicker').datepicker({
 				autoclose: true,
