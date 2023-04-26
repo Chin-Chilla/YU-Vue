@@ -23,7 +23,11 @@ var app = new Vue({
 		zTreeObj:'',//zTree
 
 		progress:0,
-		progressTitle:''
+		progressTitle:'',
+
+		//前端动态分页
+		datacheckList:[],//元数据检查不合格的数据,总的数据
+
 	},
 	mounted(){
 		that = this;
@@ -242,6 +246,8 @@ var app = new Vue({
             	toastr.error("获取联系人列表失败")
             });
 		},
+
+
 		//绑定联系人
 		bindContact(){
 			if(this.contactSelect==''){
@@ -567,25 +573,167 @@ var app = new Vue({
 		back(){
 			 $('.content-wrapper').load('metadata/manager/index.html', function() {});
 		},
+
 		//元数据检查
 		dataCheck(){
+			var state = -1;
+			var arr = new Array();
+			if ($("#thisPage").is(':checked')) {
+				state = 1;
+			} else if ($("#all").is(':checked')) {
+				state = 2;
+			} else if ($("#clear").is(':checked')) {
+				state = 0;
+			}
 			var ch = $("input[name='choose']");
-			var i = 0;
-			for (i; i < ch.length; i++) {
-				if (ch[i].checked) {
-					break;
+			var flag=false;
+			var checkNum=0;
+			for (i = 0; i < ch.length; i++) {
+				if (ch[i].checked == true) {
+					flag=true;
+					checkNum++;
 				}
 			}
-			if ($("#clear").is(':checked') || i == ch.length) {
-				toastr.warning("请选择至少一个条目!");
+			if (flag) {
+				var timer;
+				that.progressTitle="元数据检查进度"
+				that.progress = 0
+				$("#progressModal").modal({backdrop: 'static', keyboard: false})
+				var interval = 0.6*checkNum/90
+
+				if(interval<100){
+					interval = 100
+				}
+				timer = setInterval(function(){
+					if(that.progress==100){
+						clearInterval(timer)
+						return;
+					}
+					var tmp = Math.random()/2
+					if(Math.random()>0.5){
+						tmp = 1+tmp
+					}else{
+						tmp =1-tmp
+					}
+					that.progress = Math.round((that.progress+tmp)*10)/10
+					if(that.progress>99){
+						that.progress = 99
+						clearInterval(timer);
+					}
+				},interval)
+
+				var queryData = {
+					entityName:that.entityName,
+					keyword:that.keyword
+				}
+				//var arr = new Array();
+				for (var i = 0; i < ch.length; i++) {
+					if (ch[i].checked) {
+						arr.push(ch[i].value);
+					}
+				}
+				var data = {
+					classId: that.classId,
+					state: state,
+					entityArray: JSON.stringify(arr),//要检查的数据的MD_FILE_ID
+					queryCondition:JSON.stringify(queryData),
+					pageNum:1,
+					pageSize:5
+				}
+				var str ="";
+				getDataByPost('/metadata_register/datacheck', data, res=>{
+					if (res.msg == "SUCCESS") {
+						that.progress=100;
+						setTimeout(function(){
+							$("#progressModal").modal('hide')
+						},500)
+						setTimeout(function(){
+							//swal("元数据检查合格！", "", "success");
+							toastr.success("数据检查合格！")
+							//$('.content-wrapper').load('metadata/manager/detail.html', function() {});
+						},1000)
+					} else {
+						$("#progressModal").modal('hide')
+						that.datacheckList = res.data.list;
+						var total = res.data.total;
+						console.log("total"+total)
+
+						for(var i=0;i<total;i++){
+							str+="<tr id='"+i+"'><td>"+that.datacheckList[i].id+"</td><td>"+that.datacheckList[i].metaName+"</td><td>"+that.datacheckList[i].datacheckResult+"</td></tr>";
+						}
+						$("#tbodydata").append(str);
+
+						$("#datacheckModal").modal('show');
+
+						that.goPage(1,5,total);
+						that.datacheckList=[];
+						str="";
+
+					}
+				});
+				$("#tbodydata").empty();
+				// }
+			} else {
+				toastr.warning("请选择一个目标!");
 			}
-			else {
-				$("#loading").css('display', 'block');
-				setTimeout(function () {
-					$("#loading").css('display', 'none'); //取消 loading 界面
-					toastr.success("数据检查合格！")
-				}, 2000)
+		},
+		goPage(pno,psize,tablenum){
+			var itable = document.getElementById("tbodydata");
+			console.log("itable"+itable)
+			var num = itable.rows.length;//表格所有行数(所有记录数)
+
+			console.log("num:"+num)
+			var totalPage = 0;//总页数
+			var pageSize = psize;//每页显示行数
+			//总共分几页
+			if(num/pageSize > parseInt(num/pageSize)){
+				totalPage=parseInt(num/pageSize)+1;
+			}else{
+				totalPage=parseInt(num/pageSize);
 			}
+			console.log("totalPage:"+totalPage)
+			var currentPage = pno;//当前页数
+			var startRow = (currentPage - 1) * pageSize+1;//开始显示的行  31
+			var endRow = currentPage * pageSize;//结束显示的行   40
+			endRow = (endRow > num)? num : endRow;    //40
+			//遍历显示数据实现分页
+			for(var i=1;i<(num+1);i++){
+				var irow = itable.rows[i-1];
+				console.log(irow);
+				if(i>=startRow && i<=endRow){
+					irow.style.display = "table-row";
+				}else{
+					irow.style.display = "none";
+				}
+			}
+			var tempStr = "共"+num+"条数据 分"+totalPage+"页 当前第"+currentPage+"页&nbsp;&nbsp;";
+			if(currentPage>1){
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-primary\" onClick=\"that.goPage("+(1)+","+psize+")\">首页</a>&nbsp;&nbsp;";
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-primary\" onClick=\"that.goPage("+(currentPage-1)+","+psize+")\">上一页</a>&nbsp;&nbsp;"
+			}else{
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-metal\" >首页</a>&nbsp;&nbsp;";
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-metal\" >上一页</a>&nbsp;&nbsp;";
+			}
+
+			if(currentPage<totalPage){
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-primary\" onClick=\"that.goPage("+(currentPage+1)+","+psize+")\">下一页</a>&nbsp;&nbsp;";
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-primary\" onClick=\"that.goPage("+(totalPage)+","+psize+")\">尾页</a>&nbsp;&nbsp;";
+			}else{
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-metal\" >下一页</a>&nbsp;&nbsp;";
+				tempStr += "<a href=\"#\" class=\"btn btn-sm btn-metal\" >尾页</a>&nbsp;&nbsp;";
+			}
+
+			//tempStr +="<select class='' style='width:60px' οnchange=\"that.goPage(2,"+psize+")\">";
+			tempStr +="<select class='' name=\"okk\" style='width:60px' οnchange=\"alert('2')\">";
+			tempStr +="<option></option>"
+			for(var j=1;j<=totalPage;j++){
+				tempStr +="<option  value='"+j+"' >第"+ j +"页</option>";
+			}
+			tempStr +="</select>";
+			document.getElementById("barcon").innerHTML = tempStr;
+			$("select[name='okk']").change(function() {
+				that.goPage(this.value,psize);
+			})
 		}
 	}
 })
