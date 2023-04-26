@@ -74,6 +74,26 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="checkprogressModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document" style="width: 450px;margin-top: 400px">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">检查进度（{{progress}}%）</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="box box-solid">
+                        <!-- /.box-header -->
+                        <div class="box-body text-center">
+                            <div class="progress progress-striped active" style="width: 100%">
+                                <div class="progress-bar progress-bar-primary" role="progressbar" :style="{width:progress+'%'}">{{progress}}%</div>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Modal -->
     <div class="modal fade" id="treeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
         <div class="modal-dialog" role="document" style="width: 450px;">
