@@ -237,5 +237,36 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="datacheckModal" role="dialog" aria-labelledby="exampleModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">不合格的元数据</h4>
+                </div>
+                <div class="modal-body" id="modal-body2">
+                    <div id="contactConfigTabContent" class="tab-content">
+                        <br>
+                        <div class="tab-pane fade in active" id="datacheck">
+                            <table class="table table-striped" border="1" id="idData">
+                                <tr>
+                                    <th Bgcolor=#b0c4de>唯一标识</th>
+                                    <th Bgcolor=#b0c4de>名称</th>
+                                    <th Bgcolor=#b0c4de>检查结果</th>
+                                </tr>
+                                <tbody id="tbodydata">
+                                </tbody>
+                            </table>
+                            <div  align="center" >
+                                <div id="barcon" name="barcon" style="color: black;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="button" class="btn btn-primary" data-dismiss="modal" onclick="" value="取消">
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 <script src="/YU/javascript/metadata/manager/detail.js"></script>
