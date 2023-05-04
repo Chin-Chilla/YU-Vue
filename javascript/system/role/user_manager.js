@@ -578,11 +578,13 @@ var UserPage = new Vue({
 	        var tm1 = $("#role_id_modal_1").val();
 	        var tm2 = $("#role_name_modal_1").val();
 	        var tm3 = $("#role_chinesename_modal_1").val();
-	        var dataStr = "{\"roleid\":\"" + tm1 + "\"," + "\"rolename\":\"" + tm2 + "\"," + "\"rolechinesename\":\"" + tm3 
-	        getDataByPost("/user/addRole",{
+            var tm4 = $("#role_work_modal_1").val();
+	        var dataStr = "{\"roleid\":\"" + tm1 + "\"," + "\"rolename\":\"" + tm2 + "\"," + "\"rolechinesename\":\"" + tm3 + "\"," + "\"rolework\":\"" + tm4;
+            getDataByPost("/user/addRole",{
 	        	roleCode:tm1,
 	        	roleName:tm2,
-	        	roleDesc:tm3
+	        	roleDesc:tm3,
+                note:tm4
 	        },function(res){
 	        	if(res.msg=="SUCCESS"){
 	        		toastr.success("增加成功！")
@@ -633,7 +635,7 @@ var UserPage = new Vue({
 	    			roleName:that.editRoleName,
 	    			roleCode:that.editRoleCode,
 	    			roleDesc:that.editRoleDesc,
-                    roleWork:that.editRoleWork
+                    note:that.editRoleWork
 	    		},function(res){
 	    			if(res.msg=="SUCCESS"){
 	    				toastr.success("修改成功！")
