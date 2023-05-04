@@ -36,7 +36,7 @@ var app = new Vue({
 		save:0,
 		viewChart: {
 			title: {
-				text: '资源目录分布图',
+				text: '用户浏览统计图',
 				x: 'center',
 				bottom: '0%',
 				textStyle: {
@@ -88,7 +88,7 @@ var app = new Vue({
 		},
 		viewChart2: {
 			title: {
-				text: '水利信息目录资源对象分布图',
+				text: '用户浏览统计图',
 				x: 'center',
 				bottom: '0%',
 				textStyle: {
@@ -132,7 +132,7 @@ var app = new Vue({
 		},
 		viewChart3:{
 			title: {
-				text: '资源目录分布图',
+				text: '用户浏览统计图',
 				x: 'center',
 				bottom: '0%',
 				textStyle: {
