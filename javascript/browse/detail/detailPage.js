@@ -152,7 +152,7 @@ var detailPage = new Vue({
                         detailPage.getDataSequence(metadataId,curClassid);
                     }
                 }
-                if((detailPage.detailContent.dataContent.Metadata.mdContact.rpIndID)!="undefined"){
+                if(typeof( detailPage.detailContent.dataContent.Metadata.mdContact)!="undefined"&&(detailPage.detailContent.dataContent.Metadata.mdContact.rpIndID)!="undefined"){
                     userId= detailPage.detailContent.dataContent.Metadata.mdContact.rpIndID;
                     detailPage.getUserData(userId);
                 }
