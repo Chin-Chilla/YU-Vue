@@ -59,8 +59,8 @@
                                     </th>
                                     <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">节点 ID</th>
                                     <th class="sorting_desc" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">标题</th>
-                                    <!--<th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">摘要</th>-->
-                                    <!--<th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">联系人</th>-->
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">摘要</th>
+                                    <th class="sorting" tabindex="0"  aria-controls="catalogNodeList" rowspan="1" colspan="1" style="min-width: 150px">联系人</th>
                                 </tr>
                                 </thead>
                                 <tbody id="modaltbody1"></tbody>
@@ -79,82 +79,82 @@
                 </div>
             </div>
 
-			    <!--联系人信息模态窗口：选择目的树节点-->
+            <!--联系人信息模态窗口：选择目的树节点-->
             <form class="form-horizontal">
-                    <div class="modal modal-default" id="contactConfigModal" role="dialog" aria-labelledby="exampleModalLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h4 class="modal-title">联系人配置</h4>
-                                </div>
-                                <div class="modal-body" id="modal-body2">
-                                    <ul id="contactConfigTab" class="nav nav-tabs">
-                                        <li class="active">
-                                            <a href="#metadataContact" data-toggle="tab">元数据联系人</a>
-                                        </li>
-                                    </ul>
-                                    <div id="contactConfigTabContent" class="tab-content">
-                                        <div class="box-header">
-                                            <h3></h3>
-                                            <div class="box-tools">
-                                                <div class="input-group input-group-sm" style="width: 150px;">
-                                                    <input v-model="searchContact" name="table_search" class="form-control" id="searchContact" type="text">
-                                                    <div class="input-group-btn">
-                                                        <input type="button" class="btn btn-primary" @click="contactSearch()" value="筛选">
-                                                    </div>
+                <div class="modal modal-default" id="contactConfigModal" role="dialog" aria-labelledby="exampleModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">联系人配置</h4>
+                            </div>
+                            <div class="modal-body" id="modal-body2">
+                                <ul id="contactConfigTab" class="nav nav-tabs">
+                                    <li class="active">
+                                        <a href="#metadataContact" data-toggle="tab">元数据联系人</a>
+                                    </li>
+                                </ul>
+                                <div id="contactConfigTabContent" class="tab-content">
+                                    <div class="box-header">
+                                        <h3></h3>
+                                        <div class="box-tools">
+                                            <div class="input-group input-group-sm" style="width: 150px;">
+                                                <input v-model="searchContact" name="table_search" class="form-control" id="searchContact" type="text">
+                                                <div class="input-group-btn">
+                                                    <input type="button" class="btn btn-primary" @click="contactSearch()" value="筛选">
                                                 </div>
                                             </div>
                                         </div>
-                                        <br>
-                                        <div class="tab-pane fade in active" id="metadataContact">
-                                            <table class="table table-striped" border="1" id="dataContactTable">
-                                                <thead id="metaCall">
-                                                <tr>
-                                                    <th Bgcolor=#b0c4de></th>
-                                                    <th Bgcolor=#b0c4de>联系人姓名</th>
-                                                    <!--<th Bgcolor=#b0c4de>联系人ID</th>-->
-                                                    <!--<th Bgcolor=#b0c4de>性别</th>-->
-                                                    <th Bgcolor=#b0c4de>单位名称</th>
-                                                    <th Bgcolor=#b0c4de>电话</th>
-                                                    <th Bgcolor=#b0c4de>传真</th>
-                                                    <th Bgcolor=#b0c4de>邮箱</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody id="dataContactTableBody">
-                                                <tr v-for="item in contactList" :id="item.objId" @click="selectContact(item.objId)">
-                                                    <td style='width: 50px'>
-                                                        <input type='radio' name='contactcheckbox' :checked="contactSelect==item.objId" :value="item.objId">
-                                                    </td>
-                                                    <td>{{item.objName}}</td>
-                                                    <!--<td>{{item.objId}}</td>-->
-                                                    <!--<td>{{item.sex}}</td>-->
-                                                    <td>{{item.orgName}}</td>
-                                                    <td>{{item.telnumber}}</td>
-                                                    <td>{{item.faxnumb}}</td>
-                                                    <td>{{item.email}}</td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div v-if="contactList.length==0" class="align-middle text-center">
-                                                暂无搜索结果~
-                                            </div>
-                                            <div class="text-center" style="width:600px">
-                                                <ul id="dataContactPage" class="pagination-sm pagination">
-                                                </ul>
-                                            </div>
+                                    </div>
+                                    <br>
+                                    <div class="tab-pane fade in active" id="metadataContact">
+                                        <table class="table table-striped" border="1" id="dataContactTable">
+                                            <thead id="metaCall">
+                                            <tr>
+                                                <th Bgcolor=#b0c4de></th>
+                                                <th Bgcolor=#b0c4de>联系人姓名</th>
+                                                <!--<th Bgcolor=#b0c4de>联系人ID</th>-->
+                                                <!--<th Bgcolor=#b0c4de>性别</th>-->
+                                                <th Bgcolor=#b0c4de>单位名称</th>
+                                                <th Bgcolor=#b0c4de>电话</th>
+                                                <th Bgcolor=#b0c4de>传真</th>
+                                                <th Bgcolor=#b0c4de>邮箱</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody id="dataContactTableBody">
+                                            <tr v-for="item in contactList" :id="item.objId" @click="selectContact(item.objId)">
+                                                <td style='width: 50px'>
+                                                    <input type='radio' name='contactcheckbox' :checked="contactSelect==item.objId" :value="item.objId">
+                                                </td>
+                                                <td>{{item.objName}}</td>
+                                                <!--<td>{{item.objId}}</td>-->
+                                                <!--<td>{{item.sex}}</td>-->
+                                                <td>{{item.orgName}}</td>
+                                                <td>{{item.telnumber}}</td>
+                                                <td>{{item.faxnumb}}</td>
+                                                <td>{{item.email}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div v-if="contactList.length==0" class="align-middle text-center">
+                                            暂无搜索结果~
+                                        </div>
+                                        <div class="text-center" style="width:600px">
+                                            <ul id="dataContactPage" class="pagination-sm pagination">
+                                            </ul>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <input type="button" class="btn  btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" data-target="#contactModal" value="新增"><!--在数据库表中添加该联系人-->
-                                    <input type="button" class="btn  btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" @click="updateContactModal(this)" value="修改">
-                                    <input type="button" class="btn btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" @click="deleteContact" value="删除">
-                                    <input type="button" class="btn btn-primary"  style="width: 80px; height: 35px;" data-dismiss="modal" @click="bindContact" value="确认"><!--在该元数据上添加该联系人-->
-                                    <input type="button" class="btn btn-default" data-dismiss="modal" onclick="" value="取消">
-                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn  btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" data-target="#contactModal" value="新增"><!--在数据库表中添加该联系人-->
+                                <input type="button" class="btn  btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" @click="updateContactModal(this)" value="修改">
+                                <input type="button" class="btn btn-primary" style="width: 80px; height: 35px;" data-toggle="modal" @click="deleteContact" value="删除">
+                                <input type="button" class="btn btn-primary"  style="width: 80px; height: 35px;" data-dismiss="modal" @click="bindContact" value="确认"><!--在该元数据上添加该联系人-->
+                                <input type="button" class="btn btn-default" data-dismiss="modal" onclick="" value="取消">
                             </div>
                         </div>
                     </div>
+                </div>
             </form>
 
             <form class="form-horizontal">

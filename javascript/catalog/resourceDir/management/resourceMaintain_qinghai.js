@@ -162,7 +162,7 @@ var app = new Vue({
                     $("#sample_1").append("<tbody id='modaltbody1'>");
                     var msg = res.data;
                     for (var o in msg) {
-                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].name + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
+                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].name + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].AD + "' style='width:250px'><div title='" + msg[o].AD + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].AD + "</div></td></tr>");
                         var icheck1 = document.getElementById("allpage");
                         if (icheck1.checked == true) {
                             $("input[name='cellChecker']").each(function () {
@@ -291,7 +291,7 @@ var app = new Vue({
                     $("#sample_1").append("<tbody id='modaltbody1'>");
                     var msg = res.data;
                     for (var o in msg) {
-                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].name + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
+                        $("#modaltbody1").append(" <tr><td><input type='checkbox' class='checkboxes' value='1' name='cellChecker'/></td><td>" + msg[o].id + "</td><td>" + msg[o].idtitle + "</td><td title='" + msg[o].idabs + "' style='width:250px'><div title='" + msg[o].idabs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].idabs + "</div></td><td title='" + msg[o].usr_abs + "' style='width:250px'><div title='" + msg[o].usr_abs + "' style='width:250px;height:30px;text-overflow:ellipsis;white-space:nowrap;overflow:hidden;'>" + msg[o].usr_abs + "</div></td></tr>");
                         var icheck1 = document.getElementById("allpage");
                         if (icheck1.checked == true) {
                             $("input[name='cellChecker']").each(function () {
