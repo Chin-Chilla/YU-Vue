@@ -108,6 +108,8 @@ var app = new Vue({
             //初始化目录树
             getDataByGet(
                 '/index_manager/getObjById?nodeId=1000',
+                //部署青海时，将上面这行替换成下面这行代码
+                //'/object_manage/getObjTreeByCode?nodeCode=1000',
                 aJson,
                 res => {
                     $.fn.zTree.init($("#serviceTree"), setting, res);
