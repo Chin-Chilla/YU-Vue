@@ -427,20 +427,38 @@ var app = new Vue({
 		},
 		saveChartBar(){
 			if(that.save){
+				if ($("#xData").val()=="时间"){
+					var day=new Date().toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '').substr(0,10)
+					var xData='"'+day+'"'
+					getDataByPost('/show_detail/addChartBar',{
+						chartName:'用户浏览统计图',
+						xData:xData,
+						xName:$("#xData").val(),
+						yData:that.arrayDepObjTotal,
+						yName:"数量",
+						flag:that.save
+					},res=>
+					{
+						if (res.code==200)toastr.success("更新成功！")
+						else toastr.error("更新失败！")
+					})
+
+
+				}else
 			if (that.save==1){
-				// console.log("柱状图")
-			getDataByPost('/show_detail/addChartBar',{
-				chartName:'用户浏览统计图',
-				xData:that.viewChart.xAxis.data,
-				xName:$("#xData").val(),
-				yData:that.arrayDepObjTotal,
-				yName:"数量",
-				flag:that.save
-			},res=>
-			{
-				if (res.code==200)toastr.success("更新成功！")
-				else toastr.error("更新失败！")
-			})
+				getDataByPost('/show_detail/addChartBar',{
+					chartName:'用户浏览统计图',
+					xData:that.viewChart.xAxis.data,
+						xName:$("#xData").val(),
+						yData:that.arrayDepObjTotal,
+						yName:"数量",
+						flag:that.save
+					},res=>
+					{
+						if (res.code==200)toastr.success("更新成功！")
+						else toastr.error("更新失败！")
+					})
+
 			}else if(that.save==2){
 				// console.log("饼图")
 				getDataByPost('/show_detail/addChartBar',{
