@@ -206,7 +206,7 @@ var index = new Vue({
             },
             xAxis: {
                 type: 'category',
-                data: ['水利部', '长江委', '西藏自治区水利厅'
+                data: ['青海省水利厅','水利部', '长江委', '黄委'
                     // , '淮委', '海委', '珠江委', '松辽委', '太湖局',
                     // '北京', '天津', '河北', '山西', '内蒙古', '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽',
                     // '福建', '江西', '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川', '贵州',
@@ -1205,7 +1205,17 @@ var index = new Vue({
 		            for (i = 0; i < 45; i++) {
 		                that.arrayAllData.push(sum[i]);
 		            }
-		            that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40)
+                    var DepartmentArr=[];
+                    for (var i=0;i<that.firstPieTreeDataAll.length;i++){
+                        if (that.firstPieTreeDataAll[i].name=="青海省水利厅"){
+                            DepartmentArr.push(that.firstPieTreeDataAll[i].value)
+                        }
+                    }
+                    length=DepartmentArr.length
+                    for(var j=length-1;j<4;j++){
+                        DepartmentArr.push(0)
+                    }
+		            that.AllDataoption.series[0].data = DepartmentArr
 		            //显示所有流域省份数据图
 		            that.max = that.downmax[0];
 		            that.radarData = that.arrayRader[0];
@@ -1520,6 +1530,7 @@ var index = new Vue({
             })
         },
 	    getObjTree(objdep_id){
+            objdep_id=63
 	        getDataByPost("/index_manager/queryObjTree", {
 	            "dep": objdep_id,
 	        }, res=> {
@@ -1597,6 +1608,10 @@ var index = new Vue({
 	            for (var i = 0; i < that.arrayNodeId1.length; i++) {
 	                that.rightBarObj.push(dataStr[1][that.arrayNodeId1[i]]);
 	            }*/
+                var len=that.allDataObj;
+                for(var j=len-1;j<4;j++){
+                    that.allDataObj.push(0)
+                }
 	            that.AllDataoption.series[1].data = that.allDataObj;
 	         //  that.rightBaroption.series[1].data = that.rightBarObj;
 	            that.myChartAllData.setOption(that.AllDataoption);
@@ -1783,20 +1798,37 @@ var index = new Vue({
 	        that.myChartmid.setOption(that.midoption);
 	        that.myChartmid.hideLoading();
 	    },
-	    rightPictureShow() {
-	        //var that.myChartright = echarts.init(document.getElementById('right'));
-	        that.rightoption.title.text = '水利信息目录资源对象分布图';
+        rightPictureShow() {
+            //var that.myChartright = echarts.init(document.getElementById('right'));
+            that.rightoption.title.text = '水利信息目录资源对象分布图';
             quickSort(that.arrayObjTotal,0,that.arrayObjTotal.length-1);
-	        var legend = [];
-	        var length = that.arrayObjTotal.length<5?that.arrayObjTotal.length:5;
+            var arr1=[];
+            arr1.push({
+                name:"江河湖泊",
+                value:that.arrayDepObjTotal[0]
+            })
+            arr1.push({
+                name:"水利工程",
+                value:that.arrayDepObjTotal[1]
+            })
+            arr1.push({
+                name:"监测站（点）",
+                value:that.arrayDepObjTotal[2]
+            })
+            arr1.push({
+                name:"其他管理对象",
+                value:that.arrayDepObjTotal[3]
+            })
+            var legend = [];
+            var length = arr1.length<5?arr1.length:5;
             for (var i = 0; i < length; i++) {
-                legend.push(that.arrayObjTotal[i].name);
+                legend.push(arr1[i].name);
             }
-            that.rightoption.series.data = that.arrayObjTotal;
-	        that.rightoption.legend.data = legend;
-	        that.myChartright.setOption(that.rightoption);
-	        that.myChartright.hideLoading();
-	    },
+            that.rightoption.series.data = arr1;
+            that.rightoption.legend.data = legend;
+            that.myChartright.setOption(that.rightoption);
+            that.myChartright.hideLoading();
+        },
 /*
 	    leftDownPictureShow() {
 	        // var that.myChartleftDown = echarts.init(document.getElementById('left_down'));
