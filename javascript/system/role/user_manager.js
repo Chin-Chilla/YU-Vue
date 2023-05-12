@@ -45,7 +45,7 @@ var UserPage = new Vue({
             }
         });
          //点击某行任意位置触发check
-        $("#sample_3").on("click", "tr", function () {
+        $("#sample_3").on("click", "tr,td", function () {
             var input = $(this).find("input");
             //toastr.warning($(input).prop("checked"));
             if (!$(input).prop("checked")) {
