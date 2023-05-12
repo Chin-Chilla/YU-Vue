@@ -1053,6 +1053,7 @@ var app = new Vue({
                                 alert(file_name+"Excel中的部门与选择结点不一致！");
                             }
                             if (msgJson.data.state == 'ok') {
+                                console.log(msgJson.data);
                                 $("#modelthead1").empty();
                                 $("#modaltbody1").empty();
                                 $("#label1").show();
@@ -1067,9 +1068,16 @@ var app = new Vue({
                                 $("#modelthead1").append("</tr>");
                                 for (var o in exlContent) {
                                     $("#modaltbody1").append("<tr>");
+                                    var serviceMeta=exlContent[o].serviceMeta;
                                     for(var i=0;i<exlTitle.Ename.length;i++){
+                                        console.log(serviceMeta[exlTitle.Ename[i]]);
                                         if(exlTitle.Ename[i] in exlContent[o].serviceMeta){
-                                            $("#modaltbody1").append("<td height='40px' style='background-color: #5cb85c'></td>");
+                                            if (serviceMeta[exlTitle.Ename[i]]) {
+                                                $("#modaltbody1").append("<td height='40px' style='background-color: #5cb85c'></td>");
+                                            }
+                                            else {
+                                                $("#modaltbody1").append("<td style='background-color: #9f191f'></td>");
+                                            }
                                         }else {
                                             $("#modaltbody1").append("<td style='background-color: #9f191f'></td>");
                                         }
