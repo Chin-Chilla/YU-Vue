@@ -641,7 +641,16 @@ var res = new Vue({
             }
             else {
                 var nodes = treeObj.getNodesByParam("nodeName", node_name, treeNode[0]);
+                var isDelete=1;
                 if (nodes.length > 0) {
+                    for(var i=0;i<nodes.length;i++){
+                        if(nodes[i].flag=='rename'||nodes[i].flag=='insert'){
+                            isDelete=0;
+                            continue;
+                        }
+                    }
+                }
+                if(isDelete==0){
                     document.getElementById("label_1").innerHTML = tip + "已有该名称结点";
                     document.getElementById("text9").value = "";
                 } else {
