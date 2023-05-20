@@ -545,6 +545,9 @@ function  getLocationId(){
 		case "xinjiang" + LOCATION.slice("xinjiang".length):
 			DEPTNAME = "新疆生产建设兵团水利局" + DEPTNAME;
 			return "66";
+		case "qinghai":
+			DEPTNAME = "青海省水利厅" + DEPTNAME;
+			return "63";
 		default:
 			return "00";
 	}
