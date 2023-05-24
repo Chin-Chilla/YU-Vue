@@ -434,7 +434,7 @@ var app = new Vue({
 						chartName:'用户浏览统计图',
 						xData:xData,
 						xName:$("#xData").val(),
-						yData:that.arrayDepObjTotal,
+						yData:xData,
 						yName:"数量",
 						flag:that.save
 					},res=>
