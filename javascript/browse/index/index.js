@@ -778,6 +778,7 @@ var index = new Vue({
         firstPieTreeLegend: [],
         //水利信息结点下
         firstPieTreeDataAll: [],
+        allDataOp:[],
         firstPieTreeLegendAll: [],
         firstPieTreeSecondData: [],
         firstPieTreeSecondLegend: [],
@@ -1024,6 +1025,11 @@ var index = new Vue({
                                 that.firstPieTreeDataAll.push(data);
                                 that.firstPieTreeLegendAll.push(name);
                             }
+                            that.allDataOp.push({
+                                value:num,
+                                name:name
+                                }
+                            )
                         }
                     }
                     that.rightBaroption.series[0].data = that.arrayRightBar
@@ -1193,44 +1199,51 @@ var index = new Vue({
 		                that.arrayRaderTotal.push(RaderAll[i]);
 		            }
 
-		            //通过arrayRader计算流域、省级资源目录数据总量
-		            var sum = new Array();
-		            for (i = 0; i < that.arrayRader.length; i++) {
-		                sum[i] = 0;
-		                for (var j = 0; j < 4; j++) {
-		                    sum[i] += Number(that.arrayRader[i][j]);
-		                    that.arrayBar[i][j] = Number(that.arrayRader[i][j]);
-		                }
-		            }
-		            for (i = 0; i < 45; i++) {
-		                that.arrayAllData.push(sum[i]);
-		            }
-		            that.AllDataoption.series[0].data = that.arrayAllData.slice(0, 40)
-		            //显示所有流域省份数据图
-		            that.max = that.downmax[0];
-		            that.radarData = that.arrayRader[0];
-		            resolve();
-	        	}else{
-	        		toastr.warning(res.msg);
-	        	}
-	        	
-	        })
-	    },
-	    getObjTreeNum(){
-	        var aJson = {};
-	        getDataByGet("/index_manager/queryObjTreeNum", aJson, res=> {
-	        	if (res.code==200) {
-	        		var dataStr = res.data;
-		            var arr = dataStr.substring(1, dataStr.length - 1).split(",");
-		            var arr1 = new Array();
-		            for (var i = 0; i < arr.length; i++) {
-		                var tmp = arr[i].trim();
-		                arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
-		            }
-		            var arr2 = new Array();
-		            for (var i = 0; i < 45; i++) {
-		                var temp = arr1.slice(i * 34, i * 34 + 34);
-		                arr2.push(temp);
+                    //通过arrayRader计算流域、省级资源目录数据总量
+                    var sum = new Array();
+                    for (i = 0; i < that.arrayRader.length; i++) {
+                        sum[i] = 0;
+                        for (var j = 0; j < 4; j++) {
+                            sum[i] += Number(that.arrayRader[i][j]);
+                            that.arrayBar[i][j] = Number(that.arrayRader[i][j]);
+                        }
+                    }
+                    for (i = 0; i < 45; i++) {
+                        that.arrayAllData.push(sum[i]);
+                    }
+                    var DepartmentArr=[];
+                    var DepartmentNameArr=[];
+                    for (var i=0;i<that.allDataOp.length;i++){
+                            DepartmentArr.push(that.allDataOp[i].value)
+                        DepartmentNameArr.push(that.allDataOp[i].name)
+                    }
+                    that.AllDataoption.xAxis.data=DepartmentNameArr
+                    that.AllDataoption.series[0].data = DepartmentArr
+                    //显示所有流域省份数据图
+                    that.max = that.downmax[0];
+                    that.radarData = that.arrayRader[0];
+                    resolve();
+                }else{
+                    toastr.warning(res.msg);
+                }
+
+            })
+        },
+        getObjTreeNum(){
+            var aJson = {};
+            getDataByGet("/index_manager/queryObjTreeNum", aJson, res=> {
+                if (res.code==200) {
+                    var dataStr = res.data;
+                    var arr = dataStr.substring(1, dataStr.length - 1).split(",");
+                    var arr1 = new Array();
+                    for (var i = 0; i < arr.length; i++) {
+                        var tmp = arr[i].trim();
+                        arr1[i] = tmp.substring(tmp.indexOf("=")+1, arr[i].length);
+                    }
+                    var arr2 = new Array();
+                    for (var i = 0; i < 45; i++) {
+                        var temp = arr1.slice(i * 34, i * 34 + 34);
+                        arr2.push(temp);
 
 		            }
 		            for (var i = 0; i < arr2.length; i++) {
@@ -2235,7 +2248,7 @@ var index = new Vue({
                     pageSize:50000,
                     pageNum:1
                 },res=>{
-                    console.log(res.data.list)
+                    //console.log(res.data.list)
                     list=res.data.list
                     var arr=new Array()
                     var Xdata=[];
@@ -2303,7 +2316,7 @@ var index = new Vue({
             }
         },
         showChart2(list){
-            console.log(list)
+           // console.log(list)
             if(list.xName=="时间"){
                 getDataByPost('/show_detail/getViewList', {
                     pageSize: 500000,
