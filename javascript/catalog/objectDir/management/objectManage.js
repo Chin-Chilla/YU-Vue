@@ -160,13 +160,30 @@ function addHoverDom(treeId, treeNode) {
                         nodeCode: nodeCode
                     }
                     getDataByPost(
-                        '/object_manage/insertSingle',
+                        '/object_manage/IshaveclassCode',
                         data,
                         res => {
-                            editState = 1;
-                            $("#myModal").modal('hide');
-                            that.treeNodes.addNodes(treeNode, res.data);
-                            toastr.success("注册子节点成功！")
+                            if(res.msg=='该对象代码已存在！'){
+                                toastr.error(res.msg);
+                            }else{
+                                swal({
+                                        title: "当前新增对象类在对象分类体系中不存在，是否要添加？",
+                                        //type: "warning",
+                                        showCancelButton: true,
+                                        confirmButtonColor: "#4682B4",
+                                        confirmButtonText: "确认添加",
+                                        closeOnConfirm: true
+                                    }, confirm => {
+                                    getDataByPost('/object_manage/insertSingle',
+                                        data,
+                                        res => {
+                                            editState = 1;
+                                            $("#myModal").modal('hide');
+                                            that.treeNodes.addNodes(treeNode, res.data);
+                                            toastr.success("注册子节点成功！")
+                                        })
+                                    })
+                            }
                         },
                         err => {
                             $("#myModal").modal('hide');
