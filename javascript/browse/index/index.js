@@ -843,11 +843,17 @@ var index = new Vue({
     },
     mounted() { //页面一加载就会触发，可以用于初始化页面，相当于window.onload
         that = this;
-        var authCode = getUrlKey("authCode");
-        var role = getUrlKey("role");
-        if(authCode!=null&&authCode!=''&&authCode!=undefined){
-            sessionStorage.setItem("authCode",authCode);
-            sessionStorage.setItem("role",role);
+        var id = getUrlKey("Id");
+
+        if (id != null) {
+            getDataByGet('/user/getCurrentUserRole', {}, function(res) {
+                var authCode = res.data.authCode;
+                var role = res.data.roles.join(",");
+                console.log("authCode",authCode);
+                console.log("role",role);
+                sessionStorage.setItem("authCode", authCode);
+                sessionStorage.setItem("role", role);
+            });
         }
         toastr.options = {
             "closeButton": false,
