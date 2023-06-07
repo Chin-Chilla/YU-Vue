@@ -20,7 +20,9 @@ var keySearch = new Vue({
         sub_name:'',
         sub_loc:'',
         subcount: 0,
-        subed: 0
+        subed: 0,
+        flag:'',
+        treeId:''
     },
 
     mounted(){
@@ -137,6 +139,8 @@ var keySearch = new Vue({
         keySearch: function (flag,treeId) {
             keySearch.pageNo = 1;
             keySearch.count = 0;
+            if(flag!=undefined)keySearch.flag=flag
+            if(treeId!=undefined)keySearch.treeId=treeId
 
             if (keyWord == "") {
                 toastr.warning("关键词不能为空!");
@@ -889,8 +893,8 @@ var keySearch = new Vue({
             var index4 = str1.indexOf('>');
             var content3 = str1.substring(index4+1,str1.length);
             var name = content1 + content2 + content3;
-            name=name.replace(/<font color="red">/g,"");
-            name=name.replace(/<\/font>/g,"");
+            name=name.replace(/<font color="red">/,"");
+            name=name.replace(/<\/font>/,"");
             var buttonhtml = "<input type=\"button\"  value=\"订阅\" class=\"btn btn-primary\" style=\"width:80px;height: 30px;margin: 0px 5px 5px 5px\"  onclick=keySearch.subscribe('" + msg.result[i][0].id + "','"+name+"')></input>&nbsp;&nbsp;&nbsp;</a></div><div class=\"row\"><div class=\"col-md-12\" style='padding-bottom:10px'><table><tbody><tr>";
             return buttonhtml;
         },

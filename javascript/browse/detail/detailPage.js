@@ -424,7 +424,7 @@ var detailPage = new Vue({
                 callback: function (page, size, count) {
                     //alert('当前第 ' +page +'页,每页 '+size+'条,总页数：'+count+'页');
                     keySearch.pageNo = page;
-                    keySearch.getOnePage();
+                    keySearch.getOnePage(keySearch.flag);
                 }
             });
 
