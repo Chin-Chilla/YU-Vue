@@ -122,7 +122,7 @@ var app = new Vue({
 				getDataByGet1("/user/getCurrentUserInfo", "", function (res) {
 					var id = res.data;
 					getDataByGet1("/user/getUserInfo/" + id, "", function (res) {
-						$("#proposer").val(res.data.loginName);
+						$("#proposer").val(res.data.username);
 						$("#org").val(res.data.orgname);
 						$("#contact").val(res.data.mobileNumber);
 
